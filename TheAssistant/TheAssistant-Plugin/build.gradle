@@ -56,9 +56,9 @@ dependencies {
     //Fix encode URI Problem
     implementation 'eu.okaeri:okaeri-commons-core:0.2.17'
     implementation 'eu.okaeri:okaeri-configs-json-simple:4.0.1'
-    implementation 'eu.okaeri:okaeri-persistence-jdbc:1.5.13'
-    implementation 'eu.okaeri:okaeri-persistence-mongo:1.5.13'
-    implementation 'eu.okaeri:okaeri-persistence-redis:1.5.13'
+    implementation 'eu.okaeri:okaeri-persistence-jdbc:1.5.12'
+    implementation 'eu.okaeri:okaeri-persistence-mongo:1.5.12'
+    implementation 'eu.okaeri:okaeri-persistence-redis:1.5.12'
 
     implementation 'org.mariadb.jdbc:mariadb-java-client:2.7.3'
     implementation 'com.h2database:h2:2.1.214'

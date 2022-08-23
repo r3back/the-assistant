@@ -5,6 +5,7 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoClients;
 import com.qualityplus.assistant.api.util.IPlaceholder;
+import com.qualityplus.assistant.base.factory.UriGetter;
 import com.qualityplus.assistant.config.ConfigDatabase;
 import com.qualityplus.assistant.config.database.DatabaseType;
 import com.qualityplus.assistant.util.StringUtils;
@@ -32,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public final class DatabaseFactory {
+public final class DatabaseFactory implements UriGetter {
     @Bean(value = "persistence", preload = true)
     public DocumentPersistence configurePersistence(@Inject("dataFolder") File dataFolder, @Inject Config config) {
 
@@ -87,16 +88,4 @@ public final class DatabaseFactory {
         }
     }
 
-    private String getUri(ConfigDatabase configDatabase){
-
-        List<IPlaceholder> placeholderList = PlaceholderBuilder.create(
-                new Placeholder("user", Optional.ofNullable(configDatabase.userName).orElse("")),
-                new Placeholder("host", Optional.ofNullable(configDatabase.host).orElse("")),
-                new Placeholder("port", Optional.ofNullable(String.valueOf(configDatabase.port)).orElse("")),
-                new Placeholder("password", Optional.ofNullable(configDatabase.passWord).orElse("")),
-                new Placeholder("database", Optional.ofNullable(configDatabase.database).orElse(""))
-                ).get();
-
-        return StringUtils.processMulti(configDatabase.type.getUri(), placeholderList);
-    }
 }
