@@ -1,0 +1,47 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+defaultTasks 'build'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+
+    group = 'com.qualityplus.core'
+    version = '1.0.0'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    jar {
+        from '../LICENSE.txt'
+    }
+
+    repositories {
+        mavenCentral()
+        //NMS Repo
+        maven { url 'https://repo.rosewooddev.io/repository/public/' }
+        //Spigot API Repo
+        maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+        //Paper
+        maven { url 'https://papermc.io/repo/repository/maven-public/' }
+    }
+
+    dependencies {
+        implementation("org.jetbrains:annotations:22.0.0")
+        compileOnly("org.projectlombok:lombok:1.18.22")
+
+        // Enable lombok annotation processing
+        annotationProcessor("org.projectlombok:lombok:1.18.22")
+    }
+
+
+}
+
+
+
