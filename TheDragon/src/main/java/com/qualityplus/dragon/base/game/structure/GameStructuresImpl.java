@@ -31,7 +31,7 @@ public final class GameStructuresImpl implements GameStructures {
 
     @Override
     public void clearAltars() {
-        getAltars().forEach(DragonAltar::clearEye);
+        getAltars().forEach(dragonAltar -> dragonAltar.setEnderKey(false));
     }
 
     @Override

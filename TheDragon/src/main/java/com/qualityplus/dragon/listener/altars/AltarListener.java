@@ -2,9 +2,10 @@ package com.qualityplus.dragon.listener.altars;
 
 import com.qualityplus.assistant.api.util.IPlaceholder;
 import com.qualityplus.assistant.util.StringUtils;
+import com.qualityplus.assistant.util.itemstack.ItemStackUtils;
 import com.qualityplus.assistant.util.placeholder.Placeholder;
 import com.qualityplus.dragon.api.box.Box;
-import com.qualityplus.dragon.api.service.SetupService;
+import com.qualityplus.dragon.api.service.AltarSetupService;
 import com.qualityplus.dragon.util.DragonItemStackUtil;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import com.qualityplus.dragon.api.game.structure.type.DragonAltar;
@@ -29,7 +30,7 @@ import java.util.UUID;
  * Handles the Process to start the game
  */
 public final class AltarListener implements Listener {
-    private @Inject SetupService setupService;
+    private @Inject AltarSetupService setupService;
     private @Inject Box box;
 
     @EventHandler
@@ -61,12 +62,12 @@ public final class AltarListener implements Listener {
         event.setCancelled(true);
 
         if(box.game().isActive()){
-            player.sendMessage(StringUtils.color(box.files().messages().setupMessages.errorInProgress.replace("%prefix%", box.files().config().prefix)));
+            player.sendMessage(StringUtils.color(box.files().messages().setupMessages.errorDragonEventInProgress.replace("%prefix%", box.files().config().prefix)));
             return;
         }
 
-        if(setupService.getPlayersInSetupMode().contains(uuid)){
-            player.sendMessage(StringUtils.color(box.files().messages().setupMessages.errorEditor.replace("%prefix%", box.files().config().prefix)));
+        if(setupService.playerIsInEditMode(uuid)){
+            player.sendMessage(StringUtils.color(box.files().messages().setupMessages.errorInSetupMode.replace("%prefix%", box.files().config().prefix)));
             return;
         }
 
@@ -74,7 +75,7 @@ public final class AltarListener implements Listener {
     }
 
     /**
-     * Handles the process when a player put a eye in
+     * Handles the process when a player put an eye in
      * an altar
      *
      * @param player Player
@@ -86,40 +87,37 @@ public final class AltarListener implements Listener {
 
         if(block == null) return;
 
-        Optional<DragonAltar> dragonAltar = box.structures().getAltar(block.getLocation());
+        Optional<DragonAltar> altar = box.structures().getAltar(block.getLocation());
 
-        if (!dragonAltar.isPresent()) return;
+        if (!altar.isPresent()) return;
 
-        if (dragonAltar.get().isInUse()) {
-            player.sendMessage(StringUtils.color(box.files().messages().setupMessages.alreadyPlaced.replace("%prefix%", box.files().config().prefix)));
+        if (altar.get().isEnderKey()) {
+            player.sendMessage(StringUtils.color(box.files().messages().gameMessages.alreadyPlacedAltar.replace("%prefix%", box.files().config().prefix)));
             return;
         }
 
-        if(itemStack.getAmount() == 1) {
-            player.setItemInHand(null);
-        }else {
-            itemStack.setAmount(itemStack.getAmount() - 1);
-            player.setItemInHand(itemStack);
-        }
+        player.setItemInHand(ItemStackUtils.getItemWithout(itemStack, 1));
 
-        dragonAltar.get().setInUse(true);
+        altar.get().setEnderKey(true);
+
         List<DragonAltar> altarList = box.structures().getAltars();
 
-        int current = (int) altarList.stream().filter(DragonAltar::isInUse).count();
+        int current = (int) altarList.stream().filter(DragonAltar::isEnderKey).count();
         int total = altarList.size();
 
-        List<IPlaceholder> placeholders = Arrays.asList(new Placeholder("current", current)
-                , new Placeholder("total", total)
-                , new Placeholder("prefix", box.files().config().prefix));
+        List<IPlaceholder> placeholders = Arrays.asList(
+                new Placeholder("thedragon_ender_key_current", current),
+                new Placeholder("thedragon_ender_key_total", total),
+                new Placeholder("prefix", box.files().config().prefix));
 
-        player.sendMessage(StringUtils.color(StringUtils.processMulti(box.files().messages().setupMessages.placedEye, placeholders)));
+        player.sendMessage(StringUtils.color(StringUtils.processMulti(box.files().messages().gameMessages.placedEnderKey, placeholders)));
 
         if(current < total) return;
 
-        altarList.forEach(dragonAltar1 -> dragonAltar1.setInUse(false));
+        altarList.forEach(dragonAltar1 -> dragonAltar1.setEnderKey(false));
 
-        player.sendMessage(StringUtils.color(StringUtils.processMulti(box.files().messages().setupMessages.ritualCompleted, placeholders)));
+        player.sendMessage(StringUtils.color(StringUtils.processMulti(box.files().messages().gameMessages.altarsFilled, placeholders)));
+
         box.game().start();
-
     }
 }

@@ -1,6 +1,7 @@
 package com.qualityplus.dragon.util;
 
 import lombok.experimental.UtilityClass;
+import org.bukkit.Bukkit;
 
 @UtilityClass
 public class DragonHealthUtil {
@@ -11,26 +12,16 @@ public class DragonHealthUtil {
         double basisHealthAfter = current - damageCaused;
 
         if (max < MAX_AMOUNT)
-            return Math.max(basisHealthAfter, 0.0D);
+            return Math.max(basisHealthAfter, 0);
 
         double heartRate = max / MAX_AMOUNT;
 
-        double lifeWithoutDamage = (heartRate * MULTIPLIER) * current;
+        double lifeWithoutDamage = heartRate * current;
 
-        double finalHealth = Math.max(lifeWithoutDamage, 0);
+        double finalHealth = Math.max(lifeWithoutDamage - damageCaused, 0);
 
-        return Math.min(Math.max((int)(finalHealth / heartRate), 0), MAX_AMOUNT);
-    }
 
-    public static double getNewHealth(double maxHealth, double health, double damage) {
-        if (maxHealth < 200.0D)
-            return Math.max(health - damage, 0.0D);
-        double perOne = maxHealth / 200.0D;
-        double newHealth = health * perOne - damage;
-        return Math.min(getMinMax((int)(newHealth / perOne)), 200.0D);
-    }
-    public static int getMinMax(int division) {
-        return Math.max(division, 0);
+        return Math.min(Math.max(((int)(finalHealth / heartRate)), 0), MAX_AMOUNT);
     }
 
     public double getHealth(double max, double current) {

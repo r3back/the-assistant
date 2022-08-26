@@ -3,6 +3,7 @@ package com.qualityplus.assistant.api.nms;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
@@ -20,6 +21,8 @@ public interface NMS {
     Location getDragonPart(EnderDragon enderDragon, DragonPart dragonPart);
 
     void sendBossBar(Player player, String bossBar);
+
+    void setEnderEye(Block block, boolean setEnderEye);
 
     @AllArgsConstructor
     enum DragonPart{

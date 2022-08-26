@@ -27,7 +27,9 @@ public final class AddCrystalCommand extends AssistantCommand {
 
             box.structures().addStructure(new DragonCrystalImpl(location));
 
-            player.sendMessage(StringUtils.color(box.files().messages().setupMessages.crystalSet).replace("%location%", LocationUtils.toString(location)).replace("%prefix%", box.files().config().prefix));
+            player.sendMessage(StringUtils.color(box.files().messages().setupMessages.crystalSet
+                    .replace("%thedragon_crystal_location%", LocationUtils.toString(location))
+                    .replace("%prefix%", box.files().config().prefix)));
         }else{
             player.sendMessage(StringUtils.color(box.files().messages().pluginMessages.useSyntax.replace("%usage%", syntax)));
         }

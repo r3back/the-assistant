@@ -1,4 +1,4 @@
-package com.qualityplus.dragon.gui.mainmenu;
+package com.qualityplus.dragon.gui.dragons;
 
 import com.qualityplus.assistant.inventory.CommonGUI;
 import com.qualityplus.assistant.inventory.Item;
@@ -11,13 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public final class MainMenuGUIConfig extends OkaeriConfig implements SimpleGUI {
+public final class DragonsGUIConfig extends OkaeriConfig implements SimpleGUI {
     private CommonGUI commonGUI;
-    private Item spawnItem;
-    private Item crystalItem;
-    private Item altarItem;
-    private Item schematicItem;
-    private Item dragonsItem;
-    private Item guardiansItem;
-
+    private Item dragonItem;
+    private Item previousPage;
+    private Item nextPage;
+    private Item backToMainMenu;
 }

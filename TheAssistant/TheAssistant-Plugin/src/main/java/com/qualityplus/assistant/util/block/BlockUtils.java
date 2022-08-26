@@ -9,4 +9,7 @@ public class BlockUtils {
     public boolean isNull(Block block){
         return block == null || block.getType().equals(Material.AIR);
     }
+    public boolean isNotNull(Block block){
+        return !isNull(block);
+    }
 }

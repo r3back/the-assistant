@@ -47,8 +47,8 @@ public final class DragonAltarsGUI extends TheDragonGUI {
                     DragonAltar altar = dragonAltars.get(i);
 
                     List<IPlaceholder> placeholders = Arrays.asList(
-                            new Placeholder("dragon_altar_location", LocationUtils.toString(altar.getLocation())),
-                            new Placeholder("dragon_altar_id", String.valueOf(i))
+                            new Placeholder("thedragon_altar_location", LocationUtils.toString(altar.getLocation())),
+                            new Placeholder("thedragon_altar_id", String.valueOf(i))
                     );
 
                     inventory.setItem(slot, ItemStackUtils.makeItem(config.getAltarItem(), placeholders));

@@ -12,6 +12,8 @@ import com.qualityplus.dragon.api.game.structure.GameStructure;
 import com.qualityplus.dragon.gui.TheDragonGUI;
 import com.qualityplus.dragon.gui.altars.DragonAltarsGUI;
 import com.qualityplus.dragon.gui.crystals.DragonCrystalsGUI;
+import com.qualityplus.dragon.gui.dragons.DragonsGUI;
+import com.qualityplus.dragon.gui.guardians.DragonGuardiansGUI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -41,26 +43,39 @@ public final class MainMenuGUI extends TheDragonGUI {
 
         inventory.setItem(config.getSpawnItem().slot, ItemStackUtils.makeItem(config.getSpawnItem(), getSpawnPlaceholders()));
 
+        inventory.setItem(config.getDragonsItem().slot, ItemStackUtils.makeItem(config.getDragonsItem(), getDragonsPlaceholders()));
+
+        inventory.setItem(config.getGuardiansItem().slot, ItemStackUtils.makeItem(config.getGuardiansItem(), getGuardiansPlaceholders()));
+
         inventory.setItem(config.getCloseGUI().slot, ItemStackUtils.makeItem(config.getCloseGUI()));
 
         return inventory;
     }
 
+    private List<IPlaceholder> getGuardiansPlaceholders(){
+        return PlaceholderBuilder.create(new Placeholder("thedragon_guardians_amount", box.files().guardians().guardianMap.size())).get();
+    }
+
+    private List<IPlaceholder> getDragonsPlaceholders(){
+        return PlaceholderBuilder.create(new Placeholder("thedragon_dragons_amount", box.files().dragons().dragonMap.size())).get();
+    }
+
+
     private List<IPlaceholder> getCrystalsPlaceholders(){
-        return PlaceholderBuilder.create(new Placeholder("dragon_crystals_amount", box.structures().getCrystals().size())).get();
+        return PlaceholderBuilder.create(new Placeholder("thedragon_crystals_amount", box.structures().getCrystals().size())).get();
     }
 
 
     private List<IPlaceholder> getAltarsPlaceholders(){
-        return PlaceholderBuilder.create(new Placeholder("dragon_altars_amount", box.structures().getAltars().size())).get();
+        return PlaceholderBuilder.create(new Placeholder("thedragon_altars_amount", box.structures().getAltars().size())).get();
     }
 
     private List<IPlaceholder> getSchematicPlaceholders(){
-        return PlaceholderBuilder.create(new Placeholder("dragon_schematic_id", box.files().config().eventSettings.schematicSettings.id)).get();
+        return PlaceholderBuilder.create(new Placeholder("thedragon_schematic_id", box.files().config().eventSettings.schematicSettings.id)).get();
     }
 
     private List<IPlaceholder> getSpawnPlaceholders(){
-        return PlaceholderBuilder.create(new Placeholder("dragon_spawn_location", LocationUtils.toString(box.structures().getSpawn()
+        return PlaceholderBuilder.create(new Placeholder("thedragon_spawn_location", LocationUtils.toString(box.structures().getSpawn()
                 .map(DragonSpawn::getLocation).
                 orElse(null))))
                 .get();
@@ -83,6 +98,10 @@ public final class MainMenuGUI extends TheDragonGUI {
             player.openInventory(new DragonCrystalsGUI(box, 1).getInventory());
         }else if(isItem(slot, config.getAltarItem())){
             player.openInventory(new DragonAltarsGUI(box, 1).getInventory());
+        }else if(isItem(slot, config.getDragonsItem())){
+            player.openInventory(new DragonsGUI(box).getInventory());
+        }else if(isItem(slot, config.getGuardiansItem())){
+            player.openInventory(new DragonGuardiansGUI(box, 1).getInventory());
         }else if(isItem(slot, config.getSpawnItem()))
             box.structures().getSpawn()
                     .filter(Objects::nonNull)

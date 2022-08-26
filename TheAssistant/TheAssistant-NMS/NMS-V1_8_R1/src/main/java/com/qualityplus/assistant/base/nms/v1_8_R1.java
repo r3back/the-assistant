@@ -3,9 +3,12 @@ package com.qualityplus.assistant.base.nms;
 import com.mojang.authlib.GameProfile;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.Getter;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_8_R1.*;
 import org.bukkit.*;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_8_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_8_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftEnderDragon;
@@ -16,6 +19,7 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.inventivetalent.bossbar.BossBarAPI;
 
 import java.util.UUID;
 
@@ -50,7 +54,17 @@ public final class v1_8_R1 extends AbstractNMS{
     }
 
     @Override
-    public void sendBossBar(Player player, String bossBar) {
+    public void sendBossBar(Player player, String message) {
+        if(message == null || message.equals("")){
+            BossBarAPI.removeAllBars(player);
+            return;
+        }
+        BossBarAPI.removeBar(player);
+        BossBarAPI.addBar(player,  new TextComponent(message), BossBarAPI.Color.PURPLE, BossBarAPI.Style.NOTCHED_10, 10, BossBarAPI.Property.DARKEN_SKY);
+    }
 
+    @Override
+    public void setEnderEye(Block block, boolean setEnderEye) {
+        block.getState().setRawData(setEnderEye ? (byte) 4 : (byte) 3);
     }
 }

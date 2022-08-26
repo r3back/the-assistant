@@ -26,21 +26,26 @@ public final class ConfirmGUI extends TheDragonGUI {
         Player player = (Player)e.getWhoClicked();
         int slot = e.getSlot();
         e.setCancelled(true);
-        if (slot == 11) {
+        if(isItem(slot, config.getCloseGUI())){
+            player.closeInventory();
+        }else if(isItem(slot, config.getConfirmItem())) {
             box.files().guardians().remove(guardian.getID());
             player.openInventory(new DragonGuardiansGUI(box, 1).getInventory());
-        } else if (slot == 15) {
+        }else if(isItem(slot, config.getCancelItem()))
             player.openInventory(new DragonGuardiansGUI(box, 1).getInventory());
-        }
-
     }
 
     @NotNull
     @Override
     public Inventory getInventory() {
         InventoryUtils.fillInventory(inventory, config.getBackground());
-        inventory.setItem(11, ItemStackUtils.makeItem(config.getConfirmItem()));
-        inventory.setItem(15, ItemStackUtils.makeItem(config.getCancelItem()));
+
+        inventory.setItem(config.getConfirmItem().slot, ItemStackUtils.makeItem(config.getConfirmItem()));
+
+        inventory.setItem(config.getCancelItem().slot, ItemStackUtils.makeItem(config.getCancelItem()));
+
+        setItem(config.getCloseGUI());
+
         return inventory;
     }
 }

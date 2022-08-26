@@ -1,6 +1,7 @@
 package com.qualityplus.dragon.base.game.guardian;
 
 import com.qualityplus.assistant.util.StringUtils;
+import com.qualityplus.assistant.util.itemstack.ItemStackUtils;
 import com.qualityplus.dragon.api.game.guardian.Guardian;
 import eu.okaeri.configs.OkaeriConfig;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
+
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -32,21 +35,28 @@ public final class DragonGuardian extends OkaeriConfig implements Guardian {
     @Override
     public Entity spawn(Location location) {
         if(location == null || health <= 1 || entity == null) return null;
-        LivingEntity ent = (LivingEntity) location.getWorld().spawnEntity(location, EntityType.valueOf(entity));
-        if(displayName != null){
-            ent.setCustomName(StringUtils.color(displayName));
-            ent.setCustomNameVisible(true);
+
+        LivingEntity guardian = (LivingEntity) location.getWorld().spawnEntity(location, EntityType.valueOf(entity));
+
+        Optional.ofNullable(displayName).ifPresent(name -> {
+            guardian.setCustomName(StringUtils.color(name));
+            guardian.setCustomNameVisible(true);
+        });
+
+        guardian.setMaxHealth(health);
+        guardian.setHealth(health);
+
+        EntityEquipment equipment = guardian.getEquipment();
+
+        if (equipment != null) {
+            if(ItemStackUtils.isNotNull(guardianArmor.getWeapon())) equipment.setItemInMainHand(guardianArmor.getWeapon());
+            if(ItemStackUtils.isNotNull(guardianArmor.getHelmet())) equipment.setHelmet(guardianArmor.getHelmet());
+            if(ItemStackUtils.isNotNull(guardianArmor.getChestplate())) equipment.setChestplate(guardianArmor.getChestplate());
+            if(ItemStackUtils.isNotNull(guardianArmor.getLeggings())) equipment.setLeggings(guardianArmor.getLeggings());
+            if(ItemStackUtils.isNotNull(guardianArmor.getBoots())) equipment.setBoots(guardianArmor.getBoots());
         }
-        ent.setMaxHealth(health);
-        ent.setHealth(health);
-        EntityEquipment equip = ent.getEquipment();
-        if (equip != null) {
-            if(guardianArmor.getHelmet() != null) equip.setHelmet(guardianArmor.getHelmet());
-            if(guardianArmor.getChestplate() != null) equip.setChestplate(guardianArmor.getChestplate());
-            if(guardianArmor.getLeggings() != null) equip.setLeggings(guardianArmor.getLeggings());
-            if(guardianArmor.getBoots() != null) equip.setBoots(guardianArmor.getBoots());
-        }
-        return ent;
+
+        return guardian;
     }
 
     @Override

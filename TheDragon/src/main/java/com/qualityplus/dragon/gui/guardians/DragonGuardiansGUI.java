@@ -9,6 +9,7 @@ import com.qualityplus.dragon.api.game.guardian.Guardian;
 import com.qualityplus.dragon.gui.TheDragonGUI;
 import com.qualityplus.dragon.gui.confirm.ConfirmGUI;
 import com.qualityplus.dragon.gui.guardian.GuardianGUI;
+import com.qualityplus.dragon.gui.mainmenu.MainMenuGUI;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -43,7 +44,7 @@ public final class DragonGuardiansGUI extends TheDragonGUI {
                 if (guardians.size() > i && i >= 0) {
                     Guardian guardian = guardians.get(i);
 
-                    List<IPlaceholder> placeholders = Collections.singletonList(new Placeholder("dragon_guardian_id", guardian.getID()));
+                    List<IPlaceholder> placeholders = Collections.singletonList(new Placeholder("thedragon_guardian_id", guardian.getID()));
 
                     inventory.setItem(slot, ItemStackUtils.makeItem(config.getGuardianItem(), placeholders));
 
@@ -62,6 +63,8 @@ public final class DragonGuardiansGUI extends TheDragonGUI {
         if(hasNext) setItem(config.getNextPageItem());
 
         inventory.setItem(config.getCloseGUI().slot, ItemStackUtils.makeItem(config.getCloseGUI()));
+
+        inventory.setItem(config.getBackToMainMenu().slot, ItemStackUtils.makeItem(config.getBackToMainMenu()));
 
         return inventory;
     }
@@ -82,6 +85,8 @@ public final class DragonGuardiansGUI extends TheDragonGUI {
             player.openInventory(new DragonGuardiansGUI(box, page + 1).getInventory());
         }else if(isItem(slot, config.getPreviousPageItem()) && page > 1) {
             player.openInventory(new DragonGuardiansGUI(box, page - 1).getInventory());
+        }else if (isItem(slot, config.getBackToMainMenu())){
+            player.openInventory(new MainMenuGUI(box).getInventory());
         }else {
             Guardian guardian = guardiansMap.getOrDefault(slot, null);
 

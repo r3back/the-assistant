@@ -66,7 +66,9 @@ public final class GameCountdownImpl implements GameCountdown {
     private void sendTitle(Player player, TheDragonEntity theDragonEntity, ConfigTitle configTitle){
         String dragonName = theDragonEntity == null ? "" : theDragonEntity.getDisplayName();
 
-        List<IPlaceholder> placeholders = Arrays.asList(new Placeholder("dragon", dragonName), new Placeholder("time", time));
+        List<IPlaceholder> placeholders = Arrays.asList(
+                new Placeholder("thedragon_dragon_displayname", dragonName),
+                new Placeholder("thedragon_dragon_spawning_time", time));
 
         String title = StringUtils.processMulti(configTitle.getTitle(), placeholders);
         String subTitle = StringUtils.processMulti(configTitle.getSubtitle(), placeholders);

@@ -9,6 +9,8 @@ repositories {
     maven { url 'https://repo.codemc.org/repository/maven-public/' }
     //ProtocolLib
     maven { url 'https://repo.dmulloy2.net/repository/public/' }
+    //BossBar
+    maven { url 'https://jitpack.io/' }
 }
 
 dependencies {
@@ -23,6 +25,9 @@ dependencies {
     implementation project(':TheAssistant:Addons:MMOItems')
     implementation project(':TheAssistant:Addons:Placeholders')
     implementation project(':TheAssistant:Addons:MythicMobs')
+
+    //BossBar
+    implementation 'com.github.InventivetalentDev:BossBarAPI:2.4.3-SNAPSHOT'
 
     //Regions
     implementation project(':TheAssistant:Addons:Regions:WorldGuard6')
@@ -104,6 +109,7 @@ shadowJar {
         include(dependency('de.tr7zw:.*'))
         include(dependency('xyz.xenondevs:.*'))
         include(dependency('org.mongodb:mongodb-driver-sync:.*'))
+        include(dependency('com.github.InventivetalentDev:BossBarAPI:.*'))
 
         include(project(':TheAssistant:TheAssistant-API'))
         include(project(':TheAssistant:Addons'))
@@ -159,6 +165,7 @@ shadowJar {
     relocate 'de.tr7zw', 'com.qualityplus.assistant.lib.de.tr7zw'
     relocate 'xyz.xenondevs', 'com.qualityplus.assistant.lib.xyz.xenondevs'
     relocate 'com.mongodb', 'com.qualityplus.assistant.lib.com.mongodb'
+    relocate 'org.inventivetalent', 'com.qualityplus.assistant.lib.org.inventivetalent'
 
 
     doLast {

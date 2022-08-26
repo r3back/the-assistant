@@ -1,5 +1,7 @@
 package com.qualityplus.collections.base.factory;
 
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.qualityplus.assistant.base.factory.UriGetter;
 import com.qualityplus.assistant.config.ConfigDatabase;
 import com.qualityplus.assistant.config.database.DatabaseType;
@@ -12,6 +14,7 @@ import eu.okaeri.persistence.PersistencePath;
 import eu.okaeri.persistence.document.DocumentPersistence;
 import eu.okaeri.persistence.jdbc.H2Persistence;
 import eu.okaeri.persistence.jdbc.MariaDbPersistence;
+import eu.okaeri.persistence.mongo.MongoPersistence;
 import eu.okaeri.persistence.redis.RedisPersistence;
 import eu.okaeri.platform.bukkit.persistence.YamlBukkitPersistence;
 import eu.okaeri.platform.core.annotation.Bean;

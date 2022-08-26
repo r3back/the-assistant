@@ -45,8 +45,8 @@ public final class DragonCrystalsGUI extends TheDragonGUI {
                     DragonCrystal crystal = crystals.get(i);
 
                     List<IPlaceholder> placeholders = PlaceholderBuilder.create(
-                            new Placeholder("location", LocationUtils.toString(crystal.getLocation())),
-                            new Placeholder("id", String.valueOf(i))
+                            new Placeholder("thedragon_crystal_location", LocationUtils.toString(crystal.getLocation())),
+                            new Placeholder("thedragon_crystal_id", String.valueOf(i))
                     ).get();
 
                     inventory.setItem(slot, ItemStackUtils.makeItem(config.getCrystalItem(), placeholders));
@@ -72,6 +72,7 @@ public final class DragonCrystalsGUI extends TheDragonGUI {
         return inventory;
     }
 
+
     @Override
     public void onInventoryClick(InventoryClickEvent e) {
         Player player = (Player)e.getWhoClicked();
@@ -90,7 +91,7 @@ public final class DragonCrystalsGUI extends TheDragonGUI {
             player.openInventory(new DragonCrystalsGUI(box, page + 1).getInventory());
         }else if (isItem(slot, config.getPreviousPage()) && page > 1){
             player.openInventory(new DragonCrystalsGUI(box, page - 1).getInventory());
-        } else {
+        }else{
 
             DragonCrystal toRemove = crystalMap.getOrDefault(slot, null);
 

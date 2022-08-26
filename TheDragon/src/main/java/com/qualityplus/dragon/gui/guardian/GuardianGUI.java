@@ -1,5 +1,7 @@
 package com.qualityplus.dragon.gui.guardian;
 
+import com.cryptomorin.xseries.XMaterial;
+import com.qualityplus.assistant.api.util.IPlaceholder;
 import com.qualityplus.assistant.util.StringUtils;
 import com.qualityplus.assistant.util.inventory.InventoryUtils;
 import com.qualityplus.assistant.util.itemstack.ItemStackUtils;
@@ -7,21 +9,24 @@ import com.qualityplus.assistant.util.placeholder.Placeholder;
 import com.qualityplus.dragon.TheDragon;
 import com.qualityplus.dragon.api.box.Box;
 import com.qualityplus.dragon.api.game.guardian.Guardian;
+import com.qualityplus.dragon.base.editmode.GuardianEditMode;
+import com.qualityplus.dragon.base.game.guardian.DragonGuardian;
+import com.qualityplus.dragon.base.game.guardian.GuardianArmor;
+import com.qualityplus.dragon.base.service.GuardianEditServiceImpl.EditType;
 import com.qualityplus.dragon.gui.TheDragonGUI;
 import com.qualityplus.dragon.gui.equipment.GuardianEquipmentGUI;
 import com.qualityplus.dragon.gui.guardians.DragonGuardiansGUI;
-import com.qualityplus.dragon.base.game.guardian.DragonGuardian;
-import com.qualityplus.dragon.base.game.guardian.GuardianArmor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
-import com.qualityplus.dragon.base.service.SetupServiceImpl.*;
 
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 public final class GuardianGUI extends TheDragonGUI {
+    private static final String NULL_FORMAT = "&c✘";
     private final GuardianGUIConfig config;
     private final DragonGuardian guardian;
 
@@ -34,26 +39,52 @@ public final class GuardianGUI extends TheDragonGUI {
 
     @Override
     public @NotNull Inventory getInventory() {
-        Inventory inventory = Bukkit.createInventory(this, 54, StringUtils.color("&8Item Editor"));
-
         InventoryUtils.fillInventory(inventory, config.getBackground());
-
 
         GuardianArmor guardianArmor = guardian.getGuardianArmor();
 
-        inventory.setItem(config.getHelmetItem().slot, ItemStackUtils.makeItem(config.getHelmetItem(), guardianArmor.getHelmet()));
-        inventory.setItem(config.getChestPlateItem().slot, ItemStackUtils.makeItem(config.getChestPlateItem(), guardianArmor.getChestplate()));
-        inventory.setItem(config.getLeggingsItem().slot, ItemStackUtils.makeItem(config.getLeggingsItem(), guardianArmor.getLeggings()));
-        inventory.setItem(config.getBootsItem().slot, ItemStackUtils.makeItem(config.getBootsItem(), guardianArmor.getBoots()));
-        inventory.setItem(config.getMobTypeItem().slot, ItemStackUtils.makeItem(config.getMobTypeItem(), Collections.singletonList(new Placeholder("type", String.valueOf(guardian.getEntity())))));
-        inventory.setItem(config.getDisplayNameItem().slot, ItemStackUtils.makeItem(config.getDisplayNameItem(), Collections.singletonList(new Placeholder("displayname", String.valueOf(guardian.getDisplayName())))));
-        inventory.setItem(config.getHealthItem().slot, ItemStackUtils.makeItem(config.getHealthItem(), Collections.singletonList(new Placeholder("health", String.valueOf(guardian.getHealth())))));
+        inventory.setItem(config.getHelmetItem().slot, ItemStackUtils.makeItem(config.getHelmetItem(), Optional
+                .ofNullable(guardianArmor.getHelmet())
+                .orElse(XMaterial.GOLDEN_HELMET.parseItem())));
+
+        inventory.setItem(config.getChestPlateItem().slot, ItemStackUtils.makeItem(config.getChestPlateItem(), Optional
+                .ofNullable(guardianArmor.getChestplate())
+                .orElse(XMaterial.GOLDEN_CHESTPLATE.parseItem())));
+
+        inventory.setItem(config.getLeggingsItem().slot, ItemStackUtils.makeItem(config.getLeggingsItem(), Optional
+                .ofNullable(guardianArmor.getLeggings())
+                .orElse(XMaterial.GOLDEN_LEGGINGS.parseItem())));
+
+        inventory.setItem(config.getBootsItem().slot, ItemStackUtils.makeItem(config.getBootsItem(), Optional
+                .ofNullable(guardianArmor.getBoots())
+                .orElse(XMaterial.GOLDEN_BOOTS.parseItem())));
+
+        inventory.setItem(config.getWeaponItem().slot, ItemStackUtils.makeItem(config.getWeaponItem(), Optional
+                .ofNullable(guardianArmor.getWeapon())
+                .orElse(XMaterial.GOLDEN_SWORD.parseItem())));
+
+        inventory.setItem(config.getMobTypeItem().slot, ItemStackUtils.makeItem(config.getMobTypeItem(), getMobTypePlaceholders()));
+        inventory.setItem(config.getDisplayNameItem().slot, ItemStackUtils.makeItem(config.getDisplayNameItem(), getDisplayNamePlaceholders()));
+        inventory.setItem(config.getHealthItem().slot, ItemStackUtils.makeItem(config.getHealthItem(), getHealthPlaceholders()));
 
         inventory.setItem(config.getGoBackItem().slot, ItemStackUtils.makeItem(config.getGoBackItem()));
         inventory.setItem(config.getCloseGUI().slot, ItemStackUtils.makeItem(config.getCloseGUI()));
 
         return inventory;
     }
+
+    private List<IPlaceholder> getMobTypePlaceholders(){
+        return Collections.singletonList(new Placeholder("type", Optional.ofNullable(guardian.getEntity()).orElse(NULL_FORMAT)));
+    }
+
+    private List<IPlaceholder> getDisplayNamePlaceholders(){
+        return Collections.singletonList(new Placeholder("displayname", Optional.ofNullable(guardian.getDisplayName()).orElse(NULL_FORMAT)));
+    }
+
+    private List<IPlaceholder> getHealthPlaceholders(){
+        return Collections.singletonList(new Placeholder("health", String.valueOf(guardian.getHealth())));
+    }
+
     public void onInventoryClick(InventoryClickEvent e) {
         Player player = (Player)e.getWhoClicked();
 
@@ -75,6 +106,8 @@ public final class GuardianGUI extends TheDragonGUI {
             player.openInventory(new GuardianEquipmentGUI(box, player, guardian, GuardianEquipmentGUI.GuardianEquipmentType.LEGGINGS).getInventory());
         }else if (isItem(slot, config.getBootsItem())){
             player.openInventory(new GuardianEquipmentGUI(box, player, guardian, GuardianEquipmentGUI.GuardianEquipmentType.BOOTS).getInventory());
+        }else if (isItem(slot, config.getWeaponItem())){
+            player.openInventory(new GuardianEquipmentGUI(box, player, guardian, GuardianEquipmentGUI.GuardianEquipmentType.WEAPON).getInventory());
         }else
             setSetupMode(player, slot);
     }
@@ -87,9 +120,15 @@ public final class GuardianGUI extends TheDragonGUI {
 
         if(type == null) return;
 
-        TheDragon.getApi().getSetupService().setInSetupMode(player.getUniqueId(), guardian, type);
+        GuardianEditMode editMode = GuardianEditMode.builder()
+                .uuid(player.getUniqueId())
+                .dragonGuardian(guardian)
+                .editType(type)
+                .build();
 
-        player.sendMessage(StringUtils.color(box.files().messages().setupMessages.setupModeMessage.replace("%type%", type.getName())));
+        TheDragon.getApi().getGuardianEditService().setInEditMode(editMode);
+
+        player.sendMessage(StringUtils.color(box.files().messages().setupMessages.guardianEditModeMessage.replace("%type%", type.getName())));
 
         player.closeInventory();
 

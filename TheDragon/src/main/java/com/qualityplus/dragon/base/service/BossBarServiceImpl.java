@@ -51,12 +51,15 @@ public final class BossBarServiceImpl implements BossBarService {
         int remaining = Optional.ofNullable(api.getGameService().getSwitchableEvent())
                 .map(switchableEvent -> switchableEvent.getCurrentEvent().getRemainingTime())
                 .orElse(0);
+
         List<IPlaceholder> placeholders = Arrays.asList(
-                new Placeholder("dragon_name", theDragonEntity.getDisplayName()),
-                new Placeholder("max_health", String.valueOf(theDragonEntity.getMaxHealth())),
-                new Placeholder("health", String.valueOf(theDragonEntity.getHealth())),
-                new Placeholder("remaining_time", remaining));
-        String message = StringUtils.processMulti(messages.setupMessages.bossBar, placeholders);
+                new Placeholder("thedragon_dragon_displayname", theDragonEntity.getDisplayName()),
+                new Placeholder("thedragon_dragon_max_health", theDragonEntity.getMaxHealth()),
+                new Placeholder("thedragon_dragon_health", theDragonEntity.getHealth()),
+                new Placeholder("thedragon_next_event_remaining_time", remaining));
+
+        String message = StringUtils.processMulti(messages.gameMessages.gameEventBossBar, placeholders);
+
         TheDragon.getApi().getUserService().getUsers().stream()
                 .map(EventPlayer::getPlayer)
                 .filter(Objects::nonNull)

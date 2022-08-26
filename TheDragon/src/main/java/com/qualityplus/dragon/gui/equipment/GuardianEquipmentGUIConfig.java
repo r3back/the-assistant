@@ -1,7 +1,6 @@
-package com.qualityplus.dragon.gui.guardians;
+package com.qualityplus.dragon.gui.equipment;
 
 import com.qualityplus.assistant.inventory.CommonGUI;
-import com.qualityplus.assistant.inventory.Item;
 import com.qualityplus.assistant.inventory.SimpleGUI;
 import eu.okaeri.configs.OkaeriConfig;
 import lombok.AllArgsConstructor;
@@ -11,10 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public final class DragonGuardiansGUIConfig extends OkaeriConfig implements SimpleGUI {
+public final class GuardianEquipmentGUIConfig extends OkaeriConfig implements SimpleGUI {
     private CommonGUI commonGUI;
-    private Item guardianItem;
-    private Item previousPageItem;
-    private Item nextPageItem;
-    private Item backToMainMenu;
 }

@@ -1,9 +1,15 @@
 package com.qualityplus.dragon.base.configs;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.google.common.collect.ImmutableMap;
 import com.qualityplus.assistant.inventory.CommonGUI;
+import com.qualityplus.assistant.inventory.Item;
+import com.qualityplus.assistant.inventory.background.Background;
 import com.qualityplus.assistant.inventory.background.DefaultBackgrounds;
 import com.qualityplus.assistant.util.itemstack.ItemBuilder;
+import com.qualityplus.dragon.gui.dragons.DragonsGUI;
+import com.qualityplus.dragon.gui.dragons.DragonsGUIConfig;
+import com.qualityplus.dragon.gui.equipment.GuardianEquipmentGUIConfig;
 import com.qualityplus.dragon.gui.guardians.DragonGuardiansGUIConfig;
 import com.qualityplus.dragon.gui.altars.DragonAltarsGUIConfig;
 import com.qualityplus.dragon.gui.confirm.ConfirmGUIConfig;
@@ -28,29 +34,77 @@ public final class Inventories extends OkaeriConfig implements DefaultBackground
     public DragonGuardiansGUIConfig guardiansGUIConfig = new DragonGuardiansGUIConfig(
             new CommonGUI(
                     "Guardians GUI",
-                    54,
+                    27,
                     getBackGroundFiller(),
-                    ItemBuilder.of(XMaterial.BARRIER,  49, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
+                    ItemBuilder.of(XMaterial.BARRIER,  22, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
             ),
-            ItemBuilder.of(XMaterial.CREEPER_HEAD, 1, "&aGuardian: &4%dragon_guardian_id%", Arrays.asList("",
-                    "", "&e► Left-Click to edit", "&e► Right-Click to remove")).build(),
-            ItemBuilder.of(XMaterial.ARROW,  48, 1, "&aPrevious Page", Collections.singletonList("&7Click to go to previous page")).build(),
-            ItemBuilder.of(XMaterial.ARROW,  50, 1, "&aNext Page", Collections.singletonList("&7Click to go to next page")).build()
+            ItemBuilder.of(XMaterial.PLAYER_HEAD, 1, "&5&nGuardian:&d %thedragon_guardian_id%", Arrays.asList("",
+                     "&5► &dLeft-Click to edit", "&5► &dRight-Click to remove"))
+                    .headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2M4OWRjNTA0YTVjNmZjZTMxNzM0N2ZmZDQ4NGVjY2EyMjAyMmU2MjRjMDM0ZWI5YzgyNDYzZTg0OGE1YTg5NyJ9fX0")
+                    .build(),
+            ItemBuilder.of(XMaterial.ARROW,  21, 1, "&5Previous Page", Collections.singletonList("&7Click to go to previous page")).build(),
+            ItemBuilder.of(XMaterial.ARROW,  23, 1, "&5Next Page", Collections.singletonList("&7Click to go to next page")).build(),
+            ItemBuilder.of(XMaterial.ARROW,  18, 1, "&5Go Back", Collections.singletonList("&7Click to go to main menu")).build()
     );
 
     @CustomKey("altarsGUIConfig")
     public DragonAltarsGUIConfig dragonAltarsGUIConfig = new DragonAltarsGUIConfig(
             new CommonGUI(
                     "Altars GUI",
-                    54,
+                    27,
                     getBackGroundFiller(),
-                    ItemBuilder.of(XMaterial.BARRIER,  49, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
+                    ItemBuilder.of(XMaterial.BARRIER,  22, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
             ),
-            ItemBuilder.of(XMaterial.PLAYER_HEAD, 1, "&aAltar: &4%dragon_altar_id%", Arrays.asList("", "&eLocation: &6%dragon_crystal_location%", "", "&e► Left-Click to teleport", "&e► Right-Click to remove"))
+            ItemBuilder.of(XMaterial.PLAYER_HEAD, 1, "&5&nAltar:&d %thedragon_altar_id%", Arrays.asList("",
+                            "&5► &dLocation: &5%thedragon_altar_location%",
+                            "",
+                            "&5► &dLeft-Click to teleport",
+                            "&5► &dRight-Click to remove"))
                     .headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjQ2ODRlM2U3ODkwY2FmN2QxMzc2MmVhMTllYjE0YzU5NDBiODhmZDdmMDc3ZDgxZTZlZmZiNGY2ZGYxNmMyNiJ9fX0=").build(),
-            ItemBuilder.of(XMaterial.ARROW,  48, 1, "&aPrevious Page", Collections.singletonList("&7Click to go to previous page")).build(),
-            ItemBuilder.of(XMaterial.ARROW,  50, 1, "&aNext Page", Collections.singletonList("&7Click to go to next page")).build(),
-            ItemBuilder.of(XMaterial.ARROW,  45, 1, "&aGo Back", Collections.singletonList("&7Click to go to main menu")).build()
+            ItemBuilder.of(XMaterial.ARROW,  21, 1, "&5Previous Page", Collections.singletonList("&7Click to go to previous page")).build(),
+            ItemBuilder.of(XMaterial.ARROW,  23, 1, "&5Next Page", Collections.singletonList("&7Click to go to next page")).build(),
+            ItemBuilder.of(XMaterial.ARROW,  18, 1, "&5Go Back", Collections.singletonList("&7Click to go to main menu")).build()
+
+    );
+
+    @CustomKey("crystalsGUIConfig")
+    public DragonCrystalsGUIConfig dragonCrystalsGUIConfig = new DragonCrystalsGUIConfig(
+            new CommonGUI(
+                    "Crystals GUI",
+                    27,
+                    getBackGroundFiller(),
+                    ItemBuilder.of(XMaterial.BARRIER,  22, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
+            ),
+            ItemBuilder.of(XMaterial.PLAYER_HEAD, 1, "&5&nCrystal:&d %thedragon_crystal_id%", Arrays.asList("",
+                            "&5► &dLocation: &5%thedragon_crystal_location%",
+                            "",
+                            "&5► &dLeft-Click to teleport",
+                            "&5► &dRight-Click to remove"))
+                    .headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjc0ODEzOWVlNmNmZjc0NGM3ZTg5NTkzZjZiOTBkNDYwNDRkMDdlZTVlNjM4MjhmYmU5NTMxZmI2NmRmOWI4ZiJ9fX0=").build(),
+            ItemBuilder.of(XMaterial.ARROW,  21, 1, "&5Previous Page", Collections.singletonList("&7Click to go to previous page")).build(),
+            ItemBuilder.of(XMaterial.ARROW,  23, 1, "&5Next Page", Collections.singletonList("&7Click to go to next page")).build(),
+            ItemBuilder.of(XMaterial.ARROW,  18, 1, "&5Go Back", Collections.singletonList("&7Click to go to main menu")).build()
+
+    );
+
+
+    @CustomKey("dragonsGUIConfig")
+    public DragonsGUIConfig dragonsGUIConfig = new DragonsGUIConfig(
+            new CommonGUI(
+                    "Dragons GUI",
+                    27,
+                    getBackGroundFiller(),
+                    ItemBuilder.of(XMaterial.BARRIER,  22, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
+            ),
+            ItemBuilder.of(XMaterial.PLAYER_HEAD, 1, "&5&nDragon:&d %thedragon_dragon_id%", Arrays.asList("",
+                            "&5► &dDisplayName: &5%thedragon_dragon_displayname%",
+                            "&5► &dMax Health: &5%thedragon_dragon_maxhealth%",
+                            "&5► &dChance: &5%thedragon_dragon_chance%%",
+                            "&5► &dXp: &5%thedragon_dragon_xp%"))
+                    .headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjY4YzFjMDc5YTdmZmIzNmY0OGRkNzE1MDM1NWUzZTBiN2Y2OGRkNjA1ZTZmODg0NzMxM2MzNjBjZjYxZTBjIn19fQ==").build(),
+            ItemBuilder.of(XMaterial.ARROW,  21, 1, "&5Previous Page", Collections.singletonList("&7Click to go to previous page")).build(),
+            ItemBuilder.of(XMaterial.ARROW,  23, 1, "&5Next Page", Collections.singletonList("&7Click to go to next page")).build(),
+            ItemBuilder.of(XMaterial.ARROW,  18, 1, "&5Go Back", Collections.singletonList("&7Click to go to main menu")).build()
 
     );
 
@@ -66,53 +120,70 @@ public final class Inventories extends OkaeriConfig implements DefaultBackground
             ItemBuilder.of(XMaterial.RED_WOOL, 15, 1, "&cCancel", Collections.singletonList("&7Click to cancel")).build()
     );
 
-    @CustomKey("crystalsGUIConfig")
-    public DragonCrystalsGUIConfig dragonCrystalsGUIConfig = new DragonCrystalsGUIConfig(
+    @CustomKey("guardianEquipmentGUIConfig")
+    public GuardianEquipmentGUIConfig guardianEquipmentGUIConfig = new GuardianEquipmentGUIConfig(
             new CommonGUI(
-                    "Crystals GUI",
-                    54,
+                    "Select Equipment:",
+                    45,
                     getBackGroundFiller(),
-                    ItemBuilder.of(XMaterial.BARRIER,  49, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
-            ),
-            ItemBuilder.of(XMaterial.PLAYER_HEAD, 1, "&aCrystal: &4%dragon_crystal_id%", Arrays.asList("", "&eLocation: &6%dragon_crystal_location%", "", "&e► Left-Click to teleport", "&e► Right-Click to remove"))
-                    .headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjc0ODEzOWVlNmNmZjc0NGM3ZTg5NTkzZjZiOTBkNDYwNDRkMDdlZTVlNjM4MjhmYmU5NTMxZmI2NmRmOWI4ZiJ9fX0=").build(),
-            ItemBuilder.of(XMaterial.ARROW,  48, 1, "&aPrevious Page", Collections.singletonList("&7Click to go to previous page")).build(),
-            ItemBuilder.of(XMaterial.ARROW,  50, 1, "&aNext Page", Collections.singletonList("&7Click to go to next page")).build(),
-            ItemBuilder.of(XMaterial.ARROW,  45, 1, "&aGo Back", Collections.singletonList("&7Click to go to main menu")).build()
-
+                    ItemBuilder.of(XMaterial.BARRIER,  49, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).enabled(false).build()
+            )
     );
-
 
     @CustomKey("mainMenuGUIConfig")
     public MainMenuGUIConfig mainMenuGUIConfig = new MainMenuGUIConfig(
             new CommonGUI(
-                    "Main GUI",
-                    54,
-                    getBackGroundFiller(),
-                    ItemBuilder.of(XMaterial.BARRIER,  49, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
+                    "Game Settings",
+                    45,
+                    getMainMenuFiller(),
+                    ItemBuilder.of(XMaterial.BARRIER,  40, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
             ),
-            ItemBuilder.of(XMaterial.DRAGON_WALL_HEAD, 4, 1, "&aDragon Game Spawn", Arrays.asList("", "&eLocation: &6%dragon_spawn_location%", "", "&e► Click to teleport")).build(),
-            ItemBuilder.of(XMaterial.PLAYER_HEAD,  19, 1, "&aGame Crystals", Arrays.asList("", "&eAmount: &6%dragon_crystals_amount%", "", "&e► Click to view")).headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjc0ODEzOWVlNmNmZjc0NGM3ZTg5NTkzZjZiOTBkNDYwNDRkMDdlZTVlNjM4MjhmYmU5NTMxZmI2NmRmOWI4ZiJ9fX0=").build(),
-            ItemBuilder.of(XMaterial.PLAYER_HEAD,  22, 1, "&aGame Altars", Arrays.asList("", "&eAmount: &6%dragon_altars_amount%", "", "&e► Click to view")).headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjQ2ODRlM2U3ODkwY2FmN2QxMzc2MmVhMTllYjE0YzU5NDBiODhmZDdmMDc3ZDgxZTZlZmZiNGY2ZGYxNmMyNiJ9fX0").build(),
-            ItemBuilder.of(XMaterial.PAPER, 25, 1, "&aCurrent Schematic", Arrays.asList("", "&e► Schematic: %dragon_schematic_id%")).build()
-
+            ItemBuilder.of(XMaterial.PLAYER_HEAD, 11, 1, "&5&nDragon Game Spawn", Arrays.asList("", "&5► &dLocation: &5%thedragon_spawn_location%", "", "&5» &dClick to teleport")).headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTZiYTk5ODdmNzM4ZTZkNzVkM2IwMmMzMGQxNDgwYTM2MDU5M2RkYjQ2NGJkMWM4MWFiYjlkNzFkOWU2NTZjMCJ9fX0=").build(),
+            ItemBuilder.of(XMaterial.PLAYER_HEAD,  12, 1, "&5&nGame Crystals", Arrays.asList("", "&5► &dAmount: &5%thedragon_crystals_amount%", "", "&5» &dClick to view")).headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjc0ODEzOWVlNmNmZjc0NGM3ZTg5NTkzZjZiOTBkNDYwNDRkMDdlZTVlNjM4MjhmYmU5NTMxZmI2NmRmOWI4ZiJ9fX0=").build(),
+            ItemBuilder.of(XMaterial.PLAYER_HEAD,  13, 1, "&5&nGame Altars", Arrays.asList("", "&5► &dAmount: &5%thedragon_altars_amount%", "", "&5» &dClick to view")).headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjQ2ODRlM2U3ODkwY2FmN2QxMzc2MmVhMTllYjE0YzU5NDBiODhmZDdmMDc3ZDgxZTZlZmZiNGY2ZGYxNmMyNiJ9fX0").build(),
+            ItemBuilder.of(XMaterial.PLAYER_HEAD, 14, 1, "&5&nCurrent Game Schematic", Arrays.asList("", "&5► &dGame Schematic: &5%thedragon_schematic_id%", "", "&5» &dAdd it in &5/TheDragon/schematics", "  &dand then change it in &5config.yml")).headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTQ4Yjg5YjFhYTk4OGRhODc4MDA0ODhjMzcyNjBhYTg5OGQyYzA3YWM4NmMwOTljNDQ5NGZjMGY0ZjBkY2NhMiJ9fX0=").build(),
+            ItemBuilder.of(XMaterial.PLAYER_HEAD, 15, 1, "&5&nGame Dragons", Arrays.asList("", "&5► &dAmount: &5%thedragon_dragons_amount%", "", "&5» &dClick to view all dragons!")).headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjY4YzFjMDc5YTdmZmIzNmY0OGRkNzE1MDM1NWUzZTBiN2Y2OGRkNjA1ZTZmODg0NzMxM2MzNjBjZjYxZTBjIn19fQ==").build(),
+            ItemBuilder.of(XMaterial.PLAYER_HEAD, 22, 1, "&5&nGame Guardians", Arrays.asList("", "&5► &dAmount: &5%thedragon_guardians_amount%", "", "&5» &dClick to view all guardians!")).headData("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2M4OWRjNTA0YTVjNmZjZTMxNzM0N2ZmZDQ4NGVjY2EyMjAyMmU2MjRjMDM0ZWI5YzgyNDYzZTg0OGE1YTg5NyJ9fX0=").build()
     );
 
     @CustomKey("guardianGUIConfig")
     public GuardianGUIConfig guardianGUIConfig = new GuardianGUIConfig(
             new CommonGUI(
                     "Guardian GUI",
-                    54,
+                    45,
                     getBackGroundFiller(),
-                    ItemBuilder.of(XMaterial.BARRIER,  49, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
+                    ItemBuilder.of(XMaterial.BARRIER,  40, 1, "&cClose", Arrays.asList("", "&e» &7Click to close")).build()
             ),
-            ItemBuilder.of(XMaterial.ARROW, 48, 1, "&aGo Back", Arrays.asList("", "&7Click to go back")).build(),
-            ItemBuilder.of(XMaterial.DIAMOND_HELMET, 1, "&aEdit Helmet", Arrays.asList("", "&7 ► Click to change")).build(),
-            ItemBuilder.of(XMaterial.DIAMOND_CHESTPLATE, 1, "&aEdit Chestplate", Arrays.asList("", "&7 ► Click to change")).build(),
-            ItemBuilder.of(XMaterial.DIAMOND_LEGGINGS, 1, "&aEdit Leggings", Arrays.asList("", "&7 ► Click to change")).build(),
-            ItemBuilder.of(XMaterial.DIAMOND_BOOTS, 1, "&aEdit Boots", Arrays.asList("", "&7 ► Click to change")).build(),
-            ItemBuilder.of(XMaterial.ZOMBIE_HEAD, 22, 1, "&aMob Type", Arrays.asList("", "&eType: &6%type%", "", "&e► Click to change")).build(),
-            ItemBuilder.of(XMaterial.NAME_TAG, 22, 1, "&aDisplayName", Arrays.asList("", "&eDisplayname: &6%displayname%", "", "&e► Click to change")).build(),
-            ItemBuilder.of(XMaterial.APPLE, 1, "&aHealth: %health%", Arrays.asList("", "&7 ► Click to change")).build()
-    );
+            ItemBuilder.of(XMaterial.ARROW, 39, 1, "&5Go Back", Arrays.asList("&7Click to go back")).build(),
+            ItemBuilder.of(XMaterial.DIAMOND_HELMET, 10,1, "&5&nEdit Helmet", Arrays.asList("", "&5 » &dClick to change")).build(),
+            ItemBuilder.of(XMaterial.DIAMOND_CHESTPLATE, 11, 1, "&5&nEdit Chestplate", Arrays.asList("", "&5 » &dClick to change")).build(),
+            ItemBuilder.of(XMaterial.DIAMOND_LEGGINGS, 12, 1, "&5&nEdit Leggings", Arrays.asList("", "&5 » &dClick to change")).build(),
+            ItemBuilder.of(XMaterial.DIAMOND_BOOTS, 13, 1, "&5&nEdit Boots", Arrays.asList("", "&5 » &dClick to change")).build(),
+            ItemBuilder.of(XMaterial.ZOMBIE_HEAD, 14, 1, "&5&nMob Type", Arrays.asList("", "&5► &dType: &5%type%", "", "&5 » &dClick to change")).build(),
+            ItemBuilder.of(XMaterial.NAME_TAG, 15, 1, "&5&nDisplayName", Arrays.asList("", "&5► &dDisplayname: &5%displayname%", "", "&5 » &dClick to change")).build(),
+            ItemBuilder.of(XMaterial.APPLE, 16, 1, "&5&nHealth", Arrays.asList("", "&5► &dHealth: &5%health%", "&5 » &dClick to change")).build(),
+            ItemBuilder.of(XMaterial.DIAMOND_BOOTS, 22, 1, "&5&nEdit Weapon", Arrays.asList("", "&5 » &dClick to change")).build()
+            );
+
+    private Background getMainMenuFiller(){
+        return Background.builder()
+                .filler(ItemBuilder.of(XMaterial.BLACK_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                .useFiller(true)
+                .items(ImmutableMap.<Integer, Item>builder()
+                        .put(0, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(1, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(9, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(7, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(8, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(17, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(27, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(36, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(37, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(35, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(43, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .put(44, ItemBuilder.of(XMaterial.MAGENTA_STAINED_GLASS_PANE, 1, " ", Collections.emptyList()).build())
+                        .build())
+
+                .build();
+    }
 }

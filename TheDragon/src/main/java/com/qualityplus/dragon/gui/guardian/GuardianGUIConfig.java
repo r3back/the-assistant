@@ -21,4 +21,6 @@ public final class GuardianGUIConfig extends OkaeriConfig implements SimpleGUI {
     private Item mobTypeItem;
     private Item displayNameItem;
     private Item healthItem;
+    private Item weaponItem;
+
 }

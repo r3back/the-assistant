@@ -4,7 +4,7 @@ import com.qualityplus.assistant.TheAssistantPlugin;
 import com.qualityplus.assistant.api.commands.command.AssistantCommand;
 import com.qualityplus.assistant.util.StringUtils;
 import com.qualityplus.dragon.api.box.Box;
-import com.qualityplus.dragon.api.service.SetupService;
+import com.qualityplus.dragon.api.service.AltarSetupService;
 import eu.okaeri.commons.bukkit.time.MinecraftTimeEquivalent;
 import eu.okaeri.injector.annotation.Inject;
 import eu.okaeri.platform.bukkit.annotation.Delayed;
@@ -14,12 +14,11 @@ import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Component
 public final class SetupModeCommand extends AssistantCommand {
-    private @Inject SetupService setupService;
+    private @Inject AltarSetupService setupService;
     private @Inject Box box;
 
     @Override
@@ -27,14 +26,13 @@ public final class SetupModeCommand extends AssistantCommand {
         Player player = (Player) sender;
         if(args.length == 1){
             UUID uuid = player.getUniqueId();
-            Set<UUID> editorMode = setupService.getPlayersInSetupMode();
 
-            if(editorMode.contains(uuid)){
-                editorMode.remove(uuid);
+            if(setupService.playerIsInEditMode(uuid)){
+                setupService.removePlayer(uuid);
                 player.sendMessage(StringUtils.color(box.files().messages().setupMessages.setupModeLeft.replace("%prefix%", box.files().config().prefix)));
             }else{
-                editorMode.add(uuid);
-                box.files().messages().setupMessages.setupModeJoin.forEach(message -> player.sendMessage(StringUtils.color(message.replace("%prefix%", box.files().config().prefix))));
+                setupService.addPlayer(uuid);
+                box.files().messages().setupMessages.altarSetupMode.forEach(message -> player.sendMessage(StringUtils.color(message.replace("%prefix%", box.files().config().prefix))));
             }
         }else{
             player.sendMessage(StringUtils.color(box.files().messages().pluginMessages.useSyntax.replace("%usage%", syntax)));

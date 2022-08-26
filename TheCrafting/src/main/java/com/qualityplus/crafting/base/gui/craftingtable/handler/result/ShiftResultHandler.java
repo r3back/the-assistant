@@ -48,8 +48,6 @@ public final class ShiftResultHandler implements CommonHandler {
         }else{
             int min = isAuto ? getMinAutoRecipeAmount(player, (CustomRecipe) recipe) : getMinRecipeAmount((CustomRecipe) recipe);
 
-            //Bukkit.getConsoleSender().sendMessage("Amount: " + result.getAmount() + " | Min: " + min );
-
             giveItem(player, result, min / result.getAmount());
 
             for (int i = 0; i < min; i++){

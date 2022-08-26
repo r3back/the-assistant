@@ -42,13 +42,10 @@ public final class DragonCombatListener implements Listener {
         }else{
             Player attacker = getDragonAttacker(event);
 
-            Bukkit.getConsoleSender().sendMessage("A");
             Optional.ofNullable(attacker).ifPresent(player -> {
                 double damage = event.getDamage();
-                Bukkit.getConsoleSender().sendMessage("B");
 
                 if(dragonIsDeath()) return;
-                Bukkit.getConsoleSender().sendMessage("C");
 
                 addDamageToAttacker(player, damage);
 
@@ -67,8 +64,6 @@ public final class DragonCombatListener implements Listener {
         event.setCancelled(true);
 
         double dragonHealth = DragonHealthUtil.getHealthAfterDamage(theDragonEntity.getHealth(), enderDragon.getHealth(), damage);
-
-        double healthOldMethod = DragonHealthUtil.getNewHealth(theDragonEntity.getHealth(), enderDragon.getHealth(), damage);
 
         if(dragonHealth < 0){
             box.game().finish();

@@ -16,4 +16,5 @@ public final class GuardianArmor extends OkaeriConfig {
     private ItemStack chestplate;
     private ItemStack leggings;
     private ItemStack boots;
+    private ItemStack weapon;
 }

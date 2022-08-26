@@ -110,7 +110,7 @@ public final class CollectionsFile extends OkaeriConfig {
                 fastCollection("darkOakWood", "Dark Oak Wood", XMaterial.DARK_OAK_LOG, FORAGING).guiOptions(fastOptions(XMaterial.DARK_OAK_LOG, 12)).build(),
                 fastCollection("jungleWood", "Jungle Wood", XMaterial.JUNGLE_LOG, FORAGING).guiOptions(fastOptions(XMaterial.JUNGLE_LOG, 13)).build(),
                 fastCollection("oakWood", "Oak Wood", XMaterial.OAK_LOG, FORAGING).guiOptions(fastOptions(XMaterial.OAK_LOG, 14)).build(),
-                fastCollection("spruceWood", "Spruce Wood", XMaterial.SPRUCE_WOOD, FORAGING).guiOptions(fastOptions(XMaterial.SPRUCE_LOG, 15)).build()
+                fastCollection("spruceWood", "Spruce Wood", XMaterial.SPRUCE_LOG, FORAGING).guiOptions(fastOptions(XMaterial.SPRUCE_LOG, 15)).build()
         );
     }
 

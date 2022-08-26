@@ -28,11 +28,11 @@ public final class GameRankingImpl implements GameRanking {
     @Override
     public List<IPlaceholder> getPlaceholders(EventPlayer player) {
         return PlaceholderBuilder.create()
-                .with(new Placeholder("dragon_player_rank", getByPlayer(player)),
-                      new Placeholder("dragon_player_got_record", getRecordMessage(player)),
-                      new Placeholder("dragon_player_damage", player.getDamage()),
-                      new Placeholder("dragon_entity_xp", getDragonXp()),
-                      new Placeholder("dragon_last_attacker", getLastAttacker()))
+                .with(new Placeholder("thedragon_player_rank", getByPlayer(player)),
+                      new Placeholder("thedragon_player_got_new_record", getRecordMessage(player)),
+                      new Placeholder("thedragon_player_damage", player.getDamage()),
+                      new Placeholder("thedragon_dragon_xp", getDragonXp()),
+                      new Placeholder("thedragon_last_attacker", getLastAttacker()))
                 .with(getCommonPlaceholders())
                 .get();
     }
@@ -66,11 +66,11 @@ public final class GameRankingImpl implements GameRanking {
 
         double oldRecord = dragonPlayer.map(UserData::getRecord).orElse(0.0);
 
-        return player.getDamage() > oldRecord ? messages.setupMessages.newRecordMessage : "";
+        return player.getDamage() > oldRecord ? messages.gameMessages.newRecordPlaceholder : "";
     }
 
     private List<IPlaceholder> getCommonPlaceholders(){
-        String notFound = messages.setupMessages.playerNotFound;
+        String notFound = messages.gameMessages.forbiddenPlayer;
 
         return PlaceholderBuilder
                 .create(IntStream.of(0,1,2)
@@ -79,7 +79,7 @@ public final class GameRankingImpl implements GameRanking {
                         .collect(Collectors.toList()))
                 .with(IntStream.of(0,1,2)
                         .boxed()
-                        .map(number -> new Placeholder(String.format("dragon_damage_top_%d_name", number + 1), getByRank(number).map(EventPlayer::getDamage).orElse(0D)))
+                        .map(number -> new Placeholder(String.format("dragon_damage_top_%d_damage", number + 1), getByRank(number).map(EventPlayer::getDamage).orElse(0D)))
                         .collect(Collectors.toList()))
                 .get();
     }

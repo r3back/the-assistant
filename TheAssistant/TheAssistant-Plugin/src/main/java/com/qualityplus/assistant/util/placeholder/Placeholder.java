@@ -44,20 +44,12 @@ public final class Placeholder implements IPlaceholder {
     public List<String> processList(List<String> lore) {
         int specificIndex = getLine(lore, key);
 
-        /*Bukkit.getConsoleSender().sendMessage("To Replace: " + key+" | Specific Index: " + specificIndex + " | " + Optional.ofNullable(toReplace)
-                .filter(list -> list.size() > 0)
-                .map(list -> list.get(0)).orElse("Nullable"));*/
-
         if (specificIndex != -1) {
             lore.remove(specificIndex);
             if(toReplace != null && toReplace.size() > 0){
-                //Bukkit.getConsoleSender().sendMessage("Added");
                 lore.addAll(specificIndex, toReplace);
             }
         }
-        /*Bukkit.getConsoleSender().sendMessage("-------");
-        lore.forEach(line -> Bukkit.getConsoleSender().sendMessage(StringUtils.color(line)));
-        Bukkit.getConsoleSender().sendMessage("-------");*/
 
         return lore;
     }

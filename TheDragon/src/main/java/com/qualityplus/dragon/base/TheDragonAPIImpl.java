@@ -9,10 +9,10 @@ import org.bukkit.plugin.Plugin;
 
 @Component
 public final class TheDragonAPIImpl implements TheDragonAPI {
+    private @Inject @Getter GuardianEditService guardianEditService;
     private @Inject @Getter StructureService structureService;
     private @Inject @Getter GuardianService guardianService;
     private @Inject @Getter DragonService dragonService;
-    private @Inject @Getter SetupService setupService;
     private @Inject @Getter GameService gameService;
     private @Inject @Getter UserService userService;
     private @Inject @Getter Plugin plugin;

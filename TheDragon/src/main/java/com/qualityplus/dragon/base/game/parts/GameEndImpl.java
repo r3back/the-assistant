@@ -46,7 +46,7 @@ public final class GameEndImpl implements GameEnd {
         Optional<DragonReward> reward = getRewardByDamage(player);
 
         List<IPlaceholder> placeholders = Arrays.asList(
-                new Placeholder("dragon_player_reward_xp", theDragonEntity.getXp()),
+                new Placeholder("thedragon_player_reward_xp", theDragonEntity.getXp()),
                 new Placeholder("player", player.getName()));
 
         if(!reward.isPresent()) return;

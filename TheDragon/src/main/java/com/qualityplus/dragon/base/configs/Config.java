@@ -17,7 +17,7 @@ import java.util.Arrays;
 @Header("================================")
 @Names(strategy = NameStrategy.HYPHEN_CASE, modifier = NameModifier.TO_LOWER_CASE)
 public final class Config extends OkaeriConfig {
-    public String prefix = "TheDragon";
+    public String prefix = "&d&lTheDragon &f»";
 
     @CustomKey("configDatabase")
     @Comment("Database Configuration")

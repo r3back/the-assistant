@@ -16,6 +16,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.type.EndPortalFrame;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEnderDragon;
@@ -30,6 +36,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -65,7 +72,26 @@ public final class v1_18_R1 extends AbstractNMS{
     }
 
     @Override
-    public void sendBossBar(Player player, String bossBar) {
+    public void sendBossBar(Player player, String message) {
+        if(player == null || message == null || message.equals("")){
+            bossBar.removeAll();
+            return;
+        }
+        Optional.ofNullable(bossBar).ifPresent(BossBar::removeAll);
 
+        bossBar = Bukkit.createBossBar(message, BarColor.PURPLE, BarStyle.SEGMENTED_10, BarFlag.DARKEN_SKY);
+
+        bossBar.addPlayer(player);
+    }
+
+    @Override
+    public void setEnderEye(Block block, boolean setEnderEye) {
+        if(!(block.getBlockData() instanceof EndPortalFrame)) return;
+
+        EndPortalFrame altar = (EndPortalFrame) block.getBlockData();
+
+        altar.setEye(setEnderEye);
+
+        block.setBlockData(altar);
     }
 }
