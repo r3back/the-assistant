@@ -1,0 +1,111 @@
+plugins {
+    id 'java-library'
+    id 'com.github.johnrengelman.shadow'
+}
+
+repositories {
+    maven { url 'org.spigotmc:' }
+    //ProtocolLib
+    maven { url 'https://repo.dmulloy2.net/repository/public/' }
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+    implementation 'eu.okaeri:okaeri-commons-core:0.2.21'
+    implementation 'com.github.cryptomorin:XSeries:9.2.0'
+    implementation 'com.comphenix.protocol:ProtocolLib:4.7.0'
+    implementation 'com.github.InventivetalentDev:BossBarAPI:2.4.3-SNAPSHOT'
+
+    implementation project(':api')
+    implementation project(':nms')
+
+    project(':addons').subprojects.forEach(project -> implementation project)
+    project(':nms').subprojects.forEach(project -> implementation project)
+
+    rootProject.okaeri_dependencies.each { value -> implementation value}
+    rootProject.driver_dependencies.each { value -> implementation value}
+
+    implementation 'de.tr7zw:item-nbt-api:2.11.0-SNAPSHOT'
+    implementation 'xyz.xenondevs:particle:1.8.3'
+    implementation 'org.slf4j:slf4j-nop:1.7.30'
+}
+
+processResources{
+    filesMatching('plugin.yml') {
+        expand 'version': version
+    }
+}
+
+
+shadowJar {
+    archiveFileName = 'TheAssistant.jar'
+
+    dependencies {
+        //include('com.qualityplus.helper:.*')
+        include(dependency('com.h2database:.*'))
+        include(dependency('com.github.cryptomorin:.*'))
+        include(dependency('i18n-platform-commands:.*'))
+        include(dependency('eu.okaeri:.*'))
+        include(dependency('org.json.simple:.*'))
+        include(dependency('org.mariadb.jdbc:.*'))
+        include(dependency('com.zaxxer:.*'))
+        include(dependency('org.slf4j:.*'))
+        include(dependency('com.googlecode.json-simple:.*'))
+        include(dependency('org.jetbrains:.*'))
+        include(dependency('de.tr7zw:.*'))
+        include(dependency('xyz.xenondevs:.*'))
+        include(dependency('org.mongodb:mongodb-driver-sync:.*'))
+        include(dependency('com.github.InventivetalentDev:BossBarAPI:.*'))
+        include(dependency('mysql:.*'))
+
+
+        include(project(':api'))
+        include(project(':addons'))
+        include(project(':addons:world-manager'))
+        include(project(':addons:addons-commons'))
+        include(project(':addons:economy'))
+        include(project(':addons:npc'))
+        include(project(':addons:mmo-items'))
+        include(project(':addons:placeholders'))
+        include(project(':addons:mythic-mobs'))
+
+        include(project(':addons:paster'))
+        include(project(':addons:paster:paster-commons'))
+        include(project(':addons:paster:world-edit-6'))
+        include(project(':addons:paster:world-edit-7'))
+        include(project(':addons:regions'))
+        include(project(':addons:regions:regions-commons'))
+        include(project(':addons:regions:residence'))
+        include(project(':addons:regions:ultra-regions'))
+        include(project(':addons:regions:world-guard-6'))
+        include(project(':addons:regions:world-guard-7'))
+
+        include(project(':nms'))
+        include(project(':nms:nms-commons'))
+        include(project(':nms:v1_8_R1'))
+        include(project(':nms:v1_8_R3'))
+        include(project(':nms:v1_12_R1'))
+        include(project(':nms:v1_13_R1'))
+        include(project(':nms:v1_14_R1'))
+        include(project(':nms:v1_15_R1'))
+        include(project(':nms:v1_16_R1'))
+        include(project(':nms:v1_16_R3'))
+        include(project(':nms:v1_17_R1'))
+        include(project(':nms:v1_18_R1'))
+        include(project(':nms:v1_18_R2'))
+        include(project(':nms:v1_19_R1'))
+        include(project(':nms:v1_19_R2'))
+        include(project(':nms:v1_19_R3'))
+
+    }
+
+    rootProject.relocate_map.each { k, v -> relocate(k, v)}
+
+    doLast {
+        rootProject.copyJars(archiveFile)
+    }
+}
+
+artifacts {
+    archives shadowJar
+}
