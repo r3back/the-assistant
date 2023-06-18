@@ -102,7 +102,7 @@ You can find the output jars in the `plugin/build/libs` or `build/libs` director
 ```
 
 ## Integrations
-This plugin includes a lot of integrations with different plugins:
+This plugin includes integrations with different plugins:
 
 #### Economy:
 * [RoyaleEconomy](https://www.spigotmc.org/resources/%E2%9A%A1-royaleeconomy-%E2%9A%A1-1-8-1-16-banks-shops-black-market-custom-economy-talismans-more.81135/)
@@ -110,20 +110,26 @@ This plugin includes a lot of integrations with different plugins:
 * [PlayerPoints](https://github.com/Rosewood-Development/PlayerPoints)
 * [Vault](https://github.com/MilkBowl/Vault)
 
-#### Schematics
+#### Schematics:
 * [FastAsyncWorldEdit](https://github.com/IntellectualSites/FastAsyncWorldEdit)
 * [WorldEdit 7](https://github.com/EngineHub/WorldEdit)
 * [WorldEdit 6](https://github.com/EngineHub/WorldEdit)
 
-#### Regions
+#### Regions:
 * [Residence](https://github.com/Zrips/Residence)
 * [UltraRegions](https://github.com/IntellectualSites/FastAsyncWorldEdit)
 * [WorldGuard 7](https://github.com/EngineHub/WorldGuard)
 * [WorldGuard 6](https://github.com/EngineHub/WorldGuard)
 
-#### Placeholders
+#### Placeholders:
 * [PlaceholdersAPI](https://github.com/PlaceholderAPI/PlaceholderAPI)
 * [MVdWPlaceholderAPI](https://github.com/Maximvdw/MVdWPlaceholderAPI)
+
+#### More Integrations:
+* [Advanced-Slime-World-Manager](https://github.com/Paul19988/Advanced-Slime-World-Manager)
+* [MythicMobs](https://www.spigotmc.org/resources/%E2%9A%94-mythicmobs-free-version-%E2%96%BAthe-1-custom-mob-creator%E2%97%84.5702/)
+* [MMOItems](https://gitlab.com/phoenix-dvpmt/mmoitems)
+* [Citizens](https://github.com/CitizensDev/Citizens2)
 
 
 ## License
