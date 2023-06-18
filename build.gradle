@@ -54,7 +54,7 @@ def relocate_map = ['com.cryptomorin.xseries': 'com.qualityplus.assistant.lib.co
                     'com.mysql': 'com.qualityplus.assistant.lib.com.mysql',
                     'com.mongodb': 'com.qualityplus.assistant.lib.com.mongodb'] as HashMap
 
-version = 'com.github.r3back'
+group = 'com.github.r3back'
 version = '3.2.1'
 project.ext.copyJars = copyJars
 project.ext.relocate_map = relocate_map
