@@ -10,7 +10,5 @@ dependencies {
 
     compileOnly project(':api')
     compileOnly project(':addons:addons-commons')
-    compileOnly fileTree(dir: '/libs', include: ['*.jar'])
-
-    //compileOnly 'io.lumine:Mythic-Dist-Premium:5.1.0-SNAPSHOT'
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 }

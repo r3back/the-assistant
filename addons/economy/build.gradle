@@ -16,6 +16,5 @@ dependencies {
     compileOnly project(':api')
     compileOnly project(':addons:addons-commons')
 
-    //Required for RoyaleEconomy
-    compileOnly fileTree(dir: '/libs', include: ['*.jar'])
+    compileOnly fileTree(dir: 'libs', include: 'RoyaleEconomyAPI.jar')
 }
