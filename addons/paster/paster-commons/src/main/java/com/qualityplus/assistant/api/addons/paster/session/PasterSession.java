@@ -6,12 +6,36 @@ import org.bukkit.block.Block;
 
 import java.util.List;
 
+/**
+ * Schematic past session result
+ */
 public interface PasterSession {
-    void undo();
+    /**
+     * Undo actions done during paster session
+     */
+    public void undo();
 
-    void setAllBlocks(Material material);
+    /**
+     * Set all blocks inside Paster session to specified
+     * material
+     *
+     * @param material {@link Material}
+     */
+    public void setAllBlocks(final Material material);
 
-    List<Block> getAllBlocks();
+    /**
+     * Retrieve all paster session blocks
+     *
+     * @return List of {@link Block}
+     */
+    public List<Block> getAllBlocks();
 
-    boolean isInside(Location location);
+    /**
+     * Retrieves if location is inside paster session
+     * area
+     *
+     * @param location {@link Location}
+     * @return true if it's inside
+     */
+    public boolean isInside(final Location location);
 }

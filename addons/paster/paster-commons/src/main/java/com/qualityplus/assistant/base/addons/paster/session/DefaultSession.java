@@ -8,6 +8,9 @@ import org.bukkit.block.Block;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Paster Session implementation
+ */
 public final class DefaultSession implements PasterSession {
     @Override
     public void undo() {
@@ -15,7 +18,7 @@ public final class DefaultSession implements PasterSession {
     }
 
     @Override
-    public void setAllBlocks(Material material) {
+    public void setAllBlocks(final Material material) {
 
     }
 
@@ -25,7 +28,7 @@ public final class DefaultSession implements PasterSession {
     }
 
     @Override
-    public boolean isInside(Location location) {
+    public boolean isInside(final Location location) {
         return false;
     }
 }

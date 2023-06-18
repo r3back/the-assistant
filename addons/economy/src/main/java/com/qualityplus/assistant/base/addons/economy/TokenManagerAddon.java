@@ -8,21 +8,24 @@ import org.bukkit.entity.Player;
 
 import java.util.Optional;
 
+/**
+ * TokenManager Implementation
+ */
 public final class TokenManagerAddon implements EconomyAddon {
     private final TokenManager tokenManager = (TokenManager) Bukkit.getServer().getPluginManager().getPlugin("TokenManager");
 
     @Override
-    public double getMoney(OfflinePlayer player) {
+    public double getMoney(final OfflinePlayer player) {
         return Optional.ofNullable(tokenManager).map(tm -> tm.getTokens((Player) player).orElse(0L)).orElse(0L);
     }
 
     @Override
-    public void withdrawMoney(OfflinePlayer player, double amount) {
+    public void withdrawMoney(final OfflinePlayer player, final double amount) {
         Optional.ofNullable(tokenManager).ifPresent(tm -> tm.removeTokens(player.getName(), (long) amount));
     }
 
     @Override
-    public void depositMoney(OfflinePlayer player, double amount) {
+    public void depositMoney(final OfflinePlayer player, final double amount) {
         Optional.ofNullable(tokenManager).ifPresent(tm -> tm.addTokens(player.getName(), (long) amount));
     }
 

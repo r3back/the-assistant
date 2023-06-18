@@ -2,7 +2,7 @@ package com.qualityplus.assistant.util.location;
 
 import com.qualityplus.assistant.api.util.IPlaceholder;
 import com.qualityplus.assistant.util.StringUtils;
-import com.qualityplus.assistant.util.math.MathUtils;
+import com.qualityplus.assistant.util.number.NumberUtil;
 import com.qualityplus.assistant.util.placeholder.Placeholder;
 import com.qualityplus.assistant.util.placeholder.PlaceholderBuilder;
 import lombok.experimental.UtilityClass;
@@ -88,7 +88,7 @@ public final class LocationUtils {
             if (value.contains(" World: ")) {
                 world = value.replaceAll(" World: ", "");
             } else {
-                coords[count] = MathUtils.extractNumbers(value);
+                coords[count] = NumberUtil.extractNumbers(value);
             }
             count++;
         }

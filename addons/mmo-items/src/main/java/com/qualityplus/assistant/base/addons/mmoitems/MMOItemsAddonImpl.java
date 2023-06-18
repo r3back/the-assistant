@@ -9,6 +9,9 @@ import io.lumine.mythic.lib.api.stat.modifier.StatModifier;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * MMOItems implementation
+ */
 public final class MMOItemsAddonImpl implements MMOItemsAddon {
     @Override
     public String getAddonName() {
@@ -16,28 +19,29 @@ public final class MMOItemsAddonImpl implements MMOItemsAddon {
     }
 
     @Override
-    public void updateStats(UUID uuid, String ability, String type, double value) {
-        StatMap stats = MMOPlayerData.get(uuid).getStatMap();
+    public void updateStats(final UUID uuid, final String ability, final String type, final double value) {
+        final StatMap stats = MMOPlayerData.get(uuid).getStatMap();
 
-        StatInstance attribute = stats.getInstance(ability);
+        final StatInstance attribute = stats.getInstance(ability);
 
-        String key = "HC_" + ability + type;
+        final String key = "HC_" + ability + type;
 
-        StatModifier modifier = attribute.getModifier(key);
+        final StatModifier modifier = attribute.getModifier(key);
 
-        if (modifier == null || modifier.getValue() != value)
+        if (modifier == null || modifier.getValue() != value) {
             attribute.addModifier(new StatModifier(key, type, value));
+        }
     }
 
     @Override
-    public double getStats(UUID uuid, String ability) {
+    public double getStats(final UUID uuid, final String ability) {
         return Optional.ofNullable(MMOPlayerData.get(uuid))
                 .map(data -> data.getStatMap().getStat(ability))
                 .orElse(0D);
     }
 
     @Override
-    public double getMMOArmor(UUID uuid, String ability) {
+    public double getMMOArmor(final UUID uuid, final String ability) {
         return Optional.ofNullable(MMOPlayerData.get(uuid))
                 .map(data -> Optional.ofNullable(data.getStatMap()
                         .getInstance(ability)

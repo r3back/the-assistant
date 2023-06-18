@@ -13,6 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * PlaceholdersAPI Implementation
+ */
 public final class PlaceholderAPIAddon extends PlaceholderExpansion implements PlaceholdersAddon, RegistrableAddon {
     private final Map<String, PlaceholderReplacer> placeholdersMap = new HashMap<>();
     private @Inject Plugin plugin;
@@ -24,7 +27,7 @@ public final class PlaceholderAPIAddon extends PlaceholderExpansion implements P
 
     @Override
     public @NotNull String getAuthor() {
-        return plugin.getDescription().getAuthors().stream()
+        return this.plugin.getDescription().getAuthors().stream()
                 .findFirst()
                 .map(Object::toString)
                 .orElse("qualityplus");
@@ -32,7 +35,7 @@ public final class PlaceholderAPIAddon extends PlaceholderExpansion implements P
 
     @Override
     public @NotNull String getVersion() {
-        return plugin.getDescription().getVersion();
+        return this.plugin.getDescription().getVersion();
     }
 
     @Override
@@ -46,16 +49,17 @@ public final class PlaceholderAPIAddon extends PlaceholderExpansion implements P
     }
 
     @Override
-    public void registerPlaceholders(String identifier, PlaceholderReplacer replacer) {
-        placeholdersMap.put(identifier, replacer);
+    public void registerPlaceholders(final String identifier, final PlaceholderReplacer replacer) {
+        this.placeholdersMap.put(identifier, replacer);
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, @NotNull String identifier) {
-        if (player == null)
+    public String onPlaceholderRequest(final Player player, final @NotNull String identifier) {
+        if (player == null) {
             return "";
+        }
 
-        return placeholdersMap.entrySet().stream()
+        return this.placeholdersMap.entrySet().stream()
                 .filter(entry -> entry.getKey().equals(identifier))
                 .map(entry -> entry.getValue().onPlaceholderReplace(new PlaceholderReplaceEvent(player)))
                 .findFirst()

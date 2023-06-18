@@ -2,8 +2,21 @@ package com.qualityplus.assistant.api.addons.paster.schematic;
 
 import java.io.File;
 
+/**
+ * Schematic interface
+ */
 public interface Schematic {
-    String getName();
+    /**
+     * Retrieves schematic name
+     *
+     * @return schematic name
+     */
+    public String getName();
 
-    File getFile();
+    /**
+     * Retrieves schematic file
+     *
+     * @return {@link File}
+     */
+    public File getFile();
 }

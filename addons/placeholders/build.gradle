@@ -1,8 +1,13 @@
 group = 'com.qualityplus'
 project.version = '1.0.0'
 
-repositories{
-    maven { url 'https://nexus.lucko.me/repository/all/' }
+repositories {
+    maven {
+        url 'https://repo.extendedclip.com/content/repositories/placeholderapi/'
+    }
+    maven {
+        url 'https://nexus.lucko.me/repository/all/'
+    }
 }
 
 dependencies {
@@ -15,5 +20,5 @@ dependencies {
     compileOnly ('be.maximvdw:MVdWPlaceholderAPI:3.0.1-SNAPSHOT') {
         exclude(group: 'org.spigotmc')
     }
-    compileOnly 'me.clip:placeholderapi:2.10.9'
+    compileOnly 'me.clip:placeholderapi:2.11.3'
 }

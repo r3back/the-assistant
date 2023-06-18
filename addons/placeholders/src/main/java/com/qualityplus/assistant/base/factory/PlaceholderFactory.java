@@ -11,19 +11,28 @@ import eu.okaeri.platform.core.annotation.Bean;
 import eu.okaeri.platform.core.annotation.Component;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Placeholders Addon Factory
+ */
 @Component
 public final class PlaceholderFactory {
     private @Inject("injector") OkaeriInjector injector;
     private @Inject DependencyResolver resolver;
     private @Inject Plugin plugin;
 
+    /**
+     * Configure Placeholders addon
+     *
+     * @return {@link PlaceholdersAddon}
+     */
     @Bean
     public PlaceholdersAddon configurePlaceholders() {
-        if (resolver.isPlugin("PlaceholderAPI"))
-            return injector.createInstance(PlaceholderAPIAddon.class);
-        else if (resolver.isPlugin("MVdWPlaceholderAPI"))
-            return injector.createInstance(MVDWPlaceholderAddon.class);
-        else
-            return injector.createInstance(DefaultPlaceholdersAddon.class);
+        if (this.resolver.isPlugin("PlaceholderAPI")) {
+            return this.injector.createInstance(PlaceholderAPIAddon.class);
+        } else if (resolver.isPlugin("MVdWPlaceholderAPI")) {
+            return this.injector.createInstance(MVDWPlaceholderAddon.class);
+        } else {
+            return this.injector.createInstance(DefaultPlaceholdersAddon.class);
+        }
     }
 }

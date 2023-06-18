@@ -4,6 +4,9 @@ import com.qualityplus.assistant.api.addons.MMOItemsAddon;
 
 import java.util.UUID;
 
+/**
+ * Default MMOItems Addon Implementation
+ */
 public final class DefaultMMOItemsAddon implements MMOItemsAddon {
     @Override
     public String getAddonName() {
@@ -11,17 +14,17 @@ public final class DefaultMMOItemsAddon implements MMOItemsAddon {
     }
 
     @Override
-    public void updateStats(UUID uuid, String ability, String type, double value) {
+    public void updateStats(final UUID uuid, final String ability, final String type, final double value) {
 
     }
 
     @Override
-    public double getStats(UUID uuid, String ability) {
+    public double getStats(final UUID uuid, final String ability) {
         return 0;
     }
 
     @Override
-    public double getMMOArmor(UUID uuid, String ability) {
+    public double getMMOArmor(final UUID uuid, final String ability) {
         return 0;
     }
 }

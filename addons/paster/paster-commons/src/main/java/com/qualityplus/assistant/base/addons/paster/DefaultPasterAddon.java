@@ -7,6 +7,9 @@ import org.bukkit.Location;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Default Paster Addon implementation
+ */
 public final class DefaultPasterAddon implements PasterAddon {
     @Override
     public String getAddonName() {
@@ -16,10 +19,5 @@ public final class DefaultPasterAddon implements PasterAddon {
     @Override
     public CompletableFuture<PasterSession> pasteSchematic(Location location, Schematic schematic) {
         return new CompletableFuture<>();
-    }
-
-    @Override
-    public boolean isAsync() {
-        return false;
     }
 }

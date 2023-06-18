@@ -9,6 +9,9 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Optional;
 
+/**
+ * MVDWPlaceholders Implementation
+ */
 public final class MVDWPlaceholderAddon implements PlaceholdersAddon {
     private @Inject Plugin plugin;
 
@@ -18,8 +21,8 @@ public final class MVDWPlaceholderAddon implements PlaceholdersAddon {
     }
 
     @Override
-    public void registerPlaceholders(String identifier, PlaceholderReplacer replacer) {
-        PlaceholderAPI.registerPlaceholder(plugin, "thecore_" + identifier, e ->
+    public void registerPlaceholders(final String identifier, final PlaceholderReplacer replacer) {
+        PlaceholderAPI.registerPlaceholder(this.plugin, "thecore_" + identifier, e ->
                 Optional.ofNullable(e.getPlayer())
                 .map(p -> replacer.onPlaceholderReplace(new PlaceholderReplaceEvent(p)))
                 .orElse("0"));

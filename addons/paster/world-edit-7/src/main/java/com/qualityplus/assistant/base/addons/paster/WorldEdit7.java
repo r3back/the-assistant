@@ -1,6 +1,6 @@
 package com.qualityplus.assistant.base.addons.paster;
 
-import com.qualityplus.assistant.api.addons.PasterAddon;
+import com.qualityplus.assistant.api.addons.WEPasterAddon;
 import com.qualityplus.assistant.api.addons.paster.cuboid.Cuboid;
 import com.qualityplus.assistant.api.addons.paster.schematic.Schematic;
 import com.qualityplus.assistant.api.addons.paster.session.PasterSession;
@@ -30,26 +30,29 @@ import java.nio.file.Files;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public final class WorldEdit7 implements PasterAddon {
+/**
+ * WorldEdit 6 Implementation
+ */
+public final class WorldEdit7 implements WEPasterAddon {
     private @Inject("scheduler") PlatformScheduler scheduler;
     private @Inject DependencyResolver resolver;
 
     @Override
-    public CompletableFuture<PasterSession> pasteSchematic(Location location, Schematic schematic) {
-        CompletableFuture<PasterSession> future = new CompletableFuture<>();
-        Runnable pasteTask = () -> {
-            File file = schematic.getFile();
-            ClipboardFormat format = ClipboardFormats.findByFile(file);
+    public CompletableFuture<PasterSession> pasteSchematic(final Location location, final Schematic schematic) {
+        final CompletableFuture<PasterSession> future = new CompletableFuture<>();
+        final Runnable pasteTask = () -> {
+            final File file = schematic.getFile();
+            final ClipboardFormat format = ClipboardFormats.findByFile(file);
             try {
-                ClipboardReader reader = format.getReader(Files.newInputStream(file.toPath()));
+                final ClipboardReader reader = format.getReader(Files.newInputStream(file.toPath()));
 
-                Clipboard clipboard = reader.read();
+                final Clipboard clipboard = reader.read();
 
-                EditSession editSession = WorldEdit.getInstance()
+                final EditSession editSession = WorldEdit.getInstance()
                         .getEditSessionFactory()
                         .getEditSession(new BukkitWorld(location.getWorld()), -1);
 
-                Operation operation = new ClipboardHolder(clipboard)
+                final Operation operation = new ClipboardHolder(clipboard)
                                             .createPaste(editSession)
                                             .to(BlockVector3.at(location.getX(), location.getY(), location.getZ()))
                                             .ignoreAirBlocks(true)
@@ -60,46 +63,44 @@ public final class WorldEdit7 implements PasterAddon {
 
                 Optional.ofNullable(editSession).ifPresent(EditSession::close);
 
-                if (reader != null) reader.close();
-            } catch (IOException e) {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (final IOException e) {
                 e.printStackTrace();
-            } catch (WorldEditException e) {
+            } catch (final WorldEditException e) {
                 throw new RuntimeException(e);
             }
-            //future.complete(new DefaultSession());
         };
-        if (isAsync())
+        if (isAsync(resolver)) {
             this.scheduler.runAsync(pasteTask);
-        else
+        } else {
             scheduler.runSync(pasteTask);
+        }
 
         return future;
     }
 
 
-    private Cuboid getCuboid(Location baseLoc, Clipboard cc) {
+    private Cuboid getCuboid(final Location baseLoc, final Clipboard cc) {
         try {
-            org.bukkit.World world = baseLoc.getWorld();
-            //BlockVector3 to = session.getPlacementPosition(actor);
-            BlockVector3 to = BlockVector3.at(baseLoc.getX(), baseLoc.getY(), baseLoc.getZ());
-
-            Region region = cc.getRegion();
-            ClipboardHolder holder = new ClipboardHolder(cc);
-            BlockVector3 clipboardOffset = cc.getRegion().getMinimumPoint().subtract(cc.getOrigin());
-            Vector3 realTo = to.toVector3().add(holder.getTransform().apply(clipboardOffset.toVector3()));
-            Vector3 max = realTo.add(holder.getTransform().apply(region.getMaximumPoint().subtract(region.getMinimumPoint()).toVector3()));
-            Location maxLocation = new Location(world, realTo.toBlockPoint().getX(), realTo.toBlockPoint().getY(), realTo.toBlockPoint().getZ());
-            Location minLocation = new Location(world, max.toBlockPoint().getX(), max.toBlockPoint().getY(), max.toBlockPoint().getZ());
+            final org.bukkit.World world = baseLoc.getWorld();
+            final BlockVector3 to = BlockVector3.at(baseLoc.getX(), baseLoc.getY(), baseLoc.getZ());
+            final Region region = cc.getRegion();
+            final ClipboardHolder holder = new ClipboardHolder(cc);
+            final BlockVector3 clipboardOffset = cc.getRegion().getMinimumPoint().subtract(cc.getOrigin());
+            final Vector3 realTo = to.toVector3().add(holder.getTransform().apply(clipboardOffset.toVector3()));
+            final Vector3 max = realTo.add(holder.getTransform()
+                    .apply(region.getMaximumPoint().subtract(region.getMinimumPoint()).toVector3()));
+            final BlockVector3 realVector = realTo.toBlockPoint();
+            final BlockVector3 maxVector = max.toBlockPoint();
+            final Location maxLocation = new Location(world, realVector.getX(), realVector.getY(), realVector.getZ());
+            final Location minLocation = new Location(world, maxVector.getX(), maxVector.getY(), maxVector.getZ());
             return new Cuboid(minLocation, maxLocation);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             return null;
         }
-    }
-
-    @Override
-    public boolean isAsync() {
-        return isAsync(resolver);
     }
 
     @Override

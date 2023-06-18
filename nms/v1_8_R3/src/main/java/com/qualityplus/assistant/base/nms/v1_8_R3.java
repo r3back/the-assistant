@@ -3,7 +3,6 @@ package com.qualityplus.assistant.base.nms;
 import com.mojang.authlib.GameProfile;
 import com.qualityplus.assistant.api.gui.FakeInventory;
 import com.qualityplus.assistant.api.gui.fake.FakeInventoryImpl;
-import com.qualityplus.assistant.api.util.CropUtil;
 import com.qualityplus.assistant.api.util.FakeInventoryFactory;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.Getter;
@@ -29,35 +28,40 @@ import org.inventivetalent.bossbar.BossBarAPI;
 
 import java.util.*;
 
+/**
+ * NMS Implementation for Spigot v1_8_R3
+ */
 public final class v1_8_R3 extends AbstractNMS{
     private @Getter @Inject Plugin plugin;
 
     @Override
-    public void setBlockAge(Block block, int age) {
-        CraftBlock craftBlock = (((CraftBlock) block));
+    public void setBlockAge(final Block block, final int age) {
+        final CraftBlock craftBlock = (((CraftBlock) block));
         craftBlock.setData((byte)age);
     }
 
     @Override
-    public int getAge(Block block) {
-        CraftBlock craftBlock = (((CraftBlock) block));
+    public int getAge(final Block block) {
+        final CraftBlock craftBlock = (((CraftBlock) block));
         return craftBlock.getData();
     }
 
     @Override
-    public void damageBlock(List<Player> players, Block block, int damage) {
-        int x = block.getX();
-        int y = block.getY();
-        int z = block.getZ();
+    public void damageBlock(final List<Player> players, final Block block, final int damage) {
+        final int x = block.getX();
+        final int y = block.getY();
+        final int z = block.getZ();
 
-        BlockPosition position = new BlockPosition(x, y, z);
+        final BlockPosition position = new BlockPosition(x, y, z);
 
         //Keeps the same id to prevent packet glitch
-        Integer id = Optional.ofNullable(clickCache.getIfPresent(block)).orElse(new Random().nextInt(2000));
+        final Integer id = Optional
+                .ofNullable(clickCache.getIfPresent(block))
+                .orElse(new Random().nextInt(2000));
 
         clickCache.put(block, id);
 
-        PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(id, position, damage);
+        final PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(id, position, damage);
 
         players.stream()
                 .filter(Objects::nonNull)
@@ -65,84 +69,90 @@ public final class v1_8_R3 extends AbstractNMS{
     }
 
     @Override
-    public void damageBlock(Player player, Block block, int damage) {
+    public void damageBlock(final Player player, final Block block, final int damage) {
         damageBlock(Collections.singletonList(player), block, damage);
     }
 
     @Override
-    public void removeFakePlayer(FakeInventory fakeInventory) {
-
+    public void removeFakePlayer(final FakeInventory fakeInventory) {
     }
 
     @Override
-    public InventoryView createWorkBench(Player player) {
-        EntityPlayer entityPlayer = getFakePlayer("Fake Inventory");
+    public InventoryView createWorkBench(final Player player) {
+        final EntityPlayer entityPlayer = getFakePlayer("Fake Inventory");
 
         return entityPlayer.getBukkitEntity().openWorkbench(entityPlayer.getBukkitEntity().getLocation(), true);
     }
 
     @Override
-    public FakeInventory getFakeInventory(Player player, FakeInventory fakeInventory) {
-        int maxSlots = fakeInventory.getSlots();
+    public FakeInventory getFakeInventory(final Player player, final FakeInventory fakeInventory) {
+        final int maxSlots = fakeInventory.getSlots();
 
-        ItemStack[] itemStacks = fakeInventory.getInventory().getContents().clone();
+        final ItemStack[] itemStacks = fakeInventory.getInventory().getContents().clone();
 
-        Inventory inventory = FakeInventoryFactory.getInventoryWithSize(itemStacks, maxSlots);
+        final Inventory inventory = FakeInventoryFactory.getInventoryWithSize(itemStacks, maxSlots);
 
         return getInventory(inventory, maxSlots);
     }
 
 
     @Override
-    public FakeInventory getFakeInventory(Player player, int maxSlots) {
-        Inventory inventory = FakeInventoryFactory.getInventoryWithSize(maxSlots);
+    public FakeInventory getFakeInventory(final Player player, final int maxSlots) {
+        final Inventory inventory = FakeInventoryFactory.getInventoryWithSize(maxSlots);
 
         return getInventory(inventory, maxSlots);
     }
 
-    private FakeInventory getInventory(Inventory inventory, int maxSlots) {
+    private FakeInventory getInventory(final Inventory inventory, final int maxSlots) {
         return new FakeInventoryImpl(inventory, maxSlots);
     }
 
-    private EntityPlayer getFakePlayer(String name) {
-        World playerWorld = Bukkit.getWorlds().get(0);
-        Location location = new Location(playerWorld, 0,0,0);
-        MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
-        WorldServer worldServer = ((CraftWorld) playerWorld).getHandle();
-        EntityPlayer fakePlayer = new EntityPlayer(minecraftServer, worldServer, new GameProfile(UUID.randomUUID(), name), new PlayerInteractManager(worldServer));
+    private EntityPlayer getFakePlayer(final String name) {
+        final World playerWorld = Bukkit.getWorlds().get(0);
+        final Location location = new Location(playerWorld, 0,0,0);
+        final MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
+        final WorldServer worldServer = ((CraftWorld) playerWorld).getHandle();
+        final EntityPlayer fakePlayer = new EntityPlayer(minecraftServer, worldServer,
+                new GameProfile(UUID.randomUUID(), name),
+                new PlayerInteractManager(worldServer));
         fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(plugin, "UUID"));
         fakePlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        fakePlayer.playerConnection = new PlayerConnection(minecraftServer, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), fakePlayer);
+        fakePlayer.playerConnection = new PlayerConnection(minecraftServer,
+                new NetworkManager(EnumProtocolDirection.CLIENTBOUND), fakePlayer);
         worldServer.addEntity(fakePlayer);
-        //(((CraftPlayer) player).getHandle()).playerConnection.sendPacket(new PacketPlayOutNamedEntitySpawn(fakePlayer));
-        //(((CraftPlayer) player).getHandle()).playerConnection.sendPacket(new PacketPlayOutEntityHeadRotation(fakePlayer, (byte) (int) (location.getYaw() * 256.0F / 360.0F)));
         Bukkit.getOnlinePlayers().forEach(player1 -> player1.hidePlayer(fakePlayer.getBukkitEntity()));
         return fakePlayer;
     }
 
     @Override
-    public ItemStack setDurability(ItemStack itemStack, short durability) {
+    public ItemStack setDurability(final ItemStack itemStack, final short durability) {
         return null;
     }
 
     @Override
-    public Location getDragonPart(EnderDragon enderDragon, DragonPart dragonPart) {
-        EntityComplexPart part = dragonPart.equals(DragonPart.HEAD) ? ((CraftEnderDragon) enderDragon).getHandle().bn : ((CraftEnderDragon) enderDragon).getHandle().bp;
+    public Location getDragonPart(final EnderDragon enderDragon, final DragonPart dragonPart) {
+        final EntityComplexPart part = dragonPart.equals(DragonPart.HEAD) ?
+                ((CraftEnderDragon) enderDragon).getHandle().bn :
+                ((CraftEnderDragon) enderDragon).getHandle().bp;
         return new Location(enderDragon.getWorld(), part.lastX, part.lastY, part.lastZ);
     }
 
     @Override
-    public void sendBossBar(Player player, String message) {
+    public void sendBossBar(final Player player, final String message) {
         if (message == null || message.equals("")) {
             BossBarAPI.removeAllBars(player);
             return;
         }
         BossBarAPI.removeBar(player);
-        BossBarAPI.addBar(player,  new TextComponent(message), BossBarAPI.Color.PURPLE, BossBarAPI.Style.NOTCHED_10, 10, BossBarAPI.Property.DARKEN_SKY);
+        BossBarAPI.addBar(player,  new TextComponent(message),
+                BossBarAPI.Color.PURPLE,
+                BossBarAPI.Style.NOTCHED_10,
+                10,
+                BossBarAPI.Property.DARKEN_SKY);
     }
 
     @Override
-    public void setEnderEye(Block block, boolean setEnderEye) {
+    public void setEnderEye(final Block block, final boolean setEnderEye) {
         block.getState().setRawData(setEnderEye ? (byte) 4 : (byte) 3);
     }
 }

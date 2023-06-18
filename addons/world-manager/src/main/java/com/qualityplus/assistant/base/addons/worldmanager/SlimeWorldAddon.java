@@ -15,6 +15,9 @@ import org.bukkit.entity.Entity;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Slime World Manager Implementation
+ */
 public final class SlimeWorldAddon implements WorldManagerAddon {
     private static final SlimePropertyMap PROPERTIES = new SlimePropertyMap();
     private @Inject ConfigSlimeWorldManager configSlimeWorldManager;

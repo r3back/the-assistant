@@ -6,9 +6,12 @@ import org.bukkit.Location;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Default Region addon implementation
+ */
 public final class DefaultRegionsAddon implements RegionAddon {
     @Override
-    public Set<String> getRegions(Location location) {
+    public Set<String> getRegions(final Location location) {
         return new HashSet<>();
     }
 

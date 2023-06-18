@@ -18,6 +18,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Abstract NMS Implementation
+ */
 public abstract class AbstractNMS implements NMS {
     protected final Cache<Block, Integer> clickCache = CacheBuilder.newBuilder()
             .concurrencyLevel(4)
@@ -60,6 +63,11 @@ public abstract class AbstractNMS implements NMS {
     }
 
 
+    /**
+     * Black list an uuid in action bar
+     *
+     * @param uuid {@link UUID}
+     */
     public void blacklist(final UUID uuid) {
         if (isWhitelisted(uuid)) {
             return;
@@ -68,6 +76,12 @@ public abstract class AbstractNMS implements NMS {
         this.disabled.put(uuid, System.currentTimeMillis() + 3000);
     }
 
+    /**
+     * Retrieves if a UUID is blacklisted
+     *
+     * @param uuid {@link UUID}
+     * @return true if it's blacklisted
+     */
     public boolean isBlacklisted(final UUID uuid) {
         if (!this.disabled.containsKey(uuid)) {
             return false;
@@ -77,10 +91,21 @@ public abstract class AbstractNMS implements NMS {
         return endTime > System.currentTimeMillis();
     }
 
+    /**
+     * White list temporally an uuid
+     *
+     * @param uuid {@link UUID}
+     */
     public void whitelistTemp(final UUID uuid) {
         this.enabled.put(uuid, System.currentTimeMillis() + 50);
     }
 
+    /**
+     * Retrieves if a UUID is whitelisted
+     *
+     * @param uuid {@link UUID}
+     * @return true if it's whitelisted
+     */
     public boolean isWhitelisted(final UUID uuid) {
         if (!this.enabled.containsKey(uuid)) {
             return false;

@@ -12,9 +12,9 @@ import java.util.UUID;
 /**
  * Item for guis
  */
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public final class Item extends OkaeriConfig {
     public XMaterial material;
     public int amount;

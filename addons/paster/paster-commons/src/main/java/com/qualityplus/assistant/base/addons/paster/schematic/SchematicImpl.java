@@ -7,9 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.io.File;
 
+/**
+ * Schematic implementation
+ */
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 public final class SchematicImpl implements Schematic {
     private String name;
     private File file;

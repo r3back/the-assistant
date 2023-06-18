@@ -10,11 +10,14 @@ import org.bukkit.Location;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * World Guard 6 Implementation
+ */
 public final class WG6Addon implements RegionAddon {
     @Override
-    public Set<String> getRegions(Location location) {
-        RegionManager regionManager = WGBukkit.getRegionManager(location.getWorld());
-        ApplicableRegionSet set = regionManager.getApplicableRegions(location);
+    public Set<String> getRegions(final Location location) {
+        final RegionManager regionManager = WGBukkit.getRegionManager(location.getWorld());
+        final ApplicableRegionSet set = regionManager.getApplicableRegions(location);
         return set.getRegions().stream().map(ProtectedRegion::getId).collect(Collectors.toSet());
     }
 

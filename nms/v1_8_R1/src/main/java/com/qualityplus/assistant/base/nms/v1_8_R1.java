@@ -3,7 +3,6 @@ package com.qualityplus.assistant.base.nms;
 import com.mojang.authlib.GameProfile;
 import com.qualityplus.assistant.api.gui.FakeInventory;
 import com.qualityplus.assistant.api.gui.fake.FakeInventoryImpl;
-import com.qualityplus.assistant.api.util.CropUtil;
 import com.qualityplus.assistant.api.util.FakeInventoryFactory;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.Getter;
@@ -29,6 +28,9 @@ import org.inventivetalent.bossbar.BossBarAPI;
 
 import java.util.*;
 
+/**
+ * NMS Implementation for Spigot v1_8_R1
+ */
 public final class v1_8_R1 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
 
@@ -39,8 +41,8 @@ public final class v1_8_R1 extends AbstractNMS {
     }
 
     @Override
-    public int getAge(Block block) {
-        CraftBlock craftBlock = (((CraftBlock) block));
+    public int getAge(final Block block) {
+        final CraftBlock craftBlock = (((CraftBlock) block));
         return craftBlock.getData();
     }
 
@@ -110,7 +112,9 @@ public final class v1_8_R1 extends AbstractNMS {
         final Location location = new Location(playerWorld, 0,0,0);
         final MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
         final WorldServer worldServer = ((CraftWorld) playerWorld).getHandle();
-        final EntityPlayer fakePlayer = new EntityPlayer(minecraftServer, worldServer, new GameProfile(UUID.randomUUID(), name), new PlayerInteractManager(worldServer));
+        final EntityPlayer fakePlayer = new EntityPlayer(minecraftServer, worldServer,
+                new GameProfile(UUID.randomUUID(), name),
+                new PlayerInteractManager(worldServer));
         fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(plugin, "UUID"));
         fakePlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         fakePlayer.playerConnection = new PlayerConnection(minecraftServer, new NetworkManager(EnumProtocolDirection.CLIENTBOUND), fakePlayer);
@@ -126,7 +130,9 @@ public final class v1_8_R1 extends AbstractNMS {
 
     @Override
     public Location getDragonPart(final EnderDragon enderDragon, final DragonPart dragonPart) {
-        final EntityComplexPart part = dragonPart.equals(DragonPart.HEAD) ? ((CraftEnderDragon) enderDragon).getHandle().bn : ((CraftEnderDragon) enderDragon).getHandle().bp;
+        final EntityComplexPart part = dragonPart.equals(DragonPart.HEAD) ?
+                ((CraftEnderDragon) enderDragon).getHandle().bn :
+                ((CraftEnderDragon) enderDragon).getHandle().bp;
         return new Location(enderDragon.getWorld(), part.lastX, part.lastY, part.lastZ);
     }
 
@@ -137,7 +143,10 @@ public final class v1_8_R1 extends AbstractNMS {
             return;
         }
         BossBarAPI.removeBar(player);
-        BossBarAPI.addBar(player,  new TextComponent(message), BossBarAPI.Color.PURPLE, BossBarAPI.Style.NOTCHED_10, 10, BossBarAPI.Property.DARKEN_SKY);
+        BossBarAPI.addBar(player,  new TextComponent(message),
+                BossBarAPI.Color.PURPLE,
+                BossBarAPI.Style.NOTCHED_10, 10,
+                BossBarAPI.Property.DARKEN_SKY);
     }
 
     @Override

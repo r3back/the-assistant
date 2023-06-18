@@ -13,6 +13,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * World Guard 7 Implementation
+ */
 public final class WG7Addon implements RegionAddon {
     private final RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
 
@@ -22,12 +25,12 @@ public final class WG7Addon implements RegionAddon {
     }
 
     @Override
-    public Set<String> getRegions(Location location) {
-        World weWorld = Optional
+    public Set<String> getRegions(final Location location) {
+        final World weWorld = Optional
                 .ofNullable(location.getWorld()).map(BukkitAdapter::adapt)
                 .orElse(null);
 
-        return container.get(weWorld) == null ? new HashSet<>() : container.createQuery()
+        return this.container.get(weWorld) == null ? new HashSet<>() : this.container.createQuery()
                 .getApplicableRegions(BukkitAdapter.adapt(location))
                 .getRegions()
                 .stream()

@@ -13,7 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@AllArgsConstructor @Getter
+/**
+ * World edit 6 paster session implementation
+ */
+@Getter
+@AllArgsConstructor
 public final class WorldEditSession6 implements PasterSession {
     private final EditSession editSession;
     private final Cuboid cuboid;
@@ -30,7 +34,7 @@ public final class WorldEditSession6 implements PasterSession {
 
     @Override
     public List<Block> getAllBlocks() {
-        return new ArrayList<>(cuboid.getBlocks());
+        return new ArrayList<>(this.cuboid.getBlocks());
     }
 
     @Override

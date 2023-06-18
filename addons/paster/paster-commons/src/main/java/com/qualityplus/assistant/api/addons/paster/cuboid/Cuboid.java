@@ -11,23 +11,32 @@ import org.bukkit.util.Vector;
 
 import java.util.*;
 
+/**
+ * Cuboid Structure Representation
+ */
 public final class Cuboid implements Iterable<Block>, ConfigurationSerializable {
     private String worldName = "";
     private int x1 = 0, y1 = 0, z1 = 0;
     private int x2 = 0, y2 = 0, z2 = 0;
+    private final Location maxLocation;
+    private final Location minLocation;
 
-    public Location maxLocation;
-    public Location minLocation;
-
-    public Cuboid(Location location) {
+    /**
+     * Constructor with one argument
+     *
+     * @param location {@link Location}
+     */
+    public Cuboid(final Location location) {
         this(location, location);
     }
 
-    public Cuboid(Location maxLocation, Location minLocation) {
+    public Cuboid(final Location maxLocation, final Location minLocation) {
         Validate.notNull(maxLocation);
         Validate.notNull(minLocation);
-        if (!maxLocation.getWorld().getUID().equals(minLocation.getWorld().getUID()))
+
+        if (!maxLocation.getWorld().getUID().equals(minLocation.getWorld().getUID())) {
             throw new IllegalArgumentException("Location 1 must be in the same world as Location 2!");
+        }
 
         this.worldName = maxLocation.getWorld().getName();
 
@@ -43,9 +52,14 @@ public final class Cuboid implements Iterable<Block>, ConfigurationSerializable 
         this.minLocation = minLocation;
     }
 
+    /**
+     * Retrieve a list of blocks in cuboid area
+     *
+     * @return List of {@link Block}
+     */
     public List<Block> getBlocks() {
-        List<Block> blockList = new ArrayList<>();
-        World cuboidWorld = this.getWorld();
+        final List<Block> blockList = new ArrayList<>();
+        final World cuboidWorld = this.getWorld();
         for (int x = this.x1; x <= this.x2; x++) {
             for (int y = this.y1; y <= this.y2; y++) {
                 for (int z = this.z1; z <= this.z2; z++) {
@@ -56,15 +70,27 @@ public final class Cuboid implements Iterable<Block>, ConfigurationSerializable 
         return blockList;
     }
 
+    /**
+     * Retrieves Cuboid world
+     *
+     * @return {@link World}
+     */
     public World getWorld() {
         World cuboidWorld = Bukkit.getServer().getWorld(this.worldName);
-        if (cuboidWorld == null) cuboidWorld = Bukkit.getServer().createWorld(WorldCreator.name(this.worldName));
+        if (cuboidWorld == null) {
+            cuboidWorld = Bukkit.getServer().createWorld(WorldCreator.name(this.worldName));
+        }
         return cuboidWorld;
     }
 
+    /**
+     * Serializes cuboid
+     *
+     * @return Map of {@link String} and {@link Object}
+     */
     @Override
     public Map<String, Object> serialize() {
-        Map<String, Object> serializedCuboid = new HashMap<String, Object>();
+        final Map<String, Object> serializedCuboid = new HashMap<String, Object>();
         serializedCuboid.put("World", this.worldName);
         serializedCuboid.put("X1", this.x1);
         serializedCuboid.put("Y1", this.y1);
@@ -75,25 +101,44 @@ public final class Cuboid implements Iterable<Block>, ConfigurationSerializable 
         return serializedCuboid;
     }
 
+    /**
+     * Retrieves iterator for cuboid blocks
+     *
+     * @return ListIterator of {@link Block}
+     */
     @Override
     public ListIterator<Block> iterator() {
         return this.getBlocks().listIterator();
     }
 
-    public boolean isInside(Location location) {
-        Vector v1 = new Vector(minLocation.getBlockX(), minLocation.getBlockY(), minLocation.getBlockZ());
+    /**
+     * Retrieves if a location is inside cuboid
+     *
+     * @param location {@link Location}
+     * @return true if it's inside
+     */
+    public boolean isInside(final Location location) {
+        final Vector v1 = getVector(this.minLocation);
 
-        Vector v2 = new Vector(maxLocation.getBlockX(), maxLocation.getBlockY(), maxLocation.getBlockZ());
-
+        final Vector v2 = getVector(this.maxLocation);
 
         return isInAABB(location.toVector(), v1, v2);
     }
 
-    private boolean isInAABB(org.bukkit.util.Vector vector, org.bukkit.util.Vector min, Vector max) {
-        int x = vector.getBlockX();
-        int y = vector.getBlockY();
-        int z = vector.getBlockZ();
+    private Vector getVector(final Location location) {
+        return new Vector(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+    }
 
-        return x >= min.getBlockX() && x <= max.getBlockX() && y >= min.getBlockY() && y <= max.getBlockY() && z >= min.getBlockZ() && z <= max.getBlockZ();
+    private boolean isInAABB(final org.bukkit.util.Vector vector, final org.bukkit.util.Vector min, final Vector max) {
+        final int x = vector.getBlockX();
+        final int y = vector.getBlockY();
+        final int z = vector.getBlockZ();
+
+        return x >= min.getBlockX()
+                && x <= max.getBlockX()
+                && y >= min.getBlockY()
+                && y <= max.getBlockY()
+                && z >= min.getBlockZ()
+                && z <= max.getBlockZ();
     }
 }

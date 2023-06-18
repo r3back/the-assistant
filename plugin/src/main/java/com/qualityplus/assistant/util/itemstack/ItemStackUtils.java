@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
  * Utility class for ItemStacks
  */
 @UtilityClass
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ItemStackUtils {
     private final LoreWrapper LORE_WRAPPER = new LoreWrapper(60, "&7");
 
