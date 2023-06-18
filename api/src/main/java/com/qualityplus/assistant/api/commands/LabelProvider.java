@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Label Provider
+ */
 @AllArgsConstructor
 @Getter
 @Setter
@@ -20,6 +23,9 @@ public final class LabelProvider {
     private final String onlyForPlayersMessage;
     private final String unknownCommandMessage;
 
+    /**
+     * Register label provider
+     */
     public void register() {
         CommandLabelRegistry.registerNewLabel(this);
     }

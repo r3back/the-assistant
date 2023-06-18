@@ -4,7 +4,7 @@ import com.qualityplus.assistant.api.commands.CommandProvider;
 import com.qualityplus.assistant.api.commands.LabelProvider;
 import com.qualityplus.assistant.api.commands.command.AssistantCommand;
 import com.qualityplus.assistant.api.commands.handler.CommandLabelRegistry;
-import com.qualityplus.assistant.api.commands.setup.CommandSetupHandler;
+import com.qualityplus.assistant.api.commands.setup.CommandHandler;
 import com.qualityplus.assistant.util.StringUtils;
 import com.qualityplus.assistant.util.list.ListUtils;
 import eu.okaeri.commons.bukkit.time.MinecraftTimeEquivalent;
@@ -34,6 +34,30 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
     private static final String EMPTY_PERMISSION = "";
     private @Inject Logger logger;
 
+    /**
+     * Register a command with specific handler
+     *
+     * @param command Command to be registered
+     * @param handler Command handler
+     */
+    @Override
+    public void registerCommand(final AssistantCommand command, final CommandHandler<AssistantCommand> handler) {
+        command.setup(handler);
+
+        final Optional<LabelProvider> provider = getLabelProvider(command.getLabelProvider());
+
+        if (!provider.isPresent()) {
+            this.logger.warning(String.format(REGISTER_ERROR_MSG, command.getLabelProvider(), command.getAliases().get(0)));
+            return;
+        }
+
+        registerBukkitCommand(provider.get(), command.getLabelProvider());
+
+        final String label = provider.get().getLabel();
+
+        this.commands.put(label, ListUtils.listWith(this.commands.getOrDefault(label, new ArrayList<>()), command));
+    }
+
     @Override
     public void reloadCommands() {
         this.commands.values()
@@ -55,25 +79,6 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
 
             list.sort(Comparator.comparing(command -> command.getAliases().get(0)));
         }
-    }
-
-    @Override
-    public void registerCommand(final AssistantCommand command,
-                                final CommandSetupHandler<AssistantCommand> commandSetupHandler) {
-        command.setup(commandSetupHandler);
-
-        final Optional<LabelProvider> provider = getLabelProvider(command.getLabelProvider());
-
-        if (!provider.isPresent()) {
-            this.logger.warning(String.format(REGISTER_ERROR_MSG, command.getLabelProvider(), command.getAliases().get(0)));
-            return;
-        }
-
-        registerBukkitCommand(provider.get(), command.getLabelProvider());
-
-        final String label = provider.get().getLabel();
-
-        this.commands.put(label, ListUtils.listWith(this.commands.getOrDefault(label, new ArrayList<>()), command));
     }
 
     @Override

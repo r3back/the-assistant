@@ -3,7 +3,7 @@ package com.qualityplus.assistant.api.commands.command;
 import com.qualityplus.assistant.api.commands.CommandProvider;
 import com.qualityplus.assistant.api.commands.details.CommandDetails;
 import com.qualityplus.assistant.api.commands.setup.event.CommandSetupEvent;
-import com.qualityplus.assistant.api.commands.setup.CommandSetupHandler;
+import com.qualityplus.assistant.api.commands.setup.CommandHandler;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * Abstract command class
  */
 public abstract class AssistantCommand extends CommandDetails {
-    public CommandSetupHandler<AssistantCommand> commandCompleteHandler;
+    public CommandHandler<AssistantCommand> commandCompleteHandler;
     public CommandDetails commandDetails;
 
     /**
@@ -55,7 +55,7 @@ public abstract class AssistantCommand extends CommandDetails {
      *
      * @param commandSetupHandler CommandSetupHandler of {@link AssistantCommand}
      */
-    public void setup(final CommandSetupHandler<AssistantCommand> commandSetupHandler) {
+    public void setup(final CommandHandler<AssistantCommand> commandSetupHandler) {
         this.commandCompleteHandler = commandSetupHandler;
         this.reload();
     }

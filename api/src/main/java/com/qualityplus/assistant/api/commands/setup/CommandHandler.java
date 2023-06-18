@@ -3,12 +3,12 @@ package com.qualityplus.assistant.api.commands.setup;
 import com.qualityplus.assistant.api.commands.setup.event.CommandSetupEvent;
 
 /**
- * Command setup handler
+ * Command handler
  *
- * @param <T> command setup event generic type
+ * @param <T> command event generic type
  */
 @FunctionalInterface
-public interface CommandSetupHandler<T> {
+public interface CommandHandler<T> {
     /**
      * Command complete event callback
      *
