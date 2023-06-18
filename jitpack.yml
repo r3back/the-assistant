@@ -1,0 +1,6 @@
+jdk:
+  - openjdk17
+install:
+  - echo "Running The Assistant build"
+  - ./gradlew test
+  - ./gradlew build
