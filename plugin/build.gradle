@@ -109,3 +109,24 @@ shadowJar {
 artifacts {
     archives shadowJar
 }
+
+publishing {
+    repositories {
+        maven {
+            url "https://jitpack.io"
+            credentials {
+                username 'token'
+                password System.getenv('API_TOKEN')
+            }
+        }
+    }
+
+    publications {
+        register('shadow', MavenPublication) {
+            groupId project.group
+            artifactId rootProject.name
+            version project.version
+            artifact shadowJar
+        }
+    }
+}
