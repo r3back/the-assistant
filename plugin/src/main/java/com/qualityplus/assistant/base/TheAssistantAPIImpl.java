@@ -11,6 +11,9 @@ import eu.okaeri.platform.core.annotation.Component;
 import lombok.Getter;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * The Assistant API Implementation
+ */
 @Getter
 @Component
 public final class TheAssistantAPIImpl implements TheAssistantAPI {

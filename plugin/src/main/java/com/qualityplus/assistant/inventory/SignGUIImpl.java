@@ -9,7 +9,8 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.qualityplus.assistant.api.event.SignCompletedEvent;
-import com.qualityplus.assistant.api.handler.SignCompleteHandler;
+import com.qualityplus.assistant.api.sign.SignGUI;
+import com.qualityplus.assistant.api.sign.handler.SignCompleteHandler;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -28,7 +29,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public final class SignGUI {
+/**
+ * Sign GUI implementation
+ */
+public final class SignGUIImpl implements SignGUI {
     private final SignCompleteHandler action;
     private PacketAdapter packetListener;
     private final List<String> lines;
@@ -37,19 +41,28 @@ public final class SignGUI {
     private final UUID uuid;
     private Sign sign;
 
+    /**
+     * Default Constructor
+     *
+     * @param action    {@link SignCompleteHandler}
+     * @param withLines initial sign lines
+     * @param uuid      {@link UUID} player uuid
+     * @param plugin    {@link Plugin} instance
+     */
     @Builder
-    public SignGUI(final SignCompleteHandler action, final List<String> withLines,
-                   final UUID uuid, final Plugin plugin) {
+    public SignGUIImpl(final SignCompleteHandler action, final List<String> withLines,
+                       final UUID uuid, final Plugin plugin) {
         this.lines = withLines;
         this.plugin = plugin;
         this.action = action;
         this.uuid = uuid;
     }
 
+    @Override
     public void open() {
         final Player player = Bukkit.getPlayer(uuid);
 
-        if(player == null) {
+        if (player == null) {
             return;
         }
 
@@ -66,6 +79,7 @@ public final class SignGUI {
         if (material == null) {
             material = Material.OAK_WALL_SIGN;
         }
+
         while (!player.getWorld().getBlockAt(x_start, y_start, z_start).getType().equals(Material.AIR) &&
                 !player.getWorld().getBlockAt(x_start, y_start, z_start).getType().equals(material)) {
             y_start--;
@@ -77,7 +91,7 @@ public final class SignGUI {
         this.sign = (Sign)player.getWorld().getBlockAt(x_start, y_start, z_start).getState();
 
         int i = 0;
-        for(String line : this.lines){
+        for (String line : this.lines) {
             this.sign.setLine(i, line);
             i++;
         }
@@ -105,15 +119,24 @@ public final class SignGUI {
         registerSignUpdateListener();
     }
 
+    /**
+     * Class to handle when a player leaves server
+     */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     private class LeaveListener implements Listener {
+        /**
+         * Listener handler
+         *
+         * @param e {@link PlayerQuitEvent}
+         */
         @EventHandler
         public void onLeave(final PlayerQuitEvent e) {
-            if (e.getPlayer().getUniqueId().equals(SignGUI.this.uuid)) {
-                ProtocolLibrary.getProtocolManager().removePacketListener(SignGUI.this.packetListener);
-                HandlerList.unregisterAll(this);
-                SignGUI.this.sign.getBlock().setType(Material.AIR);
+            if (!e.getPlayer().getUniqueId().equals(SignGUIImpl.this.uuid)) {
+                return;
             }
+            ProtocolLibrary.getProtocolManager().removePacketListener(SignGUIImpl.this.packetListener);
+            HandlerList.unregisterAll(this);
+            SignGUIImpl.this.sign.getBlock().setType(Material.AIR);
         }
     }
 
@@ -121,19 +144,19 @@ public final class SignGUI {
         final ProtocolManager manager = ProtocolLibrary.getProtocolManager();
         this.packetListener = new PacketAdapter(plugin, PacketType.Play.Client.UPDATE_SIGN) {
             public void onPacketReceiving(final PacketEvent event) {
-                if (event.getPlayer().getUniqueId().equals(SignGUI.this.uuid)) {
-                    final List<String> lines = Stream.of(0,1,2,3)
+                if (event.getPlayer().getUniqueId().equals(SignGUIImpl.this.uuid)) {
+                    final List<String> lines = Stream.of(0, 1, 2, 3)
                             .map(line -> getLine(event, line))
                             .collect(Collectors.toList());
 
                     Bukkit.getScheduler().runTask(plugin, () -> {
                         manager.removePacketListener(this);
 
-                        HandlerList.unregisterAll(SignGUI.this.listener);
+                        HandlerList.unregisterAll(SignGUIImpl.this.listener);
 
-                        SignGUI.this.sign.getBlock().setType(Material.AIR);
+                        SignGUIImpl.this.sign.getBlock().setType(Material.AIR);
 
-                        SignGUI.this.action.onSignClose(new SignCompletedEvent(event.getPlayer(), lines));
+                        SignGUIImpl.this.action.onSignClose(new SignCompletedEvent(event.getPlayer(), lines));
                     });
                 }
             }
@@ -141,14 +164,26 @@ public final class SignGUI {
         manager.addPacketListener(this.packetListener);
     }
 
-    private String getLine(final PacketEvent event, final int line){
-        /**
-         * TODO clean up this
-         */
-        return Bukkit.getVersion().contains("1.8") ?
-                ((WrappedChatComponent[])event.getPacket()
-                        .getChatComponentArrays()
-                        .read(0))[line].getJson().replaceAll("\"", "") :
-                ((String[])event.getPacket().getStringArrays().read(0))[line];
+
+    private String getLine(final PacketEvent event, final int line) {
+        return Bukkit.getVersion().contains("1.8") ? getLineIn1_8Version(event, line) : getLineInNewestVersion(event, line);
+    }
+
+    private String getLineIn1_8Version(final PacketEvent event, final int line) {
+        final PacketContainer container = event.getPacket();
+
+        final WrappedChatComponent[] components = container
+                .getChatComponentArrays()
+                .read(0);
+
+        return components[line]
+                .getJson()
+                .replaceAll("\"", "");
+    }
+
+    private String getLineInNewestVersion(final PacketEvent event, final int line) {
+        final String[] lines = event.getPacket().getStringArrays().read(0);
+
+        return lines[line];
     }
 }

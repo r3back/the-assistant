@@ -11,23 +11,80 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class to create easily holograms
+ *
+ * TODO separate instance of hologram with an util hologram class
+ */
 public final class TheHologram {
     private List<ArmorStand> armorStands;
     private Location location;
     @Getter
     private List<String> txt;
 
+    /**
+     * Default constructor
+     *
+     * @param txt      hologram text lines
+     * @param location {@link Location} hologram location
+     */
     private TheHologram(final List<String> txt, final Location location) {
         this.txt = txt;
         this.location = location;
         this.armorStands = createArmorStands();
     }
 
+    /**
+     * Creates a new hologram
+     *
+     * @param txt      hologram text lines
+     * @param location {@link Location} hologram location
+     */
     public static TheHologram create(final List<String> txt, final Location location) {
         return new TheHologram(txt, location);
     }
 
-    private List<ArmorStand> createArmorStands(){
+    /**
+     * Move hologram to another place
+     *
+     * @param location {@link Location}
+     */
+    public void move(final Location location) {
+        remove();
+
+        this.location = location;
+
+        this.armorStands = createArmorStands();
+    }
+
+    /**
+     * Retrieve hologram with updated lines
+     *
+     * @param txt hologram text lines
+     * @return {@link TheHologram}
+     */
+    public TheHologram rename(final List<String> txt) {
+        remove();
+
+        this.txt = txt;
+        this.armorStands = createArmorStands();
+
+        return this;
+    }
+
+    /**
+     * Removes an hologram
+     */
+    public void remove() {
+        this.armorStands.stream()
+                .filter(Objects::nonNull)
+                .forEach(ArmorStand::remove);
+
+        this.armorStands.clear();
+    }
+
+
+    private List<ArmorStand> createArmorStands() {
         final List<ArmorStand> armorStands = new ArrayList<>();
 
         final double amount = 0.25;
@@ -38,7 +95,7 @@ public final class TheHologram {
 
         int size = 0;
 
-        for(final String line : Lists.reverse(txt)){
+        for (final String line : Lists.reverse(txt)) {
             final double newY = initial - (amount * size);
 
             final ArmorStand armorStand = location.getWorld()
@@ -63,30 +120,5 @@ public final class TheHologram {
         }
 
         return armorStands;
-    }
-
-    public void move(final Location location){
-        remove();
-
-        this.location = location;
-
-        this.armorStands = createArmorStands();
-    }
-
-    public TheHologram rename(final List<String> txt){
-        remove();
-
-        this.txt = txt;
-        this.armorStands = createArmorStands();
-
-        return this;
-    }
-
-    public void remove(){
-        this.armorStands.stream()
-                .filter(Objects::nonNull)
-                .forEach(ArmorStand::remove);
-
-        this.armorStands.clear();
     }
 }

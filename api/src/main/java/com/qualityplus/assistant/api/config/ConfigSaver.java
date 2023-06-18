@@ -1,5 +1,11 @@
 package com.qualityplus.assistant.api.config;
 
+/**
+ * Config saver interface
+ */
 public interface ConfigSaver {
-    void saveFiles();
+    /**
+     * Save all files
+     */
+    public void saveFiles();
 }

@@ -11,6 +11,9 @@ import eu.okaeri.platform.core.annotation.Bean;
 import eu.okaeri.platform.core.annotation.Component;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * World Manager addon factory
+ */
 @Component
 public final class WorldManagerFactory {
     private @Inject("injector") OkaeriInjector injector;
@@ -18,14 +21,19 @@ public final class WorldManagerFactory {
     private @Inject DependencyResolver resolver;
     private @Inject Plugin plugin;
 
+    /**
+     * Configure World manager addon
+     *
+     * @return {@link WorldManagerAddon}
+     */
     @Bean
-    public WorldManagerAddon configureSlimeWorldManager() {
-        if (resolver.isPlugin("SlimeWorldManager") && classExists()) {
-            final WorldManagerAddon addon = injector.createInstance(SlimeWorldAddon.class);
+    public WorldManagerAddon configureWorldManager() {
+        if (this.resolver.isPlugin("SlimeWorldManager") && classExists()) {
+            final WorldManagerAddon addon = this.injector.createInstance(SlimeWorldAddon.class);
             addon.setup();
             return addon;
         } else {
-            return injector.createInstance(DefaultWorldManagerAddon.class);
+            return this.injector.createInstance(DefaultWorldManagerAddon.class);
         }
     }
 

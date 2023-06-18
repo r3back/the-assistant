@@ -2,10 +2,27 @@ package com.qualityplus.assistant.api.util;
 
 import java.util.List;
 
+/**
+ * Placeholder interface
+ */
 public interface IPlaceholder {
-    String process(String line);
+    /**
+     *
+     * @param line line to process
+     * @return Line parsed
+     */
+    public String process(final String line);
 
-    List<String> processList(List<String> line);
+    /**
+     *
+     * @param line List of lines to process
+     * @return List of lines parsed
+     */
+    public List<String> processList(final List<String> line);
 
-    boolean isListPlaceholder();
+    /**
+     *
+     * @return true if is list placeholder
+     */
+    public boolean isListPlaceholder();
 }

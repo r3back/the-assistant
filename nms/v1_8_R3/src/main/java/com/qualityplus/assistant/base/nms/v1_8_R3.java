@@ -45,11 +45,6 @@ public final class v1_8_R3 extends AbstractNMS{
     }
 
     @Override
-    public int getMaxAge(Block block) {
-        return CropUtil.getMaxAge(block);
-    }
-
-    @Override
     public void damageBlock(List<Player> players, Block block, int damage) {
         int x = block.getX();
         int y = block.getY();
@@ -105,7 +100,7 @@ public final class v1_8_R3 extends AbstractNMS{
         return getInventory(inventory, maxSlots);
     }
 
-    private FakeInventory getInventory(Inventory inventory, int maxSlots){
+    private FakeInventory getInventory(Inventory inventory, int maxSlots) {
         return new FakeInventoryImpl(inventory, maxSlots);
     }
 
@@ -138,7 +133,7 @@ public final class v1_8_R3 extends AbstractNMS{
 
     @Override
     public void sendBossBar(Player player, String message) {
-        if(message == null || message.equals("")){
+        if (message == null || message.equals("")) {
             BossBarAPI.removeAllBars(player);
             return;
         }

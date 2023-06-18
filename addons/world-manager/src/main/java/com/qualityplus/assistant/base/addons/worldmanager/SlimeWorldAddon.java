@@ -32,13 +32,13 @@ public final class SlimeWorldAddon implements WorldManagerAddon {
 
         String name = location.getWorld().getName();
 
-        if(Bukkit.getWorld(name) != null){
+        if (Bukkit.getWorld(name) != null) {
             return WorldManagerAddon.super.chunksAreLoaded(location);
         }
 
         SlimeWorld slimeWorld = slimePlugin.getWorld(loader, location.getWorld().getName());
 
-        if(slimeWorld == null){
+        if (slimeWorld == null) {
             return CompletableFuture.completedFuture(ChunkCheckResponse.builder()
                     .areLoaded(false)
                     .canBeLoaded(false)
@@ -49,7 +49,7 @@ public final class SlimeWorldAddon implements WorldManagerAddon {
         CompletableFuture<ChunkCheckResponse> response = new CompletableFuture<>();
 
         slimePlugin.asyncLoadWorld(loader, name, false, PROPERTIES).thenAccept(world -> {
-            if(!world.isPresent()) return;
+            if (!world.isPresent()) return;
 
             response.complete(ChunkCheckResponse.builder()
                     .areLoaded(true)
@@ -70,11 +70,11 @@ public final class SlimeWorldAddon implements WorldManagerAddon {
         try {
             this.slimePlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
 
-            if(slimePlugin == null)
+            if (slimePlugin == null)
                 throw new RuntimeException();
 
             this.loader = slimePlugin.getLoader(configSlimeWorldManager.getSlimeWorldManagerSource());
-        }catch (Exception e){
+        }catch (Exception e) {
             e.printStackTrace();
         }
 

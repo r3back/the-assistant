@@ -3,6 +3,7 @@ package com.qualityplus.assistant.base.nms;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.qualityplus.assistant.api.nms.NMS;
+import com.qualityplus.assistant.api.util.CropUtil;
 import com.qualityplus.assistant.base.event.ActionBarMessageEvent;
 import com.qualityplus.assistant.base.event.ActionBarMessageEvent.ActionBarType;
 import eu.okaeri.commons.bukkit.UnsafeBukkitCommons;
@@ -53,32 +54,39 @@ public abstract class AbstractNMS implements NMS {
     }
 
 
+    @Override
+    public int getMaxAge(Block block) {
+        return CropUtil.getMaxAge(block);
+    }
+
+
     public void blacklist(final UUID uuid) {
         if (isWhitelisted(uuid)) {
             return;
         }
 
-        disabled.put(uuid, System.currentTimeMillis() + 3000);
+        this.disabled.put(uuid, System.currentTimeMillis() + 3000);
     }
 
     public boolean isBlacklisted(final UUID uuid) {
-        if(!disabled.containsKey(uuid)) return false;
-        long endTime = disabled.get(uuid);
+        if (!this.disabled.containsKey(uuid)) {
+            return false;
+        }
+        final long endTime = this.disabled.get(uuid);
+
         return endTime > System.currentTimeMillis();
     }
 
     public void whitelistTemp(final UUID uuid) {
-        enabled.put(uuid, System.currentTimeMillis() + 50);
+        this.enabled.put(uuid, System.currentTimeMillis() + 50);
     }
 
     public boolean isWhitelisted(final UUID uuid) {
-        if (!enabled.containsKey(uuid)) {
+        if (!this.enabled.containsKey(uuid)) {
             return false;
         }
-        final long endTime = enabled.get(uuid);
+        final long endTime = this.enabled.get(uuid);
         return endTime > System.currentTimeMillis();
     }
-
-
 
 }

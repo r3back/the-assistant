@@ -1,12 +1,12 @@
 package com.qualityplus.assistant.base.event;
 
-import com.qualityplus.assistant.api.event.PlayerHelperEvent;
+import com.qualityplus.assistant.api.event.PlayerAssistantEvent;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-public final class ActionBarMessageEvent extends PlayerHelperEvent {
+public final class ActionBarMessageEvent extends PlayerAssistantEvent {
     private final ActionBarType type;
     private final String message;
 

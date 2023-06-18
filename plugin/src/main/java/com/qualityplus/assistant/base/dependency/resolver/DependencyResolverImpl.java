@@ -5,6 +5,9 @@ import eu.okaeri.injector.annotation.Inject;
 import eu.okaeri.platform.core.annotation.Component;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Dependency Resolver implementation
+ */
 @Component
 public final class DependencyResolverImpl implements DependencyResolver {
     private @Inject Plugin plugin;

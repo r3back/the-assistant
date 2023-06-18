@@ -42,8 +42,9 @@ public class CommandDetails extends OkaeriConfig {
      * @param labelProvider     command label provider
      */
     @Builder
-    public CommandDetails(final List<String> aliases, final String description, final String syntax, final String permission, final boolean onlyForPlayers,
-                          final long cooldownInSeconds, final boolean enabled, final String labelProvider) {
+    public CommandDetails(final List<String> aliases, final String description, final String syntax, final String permission,
+                          final boolean onlyForPlayers, final long cooldownInSeconds, final boolean enabled,
+                          final String labelProvider) {
         this.aliases = aliases;
         this.description = description;
         this.syntax = syntax;
@@ -59,7 +60,7 @@ public class CommandDetails extends OkaeriConfig {
      * @return CooldownProvider of {@link CommandSender}
      */
     public CooldownProvider<CommandSender> getCooldownProvider() {
-        return cooldownProvider == null ? CooldownProvider.newInstance(Duration.ofSeconds(cooldownInSeconds)) : cooldownProvider;
+        return this.cooldownProvider == null ? CooldownProvider.newInstance(Duration.ofSeconds(this.cooldownInSeconds)) : this.cooldownProvider;
     }
 
     /**
@@ -70,33 +71,57 @@ public class CommandDetails extends OkaeriConfig {
         protected final Map<T, Duration> cooldownTimes = new HashMap<>();
         protected final Duration duration;
 
+        /**
+         * Constructor with specific duration
+         *
+         * @param duration {@link Duration}
+         */
         private CooldownProvider(final Duration duration) {
             this.duration = duration;
         }
 
+        /**
+         * Retrieve if is on cooldown for specific key
+         *
+         * @param t key
+         * @return true if it's on cooldown
+         */
         public boolean isOnCooldown(final T t) {
-            return cooldownTimes.containsKey(t) && cooldownTimes.get(t).toMillis() > System.currentTimeMillis();
+            return this.cooldownTimes.containsKey(t) && this.cooldownTimes.get(t).toMillis() > System.currentTimeMillis();
         }
 
+        /**
+         * Retrieves remaining time cooldown for specific key
+         *
+         * @param t key
+         * @return {@link Duration}
+         */
         public Duration getRemainingTime(final T t) {
             if (!isOnCooldown(t)) {
                 return Duration.ZERO;
             }
 
-            return cooldownTimes.get(t).minusMillis(System.currentTimeMillis());
+            return this.cooldownTimes.get(t).minusMillis(System.currentTimeMillis());
         }
 
+        /**
+         * Apply cooldown for specific key
+         *
+         * @param t key
+         */
         public void applyCooldown(final T t) {
-            cooldownTimes.put(t, duration.plusMillis(System.currentTimeMillis()));
+            this.cooldownTimes.put(t, this.duration.plusMillis(System.currentTimeMillis()));
         }
 
-
+        /**
+         * Creates a cooldown with specific duration
+         *
+         * @param duration {@link Duration}
+         * @return instance of {@link CooldownProvider}
+         * @param <T> Generic cooldown type
+         */
         public static <T> CooldownProvider<T> newInstance(final Duration duration) {
             return new CooldownProvider<>(duration);
-        }
-
-        public static <T> CooldownProvider<T> newPersistentInstance(final String name, final Duration duration) {
-            throw new NotImplementedException();
         }
     }
 

@@ -1,70 +1,77 @@
 package com.qualityplus.assistant.util.random;
 
 import com.qualityplus.assistant.api.util.Randomable;
-import com.qualityplus.assistant.util.math.MathUtils;
 
-import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
+/**
+ * Handles selection between Randomable items
+ *
+ * @param <T> Generic Randomable item
+ */
 public final class RandomSelector<T extends Randomable> {
-    List<T> items;
-    Random rand = new Random();
-    double totalSum = 0;
+    private final Random random = new Random();
+    private final List<T> items;
+    private double totalSum = 0;
 
-    public RandomSelector(List<T> items) {
+    /**
+     * Constructor with default items
+     *
+     * @param items List of Randomable Items
+     */
+    public RandomSelector(final List<T> items) {
         this.items = items;
 
-        for(T item : this.items)
-            totalSum = totalSum + item.getProbability();
+        for (final T item : this.items) {
+            this.totalSum = this.totalSum + item.getProbability();
+        }
     }
 
+    /**
+     * Retrieves a random item or null if list is empty
+     * or items aren't more than 1
+     *
+     * @return Generic Random item
+     */
     public T getRandom() {
-        if(items == null || items.size() == 1) return null;
+        if (this.items == null || this.items.size() == 1) {
+            return null;
+        }
 
-        int index = rand.nextInt((int)totalSum);
+        return getCommonRandom();
+    }
+
+    /**
+     * Retrieves a random item from list, if list items
+     * is empty retrieves null and if list size is equals to 1
+     * retrieves the unique item in list
+     *
+     * @return Generic Random item
+     */
+    public T getRandomOrUniqueItem() {
+        if (this.items == null) {
+            return null;
+        }
+
+        if (this.items.size() == 1) {
+            return this.items.get(0);
+        }
+
+        return getCommonRandom();
+    }
+
+    private T getCommonRandom() {
+        final int index = this.random.nextInt((int)this.totalSum);
+
         double sum = 0;
-        int i=0;
-        while(sum < index ) {
-            sum = sum + items.get(i++).getProbability();
-        }
-        return items.get(Math.max(0,i-1));
-    }
 
-    public T getRandomModified() {
-        if(items == null) return null;
+        int i = 0;
 
-        if(items.size() == 1){
-            return items.get(0);
+        while(sum < index) {
+            sum = sum + this.items.get(i++).getProbability();
         }
 
-        int index = rand.nextInt((int)totalSum);
-        double sum = 0;
-        int i=0;
-        while(sum < index ) {
-            sum = sum + items.get(i++).getProbability();
-        }
-        return items.get(Math.max(0,i-1));
-    }
-
-    @Nullable
-    public static <T> T getRandom(Map<T, Double> probabilitiesMap){
-        List<EasyRandom<T>> items = probabilitiesMap.keySet().stream()
-                .map(item -> new EasyRandom<>(item, probabilitiesMap.get(item)))
-                .collect(Collectors.toList());
-
-        return Optional.ofNullable(new RandomSelector<>(items).getRandom()).map(EasyRandom::getItem).orElse(null);
-    }
-
-    @Nullable
-    public static <T> T getRandom(List<T> itemsWithoutProbabilities){
-        List<EasyRandom<T>> items = itemsWithoutProbabilities.stream()
-                .map(item -> new EasyRandom<>(item, MathUtils.randomBetween(0, 100)))
-                .collect(Collectors.toList());
-
-        return Optional.ofNullable(new RandomSelector<>(items).getRandom()).map(EasyRandom::getItem).orElse(null);
+        return this.items.get(Math.max(0,i-1));
     }
 }

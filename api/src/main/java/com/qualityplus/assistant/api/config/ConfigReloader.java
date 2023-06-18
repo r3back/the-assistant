@@ -16,9 +16,9 @@ public interface ConfigReloader{
     /**
      * Reload specific files
      *
-     * @param files {@link OkaeriConfig} files to be reloaded
+     * @param files Array of {@link OkaeriConfig} to be reloaded
      */
-    public default void reloadAll(OkaeriConfig... files){
+    public default void reloadAll(final OkaeriConfig... files) {
         Arrays.stream(files).forEach(OkaeriConfig::load);
     }
 }

@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Config for multiple Messages
+ */
 @Getter
 @Setter
 @AllArgsConstructor

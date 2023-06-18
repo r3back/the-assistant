@@ -10,18 +10,26 @@ import eu.okaeri.platform.core.annotation.Bean;
 import eu.okaeri.platform.core.annotation.Component;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * MMOItems addon factory
+ */
 @Component
 public final class MMOItemsFactory {
     private @Inject("injector") OkaeriInjector injector;
     private @Inject DependencyResolver resolver;
     private @Inject Plugin plugin;
 
+    /**
+     * Configure MMOItems addon
+     *
+     * @return {@link MMOItemsAddon}
+     */
     @Bean
     public MMOItemsAddon configureMMOItems() {
-        if (resolver.isPlugin("MMOItems")) {
-            return injector.createInstance(MMOItemsAddonImpl.class);
+        if (this.resolver.isPlugin("MMOItems")) {
+            return this.injector.createInstance(MMOItemsAddonImpl.class);
         } else {
-            return injector.createInstance(DefaultMMOItemsAddon.class);
+            return this.injector.createInstance(DefaultMMOItemsAddon.class);
         }
     }
 }

@@ -23,16 +23,30 @@ import eu.okaeri.platform.minecraft.task.CommandsI18nSetupTask;
 import eu.okaeri.tasker.bukkit.BukkitTasker;
 import lombok.NonNull;
 
+/**
+ * Okaeri Plugin with no logs
+ *
+ * Default Okaeri implementation sends a bunch of
+ * logs of all tasks (DI, Commands, Tasks, Beans and more)
+ * with this implementation all logs are silenced.
+ */
 public abstract class OkaeriSilentPlugin extends OkaeriBukkitPlugin {
-    private static final boolean DEBUG = false;
+    private static final String ENABLED_VERSION_MESSAGE = "Enabled! Version %s";
+    private static final String DISABLED_VERSION_MESSAGE = "Disabled! Version %s";
 
+    /**
+     *
+     * @param message log message
+     */
     @Override
     public void log(final @NonNull String message) {
-        if (DEBUG) {
-            this.getLogger().info(message);
-        }
     }
 
+    /**
+     * Execute plan steps
+     *
+     * @param plan {@link ExecutionPlan}
+     */
     @Override
     public void plan(final @NonNull ExecutionPlan plan) {
         if (plan == null) {
@@ -65,13 +79,19 @@ public abstract class OkaeriSilentPlugin extends OkaeriBukkitPlugin {
         }
     }
 
+    /**
+     * Startup log message
+     */
     @Planned(ExecutionPhase.STARTUP)
     public void onStartup() {
-        this.getLogger().info("Enabled! Version " + this.getDescription().getVersion());
+        this.getLogger().info(String.format(ENABLED_VERSION_MESSAGE, this.getDescription().getVersion()));
     }
 
+    /**
+     * Shutdown log message
+     */
     @Planned(ExecutionPhase.SHUTDOWN)
     public void onShutdown() {
-        this.getLogger().info("Disabled! Version " + this.getDescription().getVersion());
+        this.getLogger().info(String.format(DISABLED_VERSION_MESSAGE, this.getDescription().getVersion()));
     }
 }

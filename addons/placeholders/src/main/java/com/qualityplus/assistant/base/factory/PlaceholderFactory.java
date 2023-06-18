@@ -19,9 +19,9 @@ public final class PlaceholderFactory {
 
     @Bean
     public PlaceholdersAddon configurePlaceholders() {
-        if(resolver.isPlugin("PlaceholderAPI"))
+        if (resolver.isPlugin("PlaceholderAPI"))
             return injector.createInstance(PlaceholderAPIAddon.class);
-        else if(resolver.isPlugin("MVdWPlaceholderAPI"))
+        else if (resolver.isPlugin("MVdWPlaceholderAPI"))
             return injector.createInstance(MVDWPlaceholderAddon.class);
         else
             return injector.createInstance(DefaultPlaceholdersAddon.class);

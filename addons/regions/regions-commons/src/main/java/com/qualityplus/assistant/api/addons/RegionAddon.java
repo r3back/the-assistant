@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface RegionAddon extends DependencyPlugin {
     default boolean isInAnyRegion(Location location, List<String> regions) {
-        if(regions.isEmpty()) return false;
+        if (regions.isEmpty()) return false;
 
         return getRegions(location)
                 .stream()
@@ -16,7 +16,7 @@ public interface RegionAddon extends DependencyPlugin {
     }
 
     default boolean isInRegion(Location location, String region) {
-        if(region == null) return false;
+        if (region == null) return false;
 
         return getRegions(location)
                 .stream()

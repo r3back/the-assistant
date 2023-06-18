@@ -80,7 +80,7 @@ public final class Cuboid implements Iterable<Block>, ConfigurationSerializable 
         return this.getBlocks().listIterator();
     }
 
-    public boolean isInside(Location location){
+    public boolean isInside(Location location) {
         Vector v1 = new Vector(minLocation.getBlockX(), minLocation.getBlockY(), minLocation.getBlockZ());
 
         Vector v2 = new Vector(maxLocation.getBlockX(), maxLocation.getBlockY(), maxLocation.getBlockZ());

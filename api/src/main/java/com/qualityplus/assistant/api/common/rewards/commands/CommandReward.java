@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+/**
+ * Executable command reward implementation
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,16 +22,26 @@ public final class CommandReward extends OkaeriConfig implements Reward {
 
     @Override
     public void execute(Player player) {
-        String cmd = command.replace("%player%", player.getName());
+        final String cmd = this.command.replace("%player%", player.getName());
 
-        if(commandExecutor.equals(CommandExecutor.PLAYER))
+        if (this.commandExecutor.equals(CommandExecutor.PLAYER)) {
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
-        else
+        } else {
             player.performCommand(cmd);
+        }
     }
 
+    /**
+     * Represent command executors
+     */
     public enum CommandExecutor {
+        /**
+         * Console executor
+         */
         CONSOLE,
-        PLAYER
+        /**
+         * Player Executor
+         */
+        PLAYER;
     }
 }

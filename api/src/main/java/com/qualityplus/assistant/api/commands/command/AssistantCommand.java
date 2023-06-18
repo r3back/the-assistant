@@ -3,7 +3,7 @@ package com.qualityplus.assistant.api.commands.command;
 import com.qualityplus.assistant.api.commands.CommandProvider;
 import com.qualityplus.assistant.api.commands.details.CommandDetails;
 import com.qualityplus.assistant.api.commands.setup.event.CommandSetupEvent;
-import com.qualityplus.assistant.api.commands.setup.handler.CommandSetupHandler;
+import com.qualityplus.assistant.api.commands.setup.CommandSetupHandler;
 import net.md_5.bungee.api.chat.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -47,7 +47,7 @@ public abstract class AssistantCommand extends CommandDetails {
      *
      * @param details {@link CommandDetails}
      */
-    public void setDetails(final CommandDetails details){
+    public void setDetails(final CommandDetails details) {
         this.commandDetails = details;
     }
 
@@ -55,7 +55,7 @@ public abstract class AssistantCommand extends CommandDetails {
      *
      * @param commandSetupHandler CommandSetupHandler of {@link AssistantCommand}
      */
-    public void setup(final CommandSetupHandler<AssistantCommand> commandSetupHandler){
+    public void setup(final CommandSetupHandler<AssistantCommand> commandSetupHandler) {
         this.commandCompleteHandler = commandSetupHandler;
         this.reload();
     }
@@ -63,7 +63,7 @@ public abstract class AssistantCommand extends CommandDetails {
     /**
      * Reload command info
      */
-    public void reload(){
+    public void reload() {
         //Setup Details
         this.commandCompleteHandler.onCompleteCommand(new CommandSetupEvent<>(this));
         super.cooldownInSeconds = commandDetails.getCooldownInSeconds();
@@ -88,7 +88,7 @@ public abstract class AssistantCommand extends CommandDetails {
      * @return true if inventory was open
      */
     protected boolean openInventory(final String[] args, final CommandSender sender, final InventoryHolder gui, final String useSyntax,
-                                    final String mustBeAPlayer, final String invalidPlayer){
+                                    final String mustBeAPlayer, final String invalidPlayer) {
         if (args.length != 1 && args.length != 2) {
             sender.sendMessage(useSyntax);
             return false;
@@ -129,7 +129,7 @@ public abstract class AssistantCommand extends CommandDetails {
      * @param helpPageHoverMessage Help Page Hover Message
      */
     protected void sendHelpCommands(final CommandSender sender, final String[] args, final CommandProvider<AssistantCommand> commands, final String helpHeader, final String helpMessage,
-                                    final String helpFooter, final String nextPage, final String previousPage, final String helpPageHoverMessage){
+                                    final String helpFooter, final String nextPage, final String previousPage, final String helpPageHoverMessage) {
         Player p = (Player) sender;
         int page = 1;
         if (args.length == 2) {

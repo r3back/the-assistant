@@ -3,13 +3,21 @@ package com.qualityplus.assistant.util.inventory;
 import com.qualityplus.assistant.api.util.BukkitItemUtil;
 import com.qualityplus.assistant.inventory.background.Background;
 import com.qualityplus.assistant.util.itemstack.ItemStackUtils;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+/**
+ * Utility class for Inventories
+ */
+@UtilityClass
 public final class InventoryUtils {
+    /**
+     * Fill Inventory with background items
+     *
+     * @param inventory  {@link Inventory}
+     * @param background {@link Background}
+     */
     public static void fillInventory(final Inventory inventory, final Background background) {
         if (background.useFiller && background.filler != null) {
             for (int i = 0; i < inventory.getSize(); i++) {
@@ -27,6 +35,13 @@ public final class InventoryUtils {
         }
     }
 
+    /**
+     * Retrieves the amount of an item given an Array of items
+     *
+     * @param itemStacks     Array of {@link ItemStack}
+     * @param itemStackParam {@link ItemStack}
+     * @return item amount
+     */
     public static int getItemQuantity(final ItemStack[] itemStacks, final ItemStack itemStackParam) {
         int quantity = 0;
 
@@ -49,7 +64,14 @@ public final class InventoryUtils {
         return quantity;
     }
 
-    public static void removeItems(final Inventory inventory, final ItemStack stack, int amount){
+    /**
+     * Removes specific amount of items from inventory
+     *
+     * @param inventory {@link Inventory}
+     * @param stack     {@link ItemStack}
+     * @param amount    amount to be removed
+     */
+    public static void removeItems(final Inventory inventory, final ItemStack stack, int amount) {
         for (int i = 0; i<64; i++) {
             if (amount <= 0 || !inventory.containsAtLeast(stack, amount)) {
                 break;
@@ -64,7 +86,14 @@ public final class InventoryUtils {
         }
     }
 
-    public static void addItems(final Inventory inventory, final ItemStack stack, final int amount){
+    /**
+     * Adds specific amount of items to inventory
+     *
+     * @param inventory {@link Inventory}
+     * @param stack     {@link ItemStack}
+     * @param amount    amount to be added
+     */
+    public static void addItems(final Inventory inventory, final ItemStack stack, final int amount) {
         if (BukkitItemUtil.isNull(stack)) {
             return;
         }
@@ -78,7 +107,13 @@ public final class InventoryUtils {
         }
     }
 
-    public static void removeItems(final Inventory inventory, final ItemStack stack){
+    /**
+     * Removes item from inventory
+     *
+     * @param inventory {@link Inventory}
+     * @param stack     {@link ItemStack}
+     */
+    public static void removeItems(final Inventory inventory, final ItemStack stack) {
         final int amount = stack.getAmount();
 
         final ItemStack modified = BukkitItemUtil.getItemWithout(stack, amount);

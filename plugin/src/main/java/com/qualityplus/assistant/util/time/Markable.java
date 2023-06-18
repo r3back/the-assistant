@@ -5,36 +5,56 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
+/**
+ * Markable cooldown
+ */
 @Getter
 @Setter
+@NoArgsConstructor
 public final class Markable extends OkaeriConfig {
     private long delay;
     private long lastMarked;
 
     /**
-     * Easy Creation of a markable pojo
+     * Easy Creation of a cooldown
      *
      * @param delay      Timer.getEffectiveTime();
      * @param lastMarked System.currentTimeMillis();
      */
     public Markable(final long delay, final long lastMarked) {
-        this.delay = delay;
         this.lastMarked = lastMarked;
+        this.delay = delay;
     }
 
+    /**
+     *
+     * @return true if still on cooldown
+     */
     public boolean isMarked() {
         return remainingTime() >= 0;
     }
 
+    /**
+     * Mark cooldown to current system millis
+     */
     public void mark() {
-        lastMarked = System.currentTimeMillis();
+        this.lastMarked = System.currentTimeMillis();
     }
 
+    /**
+     * Retrieves Remaining time expressed with milliseconds
+     *
+     * @return milliseconds remaining time
+     */
     public long remainingTime() {
-        return lastMarked + delay - System.currentTimeMillis();
+        return this.lastMarked + this.delay - System.currentTimeMillis();
     }
 
+    /**
+     * Retrieves Remaining time
+     *
+     * @return {@link RemainingTime}
+     */
     public RemainingTime getRemainingTime() {
         final long millis = remainingTime();
 

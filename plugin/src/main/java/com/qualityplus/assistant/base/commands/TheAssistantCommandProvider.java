@@ -3,8 +3,8 @@ package com.qualityplus.assistant.base.commands;
 import com.qualityplus.assistant.api.commands.CommandProvider;
 import com.qualityplus.assistant.api.commands.LabelProvider;
 import com.qualityplus.assistant.api.commands.command.AssistantCommand;
-import com.qualityplus.assistant.api.commands.handler.CommandLabelHandler;
-import com.qualityplus.assistant.api.commands.setup.handler.CommandSetupHandler;
+import com.qualityplus.assistant.api.commands.handler.CommandLabelRegistry;
+import com.qualityplus.assistant.api.commands.setup.CommandSetupHandler;
 import com.qualityplus.assistant.util.StringUtils;
 import com.qualityplus.assistant.util.list.ListUtils;
 import eu.okaeri.commons.bukkit.time.MinecraftTimeEquivalent;
@@ -19,17 +19,24 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+/**
+ * Command provider implementation for the assistant
+ */
 @Component
-public final class TheCoreCommandProvider implements CommandProvider<AssistantCommand> {
+public final class TheAssistantCommandProvider implements CommandProvider<AssistantCommand> {
     private final Map<String, List<AssistantCommand>> commands = new HashMap<>();
+    private static final String REGISTER_ERROR_MSG = "Error Registering %s %s";
+    private static final String PERMISSION_NODE = "thecore.";
+    private static final String EMPTY_PERMISSION = "";
     private @Inject Logger logger;
 
     @Override
     public void reloadCommands() {
-        commands.values()
+        this.commands.values()
                 .stream()
                 .flatMap(Collection::stream)
                 .forEach(AssistantCommand::reload);
@@ -37,7 +44,7 @@ public final class TheCoreCommandProvider implements CommandProvider<AssistantCo
 
     @Delayed(time = MinecraftTimeEquivalent.SECOND, async = true)
     public void registerCommands() {
-        final Iterator<List<AssistantCommand>> iterator = commands.values().iterator();
+        final Iterator<List<AssistantCommand>> iterator = this.commands.values().iterator();
 
         while (iterator.hasNext()) {
             final List<AssistantCommand> list = iterator.next();
@@ -58,7 +65,7 @@ public final class TheCoreCommandProvider implements CommandProvider<AssistantCo
         final Optional<LabelProvider> provider = getLabelProvider(command.getLabelProvider());
 
         if (!provider.isPresent()) {
-            logger.warning(String.format("Error Registering " + command.getLabelProvider() + " %s", command.getAliases().get(0)));
+            this.logger.warning(String.format(REGISTER_ERROR_MSG, command.getLabelProvider(), command.getAliases().get(0)));
             return;
         }
 
@@ -66,25 +73,25 @@ public final class TheCoreCommandProvider implements CommandProvider<AssistantCo
 
         final String label = provider.get().getLabel();
 
-        commands.put(label, ListUtils.listWith(commands.getOrDefault(label, new ArrayList<>()), command));
+        this.commands.put(label, ListUtils.listWith(this.commands.getOrDefault(label, new ArrayList<>()), command));
     }
 
     @Override
     public void unregisterCommand(final AssistantCommand command) {
         getLabelProvider(command.getLabelProvider())
-                .ifPresent(labelProvider -> commands.get(labelProvider.getLabel()).remove(command));
+                .ifPresent(labelProvider -> this.commands.get(labelProvider.getLabel()).remove(command));
     }
 
     @Override
     public List<AssistantCommand> getCommands() {
-        return commands.values()
+        return this.commands.values()
                 .stream()
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public boolean onCommand(final @NotNull CommandSender commandSender,
+    public boolean onCommand(final @NotNull CommandSender sender,
                              final @NotNull Command cmd,
                              final @NotNull String label,
                              final String[] args) {
@@ -92,36 +99,46 @@ public final class TheCoreCommandProvider implements CommandProvider<AssistantCo
         final Optional<LabelProvider> labelProvider = getLabelProvider(cmd.getName());
 
         if (args.length == 0) {
-            if (commandSender instanceof Player) {
-                commandSender.sendMessage(StringUtils.color(labelProvider.map(LabelProvider::getUseHelpMessage).orElse("")));
+            if (sender instanceof Player) {
+                sendMessage(sender, labelProvider, LabelProvider::getUseHelpMessage);
                 return true;
             }
         }
 
         for (AssistantCommand command : getCommandsByLabel(cmd.getName())) {
-            if (!(command.getAliases().contains(args[0]) && command.isEnabled()))
+            if (!(command.getAliases().contains(args[0]) && command.isEnabled())) {
                 continue;
+            }
 
-            if (command.isOnlyForPlayers() && !(commandSender instanceof Player)) {
-                commandSender.sendMessage(StringUtils.color(labelProvider.map(LabelProvider::getOnlyForPlayersMessage).orElse("")));
+            if (command.isOnlyForPlayers() && !(sender instanceof Player)) {
+                sendMessage(sender, labelProvider, LabelProvider::getOnlyForPlayersMessage);
                 return false;
             }
 
-            if (!(commandSender.hasPermission(command.getPermission()) || command.getPermission()
-                    .equalsIgnoreCase("") || command.getPermission()
-                    .equalsIgnoreCase("thecore."))) {
-                commandSender.sendMessage(StringUtils.color(labelProvider.map(LabelProvider::getNoPermissionMessage).orElse("")));
+            if (!(sender.hasPermission(command.getPermission()) || command.getPermission()
+                    .equalsIgnoreCase(EMPTY_PERMISSION) || command.getPermission()
+                    .equalsIgnoreCase(PERMISSION_NODE))) {
+
+                sendMessage(sender, labelProvider, LabelProvider::getNoPermissionMessage);
                 return false;
             }
 
-            command.execute(commandSender, args);
+            command.execute(sender, args);
             return true;
         }
-        commandSender.sendMessage(StringUtils.color(labelProvider.map(LabelProvider::getUnknownCommandMessage).orElse("")));
+
+        sendMessage(sender, labelProvider, LabelProvider::getUnknownCommandMessage);
 
         return false;
     }
 
+    @SuppressWarnings("all")
+    private void sendMessage(final CommandSender sender, final Optional<LabelProvider> provider,
+                             final Function<LabelProvider, String> function) {
+        sender.sendMessage(StringUtils.color(provider
+                .map(LabelProvider::getNoPermissionMessage)
+                .orElse(EMPTY_PERMISSION)));
+    }
 
     @Override
     public List<String> onTabComplete(final @NotNull CommandSender commandSender,
@@ -135,8 +152,8 @@ public final class TheCoreCommandProvider implements CommandProvider<AssistantCo
                 for (final String alias : command.getAliases()) {
                     if (alias.toLowerCase().startsWith(args[0].toLowerCase()) && (
                             command.isEnabled() && (commandSender.hasPermission(command.getPermission())
-                                    || command.getPermission().equalsIgnoreCase("") || command.getPermission()
-                                    .equalsIgnoreCase("thecore.")))) {
+                                    || command.getPermission().equalsIgnoreCase(EMPTY_PERMISSION)
+                                    || command.getPermission().equalsIgnoreCase(PERMISSION_NODE)))) {
                         result.add(alias);
                     }
                 }
@@ -146,8 +163,9 @@ public final class TheCoreCommandProvider implements CommandProvider<AssistantCo
 
         for (AssistantCommand command : getCommandsByLabel(cmd.getName())) {
             if (command.getAliases().contains(args[0]) && (command.isEnabled() && (
-                    commandSender.hasPermission(command.getPermission()) || command.getPermission().equalsIgnoreCase("")
-                            || command.getPermission().equalsIgnoreCase("thecore.")))) {
+                    commandSender.hasPermission(command.getPermission())
+                            || command.getPermission().equalsIgnoreCase(EMPTY_PERMISSION)
+                            || command.getPermission().equalsIgnoreCase(PERMISSION_NODE)))) {
                 return command.onTabComplete(commandSender, cmd, label, args);
             }
         }
@@ -155,15 +173,15 @@ public final class TheCoreCommandProvider implements CommandProvider<AssistantCo
         return null;
     }
 
-    private List<AssistantCommand> getCommandsByLabel(final String label){
+    private List<AssistantCommand> getCommandsByLabel(final String label) {
         return getLabelProvider(label)
                 .map(LabelProvider::getLabel)
-                .map(commands::get)
+                .map(this.commands::get)
                 .orElse(new ArrayList<>());
     }
 
-    private Optional<LabelProvider> getLabelProvider(final String label){
-        return CommandLabelHandler.values().stream()
+    private Optional<LabelProvider> getLabelProvider(final String label) {
+        return CommandLabelRegistry.values().stream()
                 .filter(labelProvider -> labelProvider.getId().equals(label))
                 .findFirst();
     }
@@ -177,11 +195,11 @@ public final class TheCoreCommandProvider implements CommandProvider<AssistantCo
             return;
         }
 
-        if (!(command.getExecutor() instanceof TheCoreCommandProvider)) {
+        if (!(command.getExecutor() instanceof TheAssistantCommandProvider)) {
             command.setExecutor(this);
         }
 
-        if (command.getTabCompleter() == null || !(command.getTabCompleter() instanceof TheCoreCommandProvider)) {
+        if (command.getTabCompleter() == null || !(command.getTabCompleter() instanceof TheAssistantCommandProvider)) {
             command.setTabCompleter(this);
         }
     }

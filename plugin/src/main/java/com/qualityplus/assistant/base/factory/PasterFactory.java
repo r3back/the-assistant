@@ -14,6 +14,9 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Logger;
 
+/**
+ * Paster Addon Factory
+ */
 @Component
 public final class PasterFactory {
     private @Inject("injector") OkaeriInjector injector;
@@ -21,20 +24,25 @@ public final class PasterFactory {
     private @Inject Plugin plugin;
     private @Inject Logger logger;
 
+    /**
+     * Configure Paster Addon
+     *
+     * @return {@link PasterAddon}
+     */
     @Bean
     private PasterAddon configurePaster() {
-        return !resolver.isPlugin("WorldEdit") ?
-                injector.createInstance(DefaultPasterAddon.class) :
+        return !this.resolver.isPlugin("WorldEdit") ?
+                this.injector.createInstance(DefaultPasterAddon.class) :
                 getPaster(XMaterial.getVersion() > 13 ? WorldEdit7.class : WorldEdit6.class);
     }
 
     private PasterAddon getPaster(final Class<? extends PasterAddon> paster) {
-        return injector.createInstance(paster);
+        return this.injector.createInstance(paster);
     }
 
-    private boolean isWorldEdit(){
-        return resolver.isPlugin("WorldEdit")
-                || resolver.isPlugin("FastAsyncWorldEdit")
-                || resolver.isPlugin("AsyncWorldEdit");
+    private boolean isWorldEdit() {
+        return this.resolver.isPlugin("WorldEdit")
+                || this.resolver.isPlugin("FastAsyncWorldEdit")
+                || this.resolver.isPlugin("AsyncWorldEdit");
     }
 }

@@ -8,15 +8,28 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+/**
+ * Modified Okaeri CommandsBukkit with removed logs
+ */
 public final class SilentCommandsBukkit extends CommandsBukkit {
     private final JavaPlugin plugin;
 
+    /**
+     * Default Constructor
+     *
+     * @param plugin {@link JavaPlugin}
+     */
     protected SilentCommandsBukkit(final @NonNull JavaPlugin plugin) {
         super(plugin);
         this.plugin = plugin;
     }
 
-    public static SilentCommandsBukkit make(final JavaPlugin plugin){
+    /**
+     *
+     * @param plugin {@link JavaPlugin}
+     * @return {@link SilentCommandsBukkit}
+     */
+    public static SilentCommandsBukkit make(final JavaPlugin plugin) {
         if (plugin == null) {
             throw new NullPointerException("plugin is marked non-null but is null");
         } else {
@@ -26,6 +39,9 @@ public final class SilentCommandsBukkit extends CommandsBukkit {
         }
     }
 
+    /**
+     * Register command listeners
+     */
     @Override
     public void registerListeners() {
         Class AsyncTabCompleteEvent;
@@ -34,8 +50,7 @@ public final class SilentCommandsBukkit extends CommandsBukkit {
             PlayerCommandSendListener playerCommandSendListener = new PlayerCommandSendListener(this, AsyncTabCompleteEvent);
             this.plugin.getServer().getPluginManager().registerEvent(AsyncTabCompleteEvent, new Listener() {
             }, EventPriority.HIGHEST, playerCommandSendListener, this.plugin, true);
-        } catch (Exception var4) {
-            //this.plugin.getLogger().warning("Failed to register PlayerCommandSendEvent listener: " + var4 + " (ignore if running an older version of Minecraft)");
+        } catch (Exception ignored) {
         }
 
         try {
@@ -43,8 +58,7 @@ public final class SilentCommandsBukkit extends CommandsBukkit {
             AsyncTabCompleteListener asyncTabCompleteListener = new AsyncTabCompleteListener(this, AsyncTabCompleteEvent);
             this.plugin.getServer().getPluginManager().registerEvent(AsyncTabCompleteEvent, new Listener() {
             }, EventPriority.HIGHEST, asyncTabCompleteListener, this.plugin, true);
-        } catch (Exception var3) {
-            //this.plugin.getLogger().warning("Failed to register AsyncTabCompleteEvent listener: " + var3 + " (ignore if running an older version of Minecraft or not Paper)");
+        } catch (Exception ignored) {
         }
 
     }

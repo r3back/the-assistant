@@ -4,10 +4,35 @@ import com.qualityplus.assistant.api.dependency.DependencyPlugin;
 
 import java.util.UUID;
 
+/**
+ * MMOItems Addon
+ */
 public interface MMOItemsAddon extends DependencyPlugin {
-    void updateStats(UUID uuid, String ability, String type, double value);
+    /**
+     * Update player stats
+     *
+     * @param uuid    {@link UUID} player uuid
+     * @param ability ability key
+     * @param type    ability type
+     * @param value   value to add
+     */
+    public void updateStats(final UUID uuid, final String ability,
+                            final String type, final double value);
 
-    double getStats(UUID uuid, String ability);
+    /**
+     * Retrieves player stats
+     *
+     * @param uuid    {@link UUID} player uuid
+     * @param ability ability key
+     * @return ability amount
+     */
+    public double getStats(final UUID uuid, final String ability);
 
-    double getMMOArmor(UUID uuid, String ability);
+    /**
+     * Retrieves player armor stats
+     * @param uuid    {@link UUID} player uuid
+     * @param ability ability key
+     * @return armor ability amount
+     */
+    public double getMMOArmor(final UUID uuid, final String ability);
 }

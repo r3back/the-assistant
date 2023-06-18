@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Spigot chat message
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 public final class SpecialMessage extends OkaeriConfig {
@@ -14,7 +17,12 @@ public final class SpecialMessage extends OkaeriConfig {
     public String action;
     public String aboveMessage;
 
-    public SpecialMessage(final String message){
+    /**
+     * Constructor with message as argument
+     *
+     * @param message message
+     */
+    public SpecialMessage(final String message) {
         this.message = Collections.singletonList(message);
     }
 }

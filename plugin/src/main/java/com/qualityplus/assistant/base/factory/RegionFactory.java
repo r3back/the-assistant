@@ -9,25 +9,33 @@ import eu.okaeri.injector.annotation.Inject;
 import eu.okaeri.platform.core.annotation.Bean;
 import eu.okaeri.platform.core.annotation.Component;
 
+/**
+ * Region addon factory
+ */
 @Component
 public final class RegionFactory {
     private @Inject("injector") OkaeriInjector injector;
     private @Inject DependencyResolver resolver;
 
+    /**
+     * Configure region addon
+     *
+     * @return {@link RegionAddon}
+     */
     @Bean
     private RegionAddon configureRegions() {
-        if (resolver.isPlugin("WorldGuard")) {
-            return injector.createInstance(getWorldGuard());
-        } else if (resolver.isPlugin("Residence")) {
-            return injector.createInstance(ResidenceAddon.class);
-        } else if (resolver.isPlugin("UltraRegions")) {
-            return injector.createInstance(UltraRegionsAddon.class);
+        if (this.resolver.isPlugin("WorldGuard")) {
+            return this.injector.createInstance(getWorldGuard());
+        } else if (this.resolver.isPlugin("Residence")) {
+            return this.injector.createInstance(ResidenceAddon.class);
+        } else if (this.resolver.isPlugin("UltraRegions")) {
+            return this.injector.createInstance(UltraRegionsAddon.class);
         } else {
-            return injector.createInstance(DefaultRegionsAddon.class);
+            return this.injector.createInstance(DefaultRegionsAddon.class);
         }
     }
 
-    private Class<? extends RegionAddon> getWorldGuard(){
+    private Class<? extends RegionAddon> getWorldGuard() {
         return XMaterial.getVersion() > 12 ? WG7Addon.class : WG6Addon.class;
     }
 }

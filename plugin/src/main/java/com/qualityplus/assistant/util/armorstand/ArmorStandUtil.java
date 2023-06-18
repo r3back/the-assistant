@@ -8,19 +8,40 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
+/**
+ * ArmorStand Utility class
+ */
 @UtilityClass
 public class ArmorStandUtil {
+    /**
+     * Rotate an armor stand facing a specific location
+     *
+     * @param armorStand  {@link ArmorStand}
+     * @param newLocation {@link Location}
+     */
     public void rotate(final ArmorStand armorStand, final Location newLocation) {
         final Location location = armorStand.getLocation().clone();
 
         armorStand.teleport(location.clone().setDirection(newLocation.clone().subtract(location).toVector()));
     }
 
+    /**
+     * Retrieves if an Armor stand is valid and its alive
+     *
+     * @param armorStand {@link ArmorStand}
+     * @return true if armorstand is valid
+     */
     public boolean entityIsValid(final ArmorStand armorStand) {
         return armorStand != null && !armorStand.isDead();
     }
 
-    public ArmorStand createDefault(Location location) {
+    /**
+     * Creates an armor stand in specific location
+     *
+     * @param location {@link Location}
+     * @return {@link ArmorStand}
+     */
+    public ArmorStand createDefault(final Location location) {
         return Optional.ofNullable(location.getWorld())
                 .map(world -> getArmorStand(world, location))
                 .orElse(null);

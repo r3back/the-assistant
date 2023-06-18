@@ -10,7 +10,7 @@ public final class CitizensAddon implements NPCAddon {
     }
 
     @Override
-    public boolean isNPC(Entity entity){
+    public boolean isNPC(Entity entity) {
         return entity.hasMetadata("NPC");
     }
 }

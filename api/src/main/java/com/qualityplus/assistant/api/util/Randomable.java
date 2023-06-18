@@ -1,5 +1,12 @@
 package com.qualityplus.assistant.api.util;
 
+/**
+ * Randomable items
+ */
 public interface Randomable {
-    double getProbability();
+    /**
+     *
+     * @return item probabilities
+     */
+    public double getProbability();
 }

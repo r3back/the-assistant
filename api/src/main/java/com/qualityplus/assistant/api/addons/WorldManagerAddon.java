@@ -9,21 +9,44 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * World Manager Addon
+ */
 public interface WorldManagerAddon extends DependencyPlugin {
-    default List<Entity> getChunkEntities(Location location){
+    /**
+     * Return entities in a location chunk
+     * @param location {@link Location}
+     * @return List of {@link Entity}
+     */
+    public default List<Entity> getChunkEntities(final Location location) {
         return Arrays.asList(location.getChunk().getEntities());
     }
 
-    default CompletableFuture<ChunkCheckResponse> chunksAreLoaded(Location location){
+    /**
+     * Retrieves a check response from location chunk
+     *
+     * @param location {@link Location}
+     * @return CompletableFuture of {@link ChunkCheckResponse}
+     */
+    public default CompletableFuture<ChunkCheckResponse> chunksAreLoaded(final Location location) {
         return CompletableFuture.completedFuture(ChunkCheckResponse.builder()
                 .canBeLoaded(true)
                 .areLoaded(location.getChunk().isLoaded())
                 .build());
     }
 
-    default void loadChunks(Location location){
+    /**
+     * Load chunks of a location
+     *
+     * @param location {@link Location}
+     */
+    public default void loadChunks(final Location location) {
         location.getChunk().load();
     }
 
-    default void setup(){}
+    /**
+     * Setup
+     */
+    public default void setup() {
+    }
 }

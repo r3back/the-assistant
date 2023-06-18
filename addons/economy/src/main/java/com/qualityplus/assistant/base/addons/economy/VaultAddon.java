@@ -26,7 +26,7 @@ public final class VaultAddon implements EconomyAddon {
         Optional.ofNullable(economy).ifPresent(eco -> eco.depositPlayer(player, amount));
     }
 
-    private Economy setupEconomy(){
+    private Economy setupEconomy() {
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
 
         return rsp == null ? null : rsp.getProvider();

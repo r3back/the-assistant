@@ -10,8 +10,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
+/**
+ * Damage listener
+ */
 @Component
 public final class DamageListener implements Listener {
+    /**
+     * Handles {@link EntityDamagedByPlayerEvent}
+     *
+     * @param e {@link EntityDamageByEntityEvent}
+     */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void entityDamagedByPlayerEvent(final EntityDamageByEntityEvent e) {
         if (!(e.getDamager() instanceof Player)) {
@@ -25,6 +33,11 @@ public final class DamageListener implements Listener {
         Bukkit.getPluginManager().callEvent(event);
     }
 
+    /**
+     * Handles {@link PlayerDamagedByEntityEvent}
+     *
+     * @param e {@link EntityDamageByEntityEvent}
+     */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void playerDamagedByEntityEvent(final EntityDamageByEntityEvent e) {
         if (!(e.getEntity() instanceof Player)) {

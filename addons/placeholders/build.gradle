@@ -12,7 +12,7 @@ dependencies {
     compileOnly project(':addons:addons-commons')
 
     compileOnly 'eu.okaeri:okaeri-platform-bukkit:0.4.0-preview54'
-    compileOnly ('be.maximvdw:MVdWPlaceholderAPI:3.0.1-SNAPSHOT'){
+    compileOnly ('be.maximvdw:MVdWPlaceholderAPI:3.0.1-SNAPSHOT') {
         exclude(group: 'org.spigotmc')
     }
     compileOnly 'me.clip:placeholderapi:2.10.9'

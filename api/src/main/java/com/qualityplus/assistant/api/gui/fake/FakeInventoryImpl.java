@@ -11,35 +11,54 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-@RequiredArgsConstructor
+/**
+ * Fake Inventory Implementation
+ */
 @Getter
+@RequiredArgsConstructor
 public final class FakeInventoryImpl implements FakeInventory {
     private InventoryView inventoryView;
     private Inventory inventory;
     private final int slots;
 
-    public FakeInventoryImpl(InventoryView inventoryView, int slots) {
+    /**
+     * Constructor with inventory view and slots
+     * 
+     * @param inventoryView {@link InventoryView}
+     * @param slots         max slots amount
+     */
+    public FakeInventoryImpl(final InventoryView inventoryView, final int slots) {
         this.inventoryView = inventoryView;
         this.slots = slots;
     }
 
-    public FakeInventoryImpl(Inventory inventory, int slots) {
+    /**
+     * Constructor with inventory and slots
+     * 
+     * @param inventory {@link Inventory}
+     * @param slots     max slots amount
+     */
+    public FakeInventoryImpl(final Inventory inventory, final int slots) {
         this.inventory = inventory;
         this.slots = slots;
     }
 
     @Override
     public void removeItems(ItemStack toRemove, int amount) {
-        for(int i = slots; i >= 0; i--){
-            if(amount <= 0) break;
+        for (int i = slots; i >= 0; i--) {
+            if (amount <= 0) {
+                break;
+            }
 
-            ItemStack itemStack = inventory.getItem(i);
+            final ItemStack itemStack = inventory.getItem(i);
 
-            if(itemStack == null || itemStack.getType() == Material.AIR || !itemStack.isSimilar(toRemove)) continue;
+            if (itemStack == null || itemStack.getType() == Material.AIR || !itemStack.isSimilar(toRemove)) {
+                continue;
+            }
 
-            int toRemoveAmount = Math.min(itemStack.getAmount(), amount);
+            final int toRemoveAmount = Math.min(itemStack.getAmount(), amount);
 
-            ItemStack newItemStack = BukkitItemUtil.getItemWithout(itemStack, toRemoveAmount);
+            final ItemStack newItemStack = BukkitItemUtil.getItemWithout(itemStack, toRemoveAmount);
 
             inventory.setItem(i, newItemStack);
 
@@ -49,16 +68,18 @@ public final class FakeInventoryImpl implements FakeInventory {
 
     @Override
     public Map<ItemStack, Integer> getItemsWithAmount() {
-        Map<ItemStack, Integer> itemStackMap = new HashMap<>();
+        final Map<ItemStack, Integer> itemStackMap = new HashMap<>();
 
-        for(int i = 0; i<slots; i++){
-            ItemStack itemStack = inventory.getItem(i);
+        for (int i = 0; i<slots; i++) {
+            final ItemStack itemStack = inventory.getItem(i);
 
-            if(itemStack == null || itemStack.getType() == Material.AIR) continue;
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
+                continue;
+            }
 
-            ItemStack clone = BukkitItemUtil.getItemWith(itemStack.clone(), 1);
+            final ItemStack clone = BukkitItemUtil.getItemWith(itemStack.clone(), 1);
 
-            Integer amount = itemStackMap.getOrDefault(clone, 0);
+            final Integer amount = itemStackMap.getOrDefault(clone, 0);
 
             itemStackMap.put(clone, itemStack.getAmount() + amount);
         }
@@ -67,21 +88,22 @@ public final class FakeInventoryImpl implements FakeInventory {
     }
 
     @Override
-    public void setItems(Map<Integer, ItemStack> items) {
-
-        for(int i = 0; i<=items.size(); i++){
+    public void setItems(final Map<Integer, ItemStack> items) {
+        for (int i = 0; i<=items.size(); i++) {
             inventory.setItem(i, items.get(i));
         }
     }
 
     @Override
-    public Map<Integer, ItemStack> getItems(){
-        Map<Integer, ItemStack> itemStackMap = new HashMap<>();
+    public Map<Integer, ItemStack> getItems() {
+        final Map<Integer, ItemStack> itemStackMap = new HashMap<>();
 
-        for(int i = 0; i<slots; i++){
-            ItemStack itemStack = inventory.getItem(i);
+        for (int i = 0; i<slots; i++) {
+            final ItemStack itemStack = inventory.getItem(i);
 
-            if(itemStack == null || itemStack.getType() == Material.AIR) continue;
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
+                continue;
+            }
 
             itemStackMap.put(i, itemStack);
         }
@@ -91,32 +113,35 @@ public final class FakeInventoryImpl implements FakeInventory {
 
     @Override
     public ItemStack[] getItemsArray() {
-        List<ItemStack> items = new ArrayList<>(getItems().values());
+        final List<ItemStack> items = new ArrayList<>(getItems().values());
 
         return BukkitItemUtil.fromList(items);
     }
 
     @Override
-    public ItemStack removeOneFromLastItem(){
-        Map<Integer, ItemStack> itemStackMap = new HashMap<>();
-
-
+    public ItemStack removeOneFromLastItem() {
+        final Map<Integer, ItemStack> itemStackMap = new HashMap<>();
+        
         Integer max = null;
 
-        for(int i = 0; i<slots; i++){
-            ItemStack itemStack = inventory.getItem(i);
+        for (int i = 0; i<slots; i++) {
+            final ItemStack itemStack = inventory.getItem(i);
 
-            if(BukkitItemUtil.isNull(itemStack)) continue;
+            if (BukkitItemUtil.isNull(itemStack)) {
+                continue;
+            }
 
             max = i;
 
             itemStackMap.put(i, itemStack);
         }
 
-        if(max != null){
+        if (max != null) {
             ItemStack lastItem = itemStackMap.getOrDefault(max, null);
 
-            if(BukkitItemUtil.isNull(lastItem)) return null;
+            if (BukkitItemUtil.isNull(lastItem)) {
+                return null;
+            }
 
             lastItem = lastItem.clone();
 
@@ -134,22 +159,26 @@ public final class FakeInventoryImpl implements FakeInventory {
     public int getEmptySlots() {
         int emptySlots = 0;
 
-        for(int i = slots; i >= 0; i--){
-            ItemStack itemStack = inventory.getItem(i);
-            if(itemStack == null || itemStack.getType() == Material.AIR)
+        for (int i = slots; i >= 0; i--) {
+            final ItemStack itemStack = inventory.getItem(i);
+
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
                 emptySlots++;
+            }
         }
 
         return emptySlots;
     }
 
     @Override
-    public void removeItems(){
+    public void removeItems() {
 
-        for(int i = 0; i<slots; i++){
+        for (int i = 0; i<slots; i++) {
             ItemStack itemStack = inventory.getItem(i);
 
-            if(itemStack == null || itemStack.getType() == Material.AIR) continue;
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
+                continue;
+            }
 
             inventory.setItem(i, null);
         }

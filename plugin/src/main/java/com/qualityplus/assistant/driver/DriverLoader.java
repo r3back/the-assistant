@@ -13,10 +13,21 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Logger;
 
+/**
+ * Class to load database drivers
+ *
+ * TODO check if this can be removed
+ */
 @Component
 public final class DriverLoader {
+    /**
+     * Load database drivers
+     *
+     * @param plugin {@link Plugin}
+     * @param logger {@link Logger}
+     */
     @Delayed(time = MinecraftTimeEquivalent.SECOND / 20, async = true)
-    public void configureDrivers(final @Inject Plugin plugin, final @Inject Logger logger) {
+    public void loadDrivers(final @Inject Plugin plugin, final @Inject Logger logger) {
         try {
             MariaDbPersistence.class.getName();
             H2Persistence.class.getName();

@@ -11,6 +11,10 @@ import eu.okaeri.configs.yaml.bukkit.serdes.transformer.StringWorldTransformer;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+/**
+ * Custom Serdes Pack for Bukkit items that overrides
+ * the Okaeri Default implementation
+ */
 @NoArgsConstructor
 public final class SerdesAssistantBukkit implements OkaeriSerdesPack {
     @Override

@@ -6,34 +6,40 @@ import io.lumine.mythic.core.mobs.ActiveMob;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
+/**
+ * MythicMobs implementation
+ */
 public final class MythicMobsAddonImpl implements MythicMobsAddon {
     private final BukkitAPIHelper bukkitAPIHelper = new BukkitAPIHelper();
 
     @Override
-    public boolean isMythicMob(Entity entity) {
+    public boolean isMythicMob(final Entity entity) {
         try {
-            ActiveMob activeMob = bukkitAPIHelper.getMythicMobInstance(entity);
+            final ActiveMob activeMob = bukkitAPIHelper.getMythicMobInstance(entity);
+
             return activeMob != null;
-        }catch (NullPointerException e){
+        }catch (NullPointerException e) {
             return false;
         }
     }
 
     @Override
-    public String getInternalName(Entity entity) {
+    public String getInternalName(final Entity entity) {
         try {
-            ActiveMob activeMob = bukkitAPIHelper.getMythicMobInstance(entity);
+            final ActiveMob activeMob = bukkitAPIHelper.getMythicMobInstance(entity);
 
-            if(activeMob == null) return null;
+            if (activeMob == null) {
+                return null;
+            }
 
             return activeMob.getType().getInternalName();
-        }catch (NullPointerException e){
+        }catch (NullPointerException e) {
             return null;
         }
     }
 
     @Override
-    public Entity spawn(String id, Location location, int level) {
+    public Entity spawn(final String id, final Location location, final int level) {
         /*
         TODO ADD SPAWN LOGIC
          */

@@ -7,10 +7,37 @@ import com.qualityplus.assistant.api.nms.NMS;
 import com.qualityplus.assistant.api.service.AddonsService;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * The assistant api
+ */
 public interface TheAssistantAPI {
-    CommandProvider<AssistantCommand> getCommandProvider();
-    DependencyResolver getDependencyResolver();
-    AddonsService getAddons();
-    Plugin getPlugin();
-    NMS getNms();
+    /**
+     *
+     * @return CommandProvider of {@link AssistantCommand}
+     */
+    public CommandProvider<AssistantCommand> getCommandProvider();
+
+    /**
+     *
+     * @return {@link DependencyResolver}
+     */
+    public DependencyResolver getDependencyResolver();
+
+    /**
+     *
+     * @return {@link AddonsService}
+     */
+    public AddonsService getAddons();
+
+    /**
+     *
+     * @return {@link Plugin} instance
+     */
+    public Plugin getPlugin();
+
+    /**
+     *
+     * @return {@link NMS}
+     */
+    public NMS getNms();
 }

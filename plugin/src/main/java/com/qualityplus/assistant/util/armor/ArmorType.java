@@ -1,20 +1,41 @@
 package com.qualityplus.assistant.util.armor;
 
 import com.qualityplus.assistant.api.util.BukkitItemUtil;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Represent Armor Types
+ */
+@Getter
+@RequiredArgsConstructor
 public enum ArmorType {
+    /**
+     * Helmet
+     */
     HELMET(5),
+    /**
+     * ChestPlate
+     */
     CHESTPLATE(6),
+    /**
+     * Leggings
+     */
     LEGGINGS(7),
+    /**
+     * Boots
+     */
     BOOTS(8);
 
     private final int slot;
 
-    ArmorType(final int slot) {
-        this.slot = slot;
-    }
-
+    /**
+     * Converts {@link ItemStack} to {@link ArmorType}
+     *
+     * @param itemStack {@link ItemStack}
+     * @return {@link ArmorType}
+     */
     public static ArmorType matchType(final ItemStack itemStack) {
         if (BukkitItemUtil.isNull(itemStack)) {
             return null;
@@ -33,9 +54,5 @@ public enum ArmorType {
         } else {
             return null;
         }
-    }
-
-    public int getSlot() {
-        return slot;
     }
 }

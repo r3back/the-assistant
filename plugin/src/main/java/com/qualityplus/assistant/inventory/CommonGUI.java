@@ -5,6 +5,9 @@ import eu.okaeri.configs.OkaeriConfig;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+/**
+ * Common GUI
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 public final class CommonGUI extends OkaeriConfig {

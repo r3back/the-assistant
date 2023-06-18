@@ -8,6 +8,9 @@ import eu.okaeri.injector.annotation.Inject;
 import eu.okaeri.platform.core.annotation.Bean;
 import eu.okaeri.platform.core.annotation.Scan;
 
+/**
+ * The Assistant Plugin Main class
+ */
 @Scan(deep = true, exclusions = {
         "com.qualityplus.assistant.lib",
         "com.qualityplus.assistant.base.addons.placeholders",
@@ -16,10 +19,21 @@ import eu.okaeri.platform.core.annotation.Scan;
 public final class TheAssistantPlugin extends OkaeriSilentPlugin {
     private static @Inject TheAssistantAPI api;
 
+    /**
+     * Retrieves The assistant api
+     *
+     * @return {@link TheAssistantAPI}
+     */
     public static TheAssistantAPI getAPI() {
         return api;
     }
 
+    /**
+     * Creates Bean for Slime World Manager config
+     *
+     * @param config {@link Config} config file
+     * @return {@link ConfigSlimeWorldManager}
+     */
     @Bean
     public ConfigSlimeWorldManager setupSlimeWorld(final @Inject Config config) {
         return config.getConfigSlimeWorldManager();

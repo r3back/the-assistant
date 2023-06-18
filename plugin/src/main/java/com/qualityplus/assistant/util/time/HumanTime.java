@@ -4,29 +4,43 @@ import eu.okaeri.configs.OkaeriConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.time.Duration;
 import java.util.Arrays;
 
-@NoArgsConstructor
-@AllArgsConstructor
+/**
+ * Human time representation
+ */
 @Setter
 @Getter
-public final class Timer extends OkaeriConfig {
+@NoArgsConstructor
+@AllArgsConstructor
+public final class HumanTime extends OkaeriConfig {
     private int amount;
     private TimeType type;
 
+    /**
+     * Retrieves time as milliseconds
+     *
+     * @return time as milliseconds
+     */
     public long getEffectiveTime() {
         return getDuration().toMillis();
     }
 
+    /**
+     * Retrieves time as seconds
+     *
+     * @return time as seconds
+     */
     public long getSeconds() {
         return getDuration().getSeconds();
     }
 
     private Duration getDuration() {
-        switch (type){
+        switch (type) {
             case MINUTES:
                 return Duration.ofMinutes(amount);
             case DAYS:
@@ -38,23 +52,41 @@ public final class Timer extends OkaeriConfig {
         }
     }
 
+    /**
+     * Represent different human time
+     */
+    @Getter
+    @RequiredArgsConstructor
     public enum TimeType{
+        /**
+         * Minutes
+         */
         MINUTES(3),
+        /**
+         * Hours
+         */
         HOURS(2),
+        /**
+         * Seconds
+         */
         SECONDS(1),
+        /**
+         * Days
+         */
         DAYS(0);
 
-        @Getter
-        public final int level;
+        private final int level;
 
-        TimeType(final int level){
-            this.level = level;
-        }
-
-        public TimeType getNext(){
+        /**
+         * Retrieves next time type
+         *
+         * @return next time type
+         */
+        public TimeType getNext() {
             return Arrays.stream(TimeType.values())
                     .filter(timeType -> timeType.getLevel() == this.level + 1)
-                    .findFirst().orElse(TimeType.DAYS);
+                    .findFirst()
+                    .orElse(TimeType.DAYS);
         }
     }
 }

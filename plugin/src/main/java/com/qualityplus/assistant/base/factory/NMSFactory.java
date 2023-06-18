@@ -13,12 +13,23 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
+/**
+ * NMS Factory
+ */
 @Component
 public final class NMSFactory {
+    private static final String RECOGNIZED_VERSION_MESSAGE = "Successfully recognized Version %s";
+    private static final String UNSUPPORTED_VERSION_MESSAGE = "Unsupported Version %s";
+    private static final String DISABLING_PLUGIN_MESSAGE = "Disabling Plugin...";
     private @Inject("injector") OkaeriInjector injector;
     private @Inject Plugin plugin;
     private @Inject Logger logger;
 
+    /**
+     * Configure nms version
+     *
+     * @return {@link NMS}
+     */
     @Bean
     public NMS configureNMS() {
         final String nmsVersion = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
@@ -33,16 +44,16 @@ public final class NMSFactory {
                 .replace("_", ".");
 
         if (version.getNms() == null) {
-            logger.info("Unsupported Version " + toSend);
-            logger.info("Disabling Plugin...");
+            this.logger.info(String.format(UNSUPPORTED_VERSION_MESSAGE, toSend));
+            this.logger.info(DISABLING_PLUGIN_MESSAGE);
 
-            Bukkit.getServer().getPluginManager().disablePlugin(plugin);
+            Bukkit.getServer().getPluginManager().disablePlugin(this.plugin);
 
             return null;
         } else {
-            logger.info("Successfully recognized Version " + toSend);
+            this.logger.info(String.format(RECOGNIZED_VERSION_MESSAGE, toSend));
 
-            return injector.createInstance(version.getNms());
+            return this.injector.createInstance(version.getNms());
         }
     }
 

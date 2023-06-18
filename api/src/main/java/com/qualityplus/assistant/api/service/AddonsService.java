@@ -2,20 +2,63 @@ package com.qualityplus.assistant.api.service;
 
 import com.qualityplus.assistant.api.addons.*;
 
+/**
+ * Addons Service
+ */
 public interface AddonsService {
-    WorldManagerAddon getWorldManager();
+    /**
+     * Retrieves World manager addon
+     *
+     * @return {@link WorldManagerAddon}
+     */
+    public WorldManagerAddon getWorldManager();
 
-    PlaceholdersAddon getPlaceholders();
+    /**
+     * Retrieves Placeholders addon
+     *
+     * @return {@link PlaceholdersAddon}
+     */
+    public PlaceholdersAddon getPlaceholders();
 
-    MythicMobsAddon getMythicMobs();
+    /**
+     * Retrieves MythicMobs Addon
+     *
+     * @return {@link MythicMobsAddon}
+     */
+    public MythicMobsAddon getMythicMobs();
 
-    MMOItemsAddon getMmoItems();
+    /**
+     * Retrieves MMOItems Addon
+     *
+     * @return {@link MMOItemsAddon}
+     */
+    public MMOItemsAddon getMmoItems();
 
-    EconomyAddon getEconomy();
+    /**
+     * Retrieves Economy addon
+     *
+     * @return {@link EconomyAddon}
+     */
+    public EconomyAddon getEconomy();
 
-    RegionAddon getRegions();
+    /**
+     * Retrieves Regions Addon
+     *
+     * @return {@link RegionAddon}
+     */
+    public RegionAddon getRegions();
 
-    PasterAddon getPaster();
+    /**
+     * Retrieves Paster Addon
+     *
+     * @return {@link PasterAddon}
+     */
+    public PasterAddon getPaster();
 
-    NPCAddon getNpc();
+    /**
+     * Retrieves NPC Manager Addon
+     *
+     * @return {@link NPCAddon}
+     */
+    public NPCAddon getNpc();
 }

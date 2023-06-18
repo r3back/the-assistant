@@ -8,10 +8,13 @@ import lombok.Setter;
 
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
+/**
+ * Config for Action Bar
+ */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public final class ConfigActionBar extends OkaeriConfig {
     private String message;
     private boolean enabled;

@@ -10,28 +10,36 @@ import eu.okaeri.platform.core.annotation.Bean;
 import eu.okaeri.platform.core.annotation.Component;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Mythic Mobs addon factory
+ */
 @Component
 public final class MythicMobsFactory {
     private @Inject("injector") OkaeriInjector injector;
     private @Inject DependencyResolver resolver;
     private @Inject Plugin plugin;
 
+    /**
+     * Configure mythic mobs addon
+     *
+     * @return {@link MythicMobsAddon}
+     */
     @Bean
     public MythicMobsAddon configureMythicMobs() {
-        if (resolver.isPlugin("MythicMobs")) {
+        if (this.resolver.isPlugin("MythicMobs")) {
             return tryToCreateAddon();
         } else {
-            return injector.createInstance(DefaultMythicMobsAddon.class);
+            return this.injector.createInstance(DefaultMythicMobsAddon.class);
         }
     }
 
-    private MythicMobsAddon tryToCreateAddon(){
+    private MythicMobsAddon tryToCreateAddon() {
         try {
             Class.forName("io.lumine.mythic.bukkit.BukkitAPIHelper");
 
-            return injector.createInstance(MythicMobsAddonImpl.class);
+            return this.injector.createInstance(MythicMobsAddonImpl.class);
         } catch (final Exception e) {
-            return injector.createInstance(DefaultMythicMobsAddon.class);
+            return this.injector.createInstance(DefaultMythicMobsAddon.class);
         }
     }
 }

@@ -5,8 +5,13 @@ import eu.okaeri.configs.OkaeriConfig;
 import eu.okaeri.configs.annotation.*;
 import eu.okaeri.platform.core.annotation.Configuration;
 import lombok.Getter;
+import lombok.Setter;
 
+/**
+ * Config file
+ */
 @Getter
+@Setter
 @Configuration()
 @Header("================================")
 @Header("       Config      ")

@@ -1,6 +1,6 @@
 package com.qualityplus.assistant.api.commands;
 
-import com.qualityplus.assistant.api.commands.handler.CommandLabelHandler;
+import com.qualityplus.assistant.api.commands.handler.CommandLabelRegistry;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public final class LabelProvider {
     private final String onlyForPlayersMessage;
     private final String unknownCommandMessage;
 
-    public void register(){
-        CommandLabelHandler.registerNewLabel(this);
+    public void register() {
+        CommandLabelRegistry.registerNewLabel(this);
     }
 }

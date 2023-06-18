@@ -9,38 +9,61 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Utility class for time
+ *
+ * TODO Clarify methods getWhenAgo and getRemainingTime
+ */
 @UtilityClass
-public class TimeUtils {
+public final class TimeUtils {
+    /**
+     * Retrieves message with parsed time
+     *
+     * @param message      mesage
+     * @param days         days format
+     * @param hours        hours format
+     * @param minutes      minutes format
+     * @param seconds      seconds format
+     * @param time         {@link RemainingTime}
+     * @param noTimeSymbol symbol when time is less than zero
+     * @param show         if symbol should be show when time is less than zero
+     * @return message with parsed time
+     */
     public String getParsedTime(final RemainingTime time, final String message, final String days,
                                 final String hours, final String minutes, final String seconds,
                                 final String noTimeSymbol, final boolean show) {
-        final String d = String.valueOf(time.getDays());
-        final String h = String.valueOf(time.getHours());
-        final String m = String.valueOf(time.getMinutes());
-        final String s = String.valueOf(time.getSeconds());
+
+        final String symbolWhenIsEmpty = show ? noTimeSymbol : "";
 
         final List<IPlaceholder> placeholders = Arrays.asList(
-                new Placeholder("days_placeholder", time.getDays() >= 0 ?
-                        days.replace("%days%", d) : show ? noTimeSymbol : ""),
-                new Placeholder("hours_placeholder",time.getHours() >= 0 ?
-                        hours.replace("%hours%", h) : show ? noTimeSymbol : ""),
-                new Placeholder("minutes_placeholder", time.getMinutes() >= 0 ?
-                        minutes.replace("%minutes%", m) : show ? noTimeSymbol : ""),
-                new Placeholder("seconds_placeholder", time.getSeconds() >= 0 ?
-                        seconds.replace("%seconds%", s) : show ? noTimeSymbol : "")
-
+                getTimePlaceholder(time.getDays(), "days", days, symbolWhenIsEmpty),
+                getTimePlaceholder(time.getHours(), "hours", hours, symbolWhenIsEmpty),
+                getTimePlaceholder(time.getMinutes(), "minutes", minutes, symbolWhenIsEmpty),
+                getTimePlaceholder(time.getSeconds(), "seconds", seconds, symbolWhenIsEmpty)
         );
 
         return StringUtils.processMulti(message, placeholders);
     }
 
-    public static RemainingTime getTimeWhenAgo(final long lastTime) {
-        final long millis = System.currentTimeMillis() - lastTime;
+    /**
+     * Retrieves how many long ago happened given a pastime
+     *
+     * @param pastTime pasttime
+     * @return {@link RemainingTime}
+     */
+    public RemainingTime getTimeWhenAgo(final long pastTime) {
+        final long millis = System.currentTimeMillis() - pastTime;
 
         return getRemainingTime(millis);
     }
 
-    public static RemainingTime getRemainingTime(long millis) {
+    /**
+     * Retrieves how many long ago happened given a pastime
+     *
+     * @param millis pasttime
+     * @return {@link RemainingTime}
+     */
+    public RemainingTime getRemainingTime(long millis) {
         final long nanos = TimeUnit.MILLISECONDS.toNanos(millis);
         final long days = TimeUnit.MILLISECONDS.toDays(millis);
         millis -= TimeUnit.DAYS.toMillis(days);
@@ -51,5 +74,17 @@ public class TimeUtils {
         final long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
 
         return new RemainingTime(days, hours, minutes, seconds, millis, nanos);
+    }
+
+
+    private Placeholder getTimePlaceholder(final long time, final String placeholder, final String placeholderValue,
+                                           final String symbolWhenIsEmpty) {
+        final String timeStr = String.valueOf(time);
+
+        final String placeholderKey = placeholder + "_placeholder";
+
+        final String finalValue = time >= 0 ? new Placeholder(placeholder, timeStr).process(placeholderValue) : symbolWhenIsEmpty;
+
+        return new Placeholder(placeholderKey, finalValue);
     }
 }

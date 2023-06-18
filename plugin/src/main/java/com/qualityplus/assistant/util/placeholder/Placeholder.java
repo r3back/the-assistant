@@ -1,31 +1,57 @@
 package com.qualityplus.assistant.util.placeholder;
 
 import com.qualityplus.assistant.api.util.IPlaceholder;
-import com.qualityplus.assistant.util.math.MathUtils;
+import com.qualityplus.assistant.api.util.MathUtil;
 
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Placeholder implementation
+ */
 public final class Placeholder implements IPlaceholder {
     private final String key;
     private final String value;
     private List<String> toReplace;
 
+    /**
+     * Basic Constructor
+     *
+     * @param key   placeholder key
+     * @param value placeholder value
+     */
     public Placeholder(final String key, final String value) {
         this.key = "%" + key + "%";
         this.value = value;
     }
 
+    /**
+     * Constructor with int as value
+     * @param key   placeholder key
+     * @param value placeholder int value
+     */
     public Placeholder(final String key, final int value) {
         this.key = "%" + key + "%";
         this.value = String.valueOf(value);
     }
 
+    /**
+     * Constructor with double as value
+     *
+     * @param key   placeholder key
+     * @param value placeholder double value
+     */
     public Placeholder(final String key, final double value) {
         this.key = "%" + key + "%";
-        this.value = MathUtils.round(value);
+        this.value = MathUtil.round(value);
     }
 
+    /**
+     * Constructor for list placeholder
+     *
+     * @param key   placeholder key
+     * @param value placeholder list value
+     */
     public Placeholder(final String key, final List<String> value) {
         this.key = "%" + key + "%";
         this.value = "";
@@ -73,6 +99,11 @@ public final class Placeholder implements IPlaceholder {
         return toReplace != null;
     }
 
+    /**
+     * Creates a list only with this placeholder
+     *
+     * @return List of {@link IPlaceholder}
+     */
     public List<IPlaceholder> alone() {
         return Collections.singletonList(this);
     }

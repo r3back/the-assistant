@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Item for guis
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,7 +29,12 @@ public final class Item extends OkaeriConfig {
     public boolean enchanted = false;
     public Integer customModelData;
 
-    public Item(final Item item){
+    /**
+     * Copy constructor
+     *
+     * @param item {@link Item} item to be copied
+     */
+    public Item(final Item item) {
         this.material = item.material;
         this.amount = item.amount;
         this.displayName = item.displayName;

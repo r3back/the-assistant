@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Config for Sounds
+ */
 @Getter
 @Setter
 @AllArgsConstructor

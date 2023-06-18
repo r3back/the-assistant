@@ -10,18 +10,26 @@ import eu.okaeri.platform.core.annotation.Bean;
 import eu.okaeri.platform.core.annotation.Component;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * NPC addon factory
+ */
 @Component
 public final class NPCFactory {
     private @Inject("injector") OkaeriInjector injector;
     private @Inject DependencyResolver resolver;
     private @Inject Plugin plugin;
 
+    /**
+     * Configure npc addon
+     *
+     * @return {@link NPCAddon}
+     */
     @Bean
     public NPCAddon configureNpc() {
-        if (resolver.isPlugin("Citizens")) {
-            return injector.createInstance(CitizensAddon.class);
+        if (this.resolver.isPlugin("Citizens")) {
+            return this.injector.createInstance(CitizensAddon.class);
         } else {
-            return injector.createInstance(DefaultNPCAddon.class);
+            return this.injector.createInstance(DefaultNPCAddon.class);
         }
     }
 }

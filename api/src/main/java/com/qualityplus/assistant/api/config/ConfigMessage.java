@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Config for simple messages
+ */
 @Getter
 @Setter
 @AllArgsConstructor

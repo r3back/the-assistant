@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+/**
+ * Multiple spigot message
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 public final class MultipleSpecialMessage extends OkaeriConfig {

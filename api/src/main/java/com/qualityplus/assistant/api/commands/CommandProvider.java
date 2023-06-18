@@ -1,6 +1,6 @@
 package com.qualityplus.assistant.api.commands;
 
-import com.qualityplus.assistant.api.commands.setup.handler.CommandSetupHandler;
+import com.qualityplus.assistant.api.commands.setup.CommandSetupHandler;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.command.TabExecutor;
 

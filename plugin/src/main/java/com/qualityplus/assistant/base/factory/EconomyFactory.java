@@ -9,12 +9,20 @@ import eu.okaeri.platform.core.annotation.Bean;
 import eu.okaeri.platform.core.annotation.Component;
 import org.bukkit.plugin.Plugin;
 
+/**
+ * Economy Addon factory
+ */
 @Component
 public final class EconomyFactory {
     private @Inject("injector") OkaeriInjector injector;
     private @Inject DependencyResolver resolver;
     private @Inject Plugin plugin;
 
+    /**
+     * Configure economy addon
+     *
+     * @return {@link EconomyAddon}
+     */
     @Bean
     public EconomyAddon configureEconomy() {
         if (this.resolver.isPlugin("RoyaleEconomy")) {

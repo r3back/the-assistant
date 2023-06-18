@@ -117,7 +117,7 @@ public final class v1_15_R1 extends AbstractNMS{
         return getInventory(inventory, maxSlots);
     }
 
-    private FakeInventory getInventory(Inventory inventory, int maxSlots){
+    private FakeInventory getInventory(Inventory inventory, int maxSlots) {
         return new FakeInventoryImpl(inventory, maxSlots);
     }
 
@@ -150,7 +150,7 @@ public final class v1_15_R1 extends AbstractNMS{
 
     @Override
     public void sendBossBar(Player player, String message) {
-        if(player == null || message == null || message.equals("")){
+        if (player == null || message == null || message.equals("")) {
             bossBar.removeAll();
             return;
         }
@@ -163,7 +163,7 @@ public final class v1_15_R1 extends AbstractNMS{
 
     @Override
     public void setEnderEye(Block block, boolean setEnderEye) {
-        if(!(block.getBlockData() instanceof EndPortalFrame)) return;
+        if (!(block.getBlockData() instanceof EndPortalFrame)) return;
 
         EndPortalFrame altar = (EndPortalFrame) block.getBlockData();
 

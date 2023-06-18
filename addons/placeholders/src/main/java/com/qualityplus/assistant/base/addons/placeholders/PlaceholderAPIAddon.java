@@ -1,7 +1,7 @@
 package com.qualityplus.assistant.base.addons.placeholders;
 
 import com.qualityplus.assistant.api.addons.PlaceholdersAddon;
-import com.qualityplus.assistant.api.addons.registrable.Registrable;
+import com.qualityplus.assistant.api.addons.registrable.RegistrableAddon;
 import com.qualityplus.assistant.api.addons.replacer.PlaceholderReplaceEvent;
 import com.qualityplus.assistant.api.addons.replacer.PlaceholderReplacer;
 import eu.okaeri.injector.annotation.Inject;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class PlaceholderAPIAddon extends PlaceholderExpansion implements PlaceholdersAddon, Registrable {
+public final class PlaceholderAPIAddon extends PlaceholderExpansion implements PlaceholdersAddon, RegistrableAddon {
     private final Map<String, PlaceholderReplacer> placeholdersMap = new HashMap<>();
     private @Inject Plugin plugin;
 

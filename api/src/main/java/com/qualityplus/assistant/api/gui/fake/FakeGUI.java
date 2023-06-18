@@ -7,24 +7,39 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Fake GUI
+ */
 public final class FakeGUI implements InventoryHolder {
+    public static final String FAKE_INVENTORY_NAME = "Fake";
     private final Inventory inventory;
     private final int slots;
 
-    public FakeGUI(int slots) {
-        this.inventory = Bukkit.createInventory(this, 54, "Fake");
+    /**
+     * Constructor with max slots amount
+     *
+     * @param slots max slots amount
+     */
+    public FakeGUI(final int slots) {
+        this.inventory = Bukkit.createInventory(this, 54, FAKE_INVENTORY_NAME);
         this.slots = slots;
     }
 
-    public FakeGUI(ItemStack[] contents, int maxSlots){
-        this.inventory = Bukkit.createInventory(this, 54, "Fake");
+    /**
+     * Constructor with two arguments
+     *
+     * @param contents Array of {@link ItemStack}
+     * @param maxSlots Inventory max slots
+     */
+    public FakeGUI(final ItemStack[] contents, final int maxSlots) {
+        this.inventory = Bukkit.createInventory(this, 54, FAKE_INVENTORY_NAME);
         this.inventory.setContents(contents);
         this.slots = maxSlots;
     }
 
     @Override
     public @NotNull Inventory getInventory() {
-        for(int i = slots; i<inventory.getSize(); i++){
+        for (int i = slots; i<inventory.getSize(); i++) {
             inventory.setItem(i, XMaterial.BARRIER.parseItem());
         }
 

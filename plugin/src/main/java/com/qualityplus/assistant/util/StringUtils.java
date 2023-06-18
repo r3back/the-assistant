@@ -4,6 +4,7 @@ import com.qualityplus.assistant.api.util.IPlaceholder;
 import com.qualityplus.assistant.util.message.MultipleSpecialMessage;
 import com.qualityplus.assistant.util.message.SpecialMessage;
 import lombok.experimental.UtilityClass;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -22,23 +23,47 @@ import java.util.stream.IntStream;
 public final class StringUtils {
     private final Pattern PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
 
-    public static String unColor(final String string) {
+    /**
+     * Removes Color from a string
+     *
+     * @param string string to remove color
+     * @return String without color
+     */
+    public String unColor(final String string) {
         return ChatColor.stripColor(string);
     }
 
-    public static String color(final String string) {
+    /**
+     * Colorize a string
+     *
+     * @param string string to be colored
+     * @return Colored string
+     */
+    public String color(final String string) {
         final String hexMessage = hexColor(string);
 
         return ChatColor.translateAlternateColorCodes('&', hexMessage);
     }
 
-    public static List<String> color(final List<String> strings) {
+    /**
+     * Colorize all lines of a list
+     *
+     * @param strings List of {@link String}
+     * @return List of {@link String} colored
+     */
+    public List<String> color(final List<String> strings) {
         return strings.stream()
                 .map(StringUtils::color)
                 .collect(Collectors.toList());
     }
 
-    public static String hexColor(String message) {
+    /**
+     * Retrieves a message with hex colors parsed
+     *
+     * @param message message to be parsed
+     * @return message with hex colors
+     */
+    public String hexColor(String message) {
         Matcher matcher = PATTERN.matcher(message);
 
         while (matcher.find()) {
@@ -50,15 +75,16 @@ public final class StringUtils {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
 
-    public static List<String> intStream(final int from, final int to){
-        return IntStream.range(from, to)
-                .boxed()
-                .map(String::valueOf)
-                .collect(Collectors.toList());
-    }
 
-    public static List<String> processMulti(final List<String> lines, final List<IPlaceholder> placeholders) {
-        if(placeholders.stream().anyMatch(IPlaceholder::isListPlaceholder)){
+    /**
+     * Retrieves a list of string with parsed placeholders
+     *
+     * @param lines        List of {@link String} to be parsed
+     * @param placeholders List of {@link IPlaceholder} to parse
+     * @return List of {@link String} with placeholders parsed
+     */
+    public List<String> processMulti(final List<String> lines, final List<IPlaceholder> placeholders) {
+        if (placeholders.stream().anyMatch(IPlaceholder::isListPlaceholder)) {
             //Se Hace Una lista con los placeholders que no son lista
             final List<String> finalLore = processMulti(lines, placeholders.stream()
                     .filter(p -> !p.isListPlaceholder())
@@ -77,7 +103,14 @@ public final class StringUtils {
         }
     }
 
-    public static String processMulti(final String line, final List<IPlaceholder> placeholders) {
+    /**
+     * Retrieves a string with placeholders parsed
+     *
+     * @param line         string to be parsed
+     * @param placeholders List of {@link IPlaceholder} to parse
+     * @return string with placeholders parsed
+     */
+    public String processMulti(final String line, final List<IPlaceholder> placeholders) {
         String processedLine = line;
         for (final IPlaceholder placeholder : placeholders.stream()
                 .filter(p -> !p.isListPlaceholder())
@@ -87,24 +120,33 @@ public final class StringUtils {
         return color(processedLine);
     }
 
-    public static TextComponent getMessage(final MultipleSpecialMessage multipleSpecialMessage,
-                                           final List<IPlaceholder> placeholders) {
+    /**
+     * Retrieves a Special message with placeholders parsed
+     *
+     * @param multipleSpecialMessage {@link MultipleSpecialMessage}
+     * @param placeholders           List of {@link IPlaceholder}
+     * @return {@link TextComponent} with placeholders parsed
+     */
+    public TextComponent getMessage(final MultipleSpecialMessage multipleSpecialMessage,
+                                    final List<IPlaceholder> placeholders) {
         final List<TextComponent> textComponents = multipleSpecialMessage.specialMessages.stream()
                 .map(specialMessage -> getMessage(specialMessage, placeholders))
                 .collect(Collectors.toList());
-        /*for(SpecialMessage specialMessage : multipleSpecialMessage.specialMessages){
-            List<String> messages = specialMessage.message.stream().map(message -> processMulti(message, placeholders))
-                    .collect(Collectors.toList());
-            String action = processMulti(specialMessage.action, placeholders);
-            String aboveMessage = processMulti(specialMessage.aboveMessage, placeholders);
-            messages.stream().map(message -> MessageBuilder.get(message, action, aboveMessage)).forEach(textComponents::add);
-        }*/
+
         final TextComponent textComponent = new TextComponent();
+
         textComponents.forEach(textComponent::addExtra);
         return textComponent;
     }
 
-    public static TextComponent getMessage(final SpecialMessage specialMessage, final List<IPlaceholder> placeholders) {
+    /**
+     * Retrieves a Special message with placeholders parsed
+     *
+     * @param specialMessage {@link SpecialMessage}
+     * @param placeholders   List of {@link IPlaceholder}
+     * @return {@link TextComponent} with placeholders parsed
+     */
+    public TextComponent getMessage(final SpecialMessage specialMessage, final List<IPlaceholder> placeholders) {
         final TextComponent component = new TextComponent();
 
         final List<String> messages = specialMessage.message
@@ -122,7 +164,17 @@ public final class StringUtils {
         return component;
     }
 
-    public static class MessageBuilder{
+    /**
+     * Spigot Chat Message Builder
+     */
+    public class MessageBuilder{
+        /**
+         *
+         * @param message message
+         * @param command message command
+         * @param hover   text hover message
+         * @return {@link TextComponent}
+         */
         public static TextComponent get(final String message, final String command, final String hover) {
             final TextComponent textComponent = new TextComponent(StringUtils.color(message));
 
@@ -130,12 +182,20 @@ public final class StringUtils {
                 textComponent.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
             }
             if (hover != null) {
-                textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(StringUtils.color(hover)).create()));
+                final BaseComponent[] hoverC = new ComponentBuilder(StringUtils.color(hover)).create();
+
+                textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverC));
             }
             return textComponent;
         }
     }
 
+    /**
+     *
+     * @param str   string
+     * @param count count
+     * @return {@link String}
+     */
     public String repeat(final String str, final int count) {
         final byte[] value = str.getBytes(StandardCharsets.UTF_8);
 

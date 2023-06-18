@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
+/**
+ * Represent remaining time with human format
+ */
 @Data
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public final class RemainingTime extends OkaeriConfig {
     private long days;
     private long hours;
@@ -16,6 +19,11 @@ public final class RemainingTime extends OkaeriConfig {
     private long millis;
     private long nanos;
 
+    /**
+     * Retrieves if remaining time is zero
+     *
+     * @return true if remaining time is zero
+     */
     public boolean isZero() {
         return days <= 0 && hours <= 0 && minutes <= 0 && seconds <= 0;
     }

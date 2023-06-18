@@ -6,11 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
-@NoArgsConstructor
+/**
+ * Lore Wrapper
+ */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public final class LoreWrapper extends OkaeriConfig {
-    public int wrapLength;
-    public String wrapStart;
+    private int wrapLength;
+    private String wrapStart;
 }
