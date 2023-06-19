@@ -42,11 +42,11 @@ dependencies {
 ## Building
 The-Assistant uses Gradle to handle dependencies & building.
 
-## Requirements
+### Requirements
 * Java 8 JDK or newer
 * Git
 
-## Compiling from source
+### Compiling from source
 ```sh
 $ git clone https://github.com/lucko/LuckPerms.git
 
