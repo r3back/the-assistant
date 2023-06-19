@@ -48,9 +48,9 @@ The-Assistant uses Gradle to handle dependencies & building.
 
 ### Compiling from source
 ```sh
-$ git clone https://github.com/lucko/LuckPerms.git
+$ git clone https://github.com/r3back/the-assistant.git
 
-$ cd LuckPerms/
+$ cd the-assistant/
 
 $ ./gradlew build -x shadowJar
 ```
