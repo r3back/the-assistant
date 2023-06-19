@@ -18,6 +18,8 @@ dependencies {
     implementation 'com.github.cryptomorin:XSeries:9.4.0'
     implementation 'com.comphenix.protocol:ProtocolLib:4.7.0'
     implementation 'com.github.InventivetalentDev:BossBarAPI:2.4.3-SNAPSHOT'
+    //implementation 'io.lettuce:lettuce-core:6.1.1.RELEASE'
+    //implementation 'org.mongodb:mongo-java-driver:3.12.10'
 
     implementation project(':api')
     implementation project(':nms')
@@ -57,8 +59,8 @@ shadowJar {
         include(dependency('org.jetbrains:.*'))
         include(dependency('de.tr7zw:.*'))
         include(dependency('xyz.xenondevs:.*'))
-        include(dependency('org.mongodb:.*'))
-        include(dependency('io.lettuce:lettuce-core:.*'))
+        //include(dependency('org.mongodb:.*'))
+        //include(dependency('io.lettuce:lettuce-core:.*'))
 
         include(dependency('org.mongodb:mongodb-driver-sync:.*'))
         include(dependency('com.github.InventivetalentDev:BossBarAPI:.*'))

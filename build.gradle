@@ -52,12 +52,13 @@ def relocate_map = ['com.cryptomorin.xseries': 'com.qualityplus.assistant.lib.co
                     'org.jetbrains.annotations': 'com.qualityplus.assistant.lib.org.jetbrains.annotations',
                     'de.tr7zw': 'com.qualityplus.assistant.lib.de.tr7zw',
                     'com.mysql': 'com.qualityplus.assistant.lib.com.mysql',
-                    'com.mongodb': 'com.qualityplus.assistant.lib.com.mongodb',
+                    'com.mongodb': 'com.qualityplus.assistant.lib.com.mongodb'/*,
                     'io.lettuce': 'com.qualityplus.assistant.lib.io.lettuce',
-                    'io.bson': 'com.qualityplus.assistant.lib.io.bson'] as HashMap
+                    'io.bson': 'com.qualityplus.assistant.lib.io.bson'*/
+                    ] as HashMap
 
 group = 'com.github.r3back'
-version = '3.2.5'
+version = '3.2.6'
 project.ext.copyJars = copyJars
 project.ext.relocate_map = relocate_map
 project.ext.okaeri_dependencies = okaeri_dependencies
