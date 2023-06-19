@@ -19,12 +19,21 @@ public interface Levellable<T, N extends Number> {
     public Map<T, N> getLevel();
 
     /**
+     * Retrieves default value
+     *
+     * @return default value
+     */
+    public N getDefault();
+
+    /**
      * Retrieves level for specific level
      *
      * @param key key
      * @return level for key
      */
-    public N getLevel(final T key);
+    public default N getLevel(final T key) {
+        return getLevel().getOrDefault(key, getDefault());
+    }
 
     /**
      * Add level for specific key

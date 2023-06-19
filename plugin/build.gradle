@@ -41,7 +41,7 @@ processResources{
 
 
 shadowJar {
-    archiveFileName = 'TheAssistant.jar'
+    archiveClassifier.set('')
 
     dependencies {
         //include('com.qualityplus.helper:.*')

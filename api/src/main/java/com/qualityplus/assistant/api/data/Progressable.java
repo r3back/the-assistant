@@ -16,7 +16,24 @@ public interface Progressable<T, N extends Number> {
      *
      * @return Map of levels
      */
-    public Map<T, N> getXP();
+    public Map<T, N> getXp();
+
+    /**
+     * Retrieves default value
+     *
+     * @return default value
+     */
+    public N getDefault();
+
+    /**
+     * Retrieves level for specific level
+     *
+     * @param key key
+     * @return level for key
+     */
+    public default N getLevel(final T key) {
+        return getXp().getOrDefault(key, getDefault());
+    }
 
     /**
      * Retrieves level for specific level
@@ -33,7 +50,7 @@ public interface Progressable<T, N extends Number> {
      * @param quantity value
      */
     public default void addXp(final T key, final N quantity) {
-        getXP().computeIfPresent(key, (key2, value) -> MathUtil.sumNumbers(value, quantity));
+        getXp().computeIfPresent(key, (key2, value) -> MathUtil.sumNumbers(value, quantity));
     }
 
     /**
@@ -43,7 +60,7 @@ public interface Progressable<T, N extends Number> {
      * @param quantity value
      */
     public default void removeXp(final T key, final N quantity) {
-        getXP().computeIfPresent(key, (key2, value) -> MathUtil.subtractNumbers(value, quantity));
+        getXp().computeIfPresent(key, (key2, value) -> MathUtil.subtractNumbers(value, quantity));
     }
 
     /**
@@ -53,6 +70,6 @@ public interface Progressable<T, N extends Number> {
      * @param quantity quantity
      */
     public default void setXp(final T key, final N quantity) {
-        getXP().put(key, quantity);
+        getXp().put(key, quantity);
     }
 }
