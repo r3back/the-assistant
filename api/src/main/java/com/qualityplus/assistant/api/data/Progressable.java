@@ -23,7 +23,7 @@ public interface Progressable<T, N extends Number> {
      *
      * @return default value
      */
-    public N getDefault();
+    public N getDefaultXp();
 
     /**
      * Retrieves level for specific level
@@ -31,17 +31,9 @@ public interface Progressable<T, N extends Number> {
      * @param key key
      * @return level for key
      */
-    public default N getLevel(final T key) {
-        return getXp().getOrDefault(key, getDefault());
+    public default N getXp(final T key) {
+        return getXp().getOrDefault(key, getDefaultXp());
     }
-
-    /**
-     * Retrieves level for specific level
-     *
-     * @param key key
-     * @return level for key
-     */
-    public N getXp(final T key);
 
     /**
      * Add level for specific key

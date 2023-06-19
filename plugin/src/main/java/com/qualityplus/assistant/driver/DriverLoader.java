@@ -1,5 +1,6 @@
 package com.qualityplus.assistant.driver;
 
+import com.mongodb.MongoClientURI;
 import eu.okaeri.commons.bukkit.time.MinecraftTimeEquivalent;
 import eu.okaeri.injector.annotation.Inject;
 import eu.okaeri.persistence.jdbc.H2Persistence;
@@ -8,6 +9,7 @@ import eu.okaeri.persistence.mongo.MongoPersistence;
 import eu.okaeri.persistence.redis.RedisPersistence;
 import eu.okaeri.platform.bukkit.annotation.Delayed;
 import eu.okaeri.platform.core.annotation.Component;
+import io.lettuce.core.RedisClient;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -33,6 +35,8 @@ public final class DriverLoader {
             H2Persistence.class.getName();
             MongoPersistence.class.getName();
             RedisPersistence.class.getName();
+            MongoClientURI.class.getName();
+            RedisClient.class.getName();
 
             logger.info("Successfully loaded Database Drivers");
         } catch (final Exception ignored) {
