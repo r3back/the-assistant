@@ -58,7 +58,7 @@ def relocate_map = ['com.cryptomorin.xseries': 'com.qualityplus.assistant.lib.co
                     ] as HashMap
 
 group = 'com.github.r3back'
-version = '3.2.6'
+version = '3.2.7'
 project.ext.copyJars = copyJars
 project.ext.relocate_map = relocate_map
 project.ext.okaeri_dependencies = okaeri_dependencies
