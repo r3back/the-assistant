@@ -57,6 +57,9 @@ shadowJar {
         include(dependency('org.jetbrains:.*'))
         include(dependency('de.tr7zw:.*'))
         include(dependency('xyz.xenondevs:.*'))
+        include(dependency('org.mongodb:.*'))
+        include(dependency('io.lettuce:lettuce-core:.*'))
+
         include(dependency('org.mongodb:mongodb-driver-sync:.*'))
         include(dependency('com.github.InventivetalentDev:BossBarAPI:.*'))
         include(dependency('mysql:.*'))
