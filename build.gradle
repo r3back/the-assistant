@@ -58,7 +58,7 @@ def relocate_map = ['com.cryptomorin.xseries': 'com.qualityplus.assistant.lib.co
                     ] as HashMap
 
 group = 'com.github.r3back'
-version = '3.2.8'
+version = '3.2.9'
 project.ext.copyJars = copyJars
 project.ext.relocate_map = relocate_map
 project.ext.okaeri_dependencies = okaeri_dependencies
@@ -86,23 +86,38 @@ subprojects {
     repositories {
         mavenCentral()
         //NMS Repo
-        maven { url 'https://repo.rosewooddev.io/repository/public/' }
-
-        maven { url 'https://libraries.minecraft.net/' }
+        maven {
+            url 'https://repo.rosewooddev.io/repository/public/'
+        }
+        maven {
+            url 'https://libraries.minecraft.net/'
+        }
         //Spigot API Repo
-        maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+        maven {
+            url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+        }
         //Paper
-        maven { url 'https://papermc.io/repo/repository/maven-public/' }
+        maven {
+            url 'https://papermc.io/repo/repository/maven-public/'
+        }
         //Okaeri
-        maven { url 'https://storehouse.okaeri.eu/repository/maven-public/' }
+        maven {
+            url 'https://storehouse.okaeri.eu/repository/maven-public/'
+        }
         //NBT API
-        maven { url 'https://repo.codemc.org/repository/maven-public/' }
-
-        maven { url 'https://jitpack.io' }
-
+        maven {
+            url 'https://repo.codemc.org/repository/maven-public/'
+        }
+        maven {
+            url 'https://jitpack.io'
+        }
         //SlimeWorld
-        maven { url 'https://repo.rapture.pw/repository/maven-snapshots/'}
-        maven { url 'https://repo.rapture.pw/repository/maven-releases/'}
+        maven {
+            url 'https://repo.rapture.pw/repository/maven-snapshots/'
+        }
+        maven {
+            url 'https://repo.rapture.pw/repository/maven-releases/'
+        }
     }
 
     dependencies {

@@ -70,6 +70,7 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
     public void registerCommands() {
         final Iterator<List<AssistantCommand>> iterator = this.commands.values().iterator();
 
+        //TODO refactor whole command provider
         while (iterator.hasNext()) {
             final List<AssistantCommand> list = iterator.next();
 
@@ -141,7 +142,7 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
     private void sendMessage(final CommandSender sender, final Optional<LabelProvider> provider,
                              final Function<LabelProvider, String> function) {
         sender.sendMessage(StringUtils.color(provider
-                .map(LabelProvider::getNoPermissionMessage)
+                .map(LabelProvider::getUseHelpMessage)
                 .orElse(EMPTY_PERMISSION)));
     }
 
