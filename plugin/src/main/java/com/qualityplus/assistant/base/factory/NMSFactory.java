@@ -118,7 +118,7 @@ public final class NMSFactory {
         /**
          * V1_19_R3
          */
-        V1_19_R3(() -> v1_20_R1.class),
+        V1_19_R3(() -> v1_19_R3.class),
         /**
          * V1_20_R1
          */
