@@ -36,9 +36,19 @@ public final class ListUtils {
         return list;
     }
 
-    public static class ListBuilder<T>{
+    /**
+     * List Builder
+     *
+     * @param <T> Generic List Build type
+     */
+    public static class ListBuilder<T> {
         private final List<T> initialList;
 
+        /**
+         * Default Constructor
+         *
+         * @param initialList initial list
+         */
         private ListBuilder(final List<T> initialList) {
             this.initialList = new ArrayList<>(initialList);
         }
@@ -50,7 +60,7 @@ public final class ListUtils {
          * @return {@link ListBuilder}
          * @param <T> Generic type of {@link ListBuilder}
          */
-        public static <T> ListBuilder<T> of(final List<T> list){
+        public static <T> ListBuilder<T> of(final List<T> list) {
             return new ListBuilder<>(list);
         }
 
@@ -61,7 +71,7 @@ public final class ListUtils {
          * @param <T> Generic type of {@link ListBuilder}
          */
         @SafeVarargs
-        public static <T> ListBuilder<T> of(final List<T>... lists){
+        public static <T> ListBuilder<T> of(final List<T>... lists) {
             final ListBuilder<T> builder = new ListBuilder<>(new ArrayList<>());
 
             for (final List<T> list : lists) {
@@ -77,7 +87,7 @@ public final class ListUtils {
          * @param with List to add
          * @return {@link ListBuilder}
          */
-        public ListBuilder<T> with(final List<T> with){
+        public ListBuilder<T> with(final List<T> with) {
             this.initialList.addAll(with);
             return this;
         }
@@ -88,7 +98,7 @@ public final class ListUtils {
          *
          * @return List
          */
-        public List<T> get(){
+        public List<T> get() {
             return this.initialList;
         }
     }
