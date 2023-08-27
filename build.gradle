@@ -32,7 +32,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'checkstyle'
     apply plugin: 'maven-publish'
-
+ 
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
