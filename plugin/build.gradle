@@ -145,10 +145,11 @@ artifacts {
 publishing {
     repositories {
         maven {
+            name "jitpack"
             url "https://jitpack.io"
             credentials {
-                username 'token'
-                password System.getenv('API_TOKEN')
+                username System.getenv('JITPACK_USERNAME')
+                password System.getenv('JITPACK_PASSWORD')
             }
         }
     }

@@ -23,7 +23,7 @@ def assistant_dependencies = [':plugin',
                               ':nms:nms-commons'] as HashSet
 
 group = 'com.github.r3back'
-version = '3.2.10'
+version = '3.2.11'
 project.ext.okaeri_dependencies = okaeri_dependencies
 project.ext.driver_dependencies = driver_dependencies
 project.ext.assistant_dependencies = assistant_dependencies
