@@ -46,8 +46,8 @@ public abstract class HikariConfiguration extends DBUrlFactory {
         return mysqlHikari;
     }
 
-    protected HikariConfig getMariaDBHikari(ConfigDatabase db) {
-        HikariConfig mariadbHikari = new HikariConfig();
+    protected HikariConfig getMariaDBHikari(final ConfigDatabase db) {
+        final HikariConfig mariadbHikari = new HikariConfig();
 
         mariadbHikari.setDataSourceClassName("org.mariadb.jdbc.MariaDbDataSource");
         mariadbHikari.addDataSourceProperty("serverName", db.getHost());
@@ -59,7 +59,7 @@ public abstract class HikariConfiguration extends DBUrlFactory {
         return mariadbHikari;
     }
 
-    protected HikariConfig getH2Hikari(String name) {
+    protected HikariConfig getH2Hikari(final String name) {
         final HikariConfig jdbcHikari = new HikariConfig();
 
         jdbcHikari.setJdbcUrl(String.format(H2_URL, name));

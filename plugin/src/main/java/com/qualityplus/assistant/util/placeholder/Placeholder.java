@@ -65,12 +65,12 @@ public final class Placeholder implements IPlaceholder {
 
     @Override
     public List<String> processList(final List<String> lore) {
-        final int specificIndex = getLine(lore, key);
+        final int specificIndex = getLine(lore, this.key);
 
         if (specificIndex != -1) {
             lore.remove(specificIndex);
-            if (toReplace != null && toReplace.size() > 0) {
-                lore.addAll(specificIndex, toReplace);
+            if (this.toReplace != null && this.toReplace.size() > 0) {
+                lore.addAll(specificIndex, this.toReplace);
             }
         }
 
@@ -78,13 +78,13 @@ public final class Placeholder implements IPlaceholder {
     }
 
     private int getLine(final List<String> list, final String toCheck) {
-        int init = list.indexOf(key);
+        int init = list.indexOf(this.key);
 
         if (init != -1) {
             return init;
         }
 
-        for (int i = 0; i<list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             if (list.get(i).contains(toCheck)) {
                 init = i;
                 break;
@@ -96,7 +96,7 @@ public final class Placeholder implements IPlaceholder {
 
     @Override
     public boolean isListPlaceholder() {
-        return toReplace != null;
+        return this.toReplace != null;
     }
 
     /**

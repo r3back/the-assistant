@@ -50,7 +50,7 @@ public abstract class GUI implements InventoryHolder, ClickableInventory<Item, B
 
     @Override
     public boolean isClickingDecoration(final Integer clickedSlot, final Background background) {
-        return Optional.ofNullable(background.items)
+        return Optional.ofNullable(background.getItems())
                 .map(back -> back.keySet().stream().anyMatch(slot -> slot.equals(clickedSlot)))
                 .orElse(false);
     }
@@ -58,39 +58,39 @@ public abstract class GUI implements InventoryHolder, ClickableInventory<Item, B
     @Override
     public void setItem(final Item item) {
 
-        if (!item.enabled || item.slot == null) {
+        if (!item.isEnabled() || item.getSlot() == null) {
             return;
         }
 
-        inventory.setItem(item.slot, ItemStackUtils.makeItem(item));
+        this.inventory.setItem(item.getSlot(), ItemStackUtils.makeItem(item));
     }
 
     @Override
     public void setItem(final Item item, final List<IPlaceholder> placeholderList) {
-        if (!item.enabled || item.slot == null) {
+        if (!item.isEnabled() || item.getSlot() == null) {
             return;
         }
 
-        inventory.setItem(item.slot, ItemStackUtils.makeItem(item, placeholderList));
+        this.inventory.setItem(item.getSlot(), ItemStackUtils.makeItem(item, placeholderList));
     }
 
     @Override
     public void setItem(final Item item, final LoreWrapper loreWrapper) {
-        if (!item.enabled || item.slot == null) {
+        if (!item.isEnabled() || item.getSlot() == null) {
             return;
         }
 
-        inventory.setItem(item.slot, ItemStackUtils.makeItem(item, loreWrapper));
+        this.inventory.setItem(item.getSlot(), ItemStackUtils.makeItem(item, loreWrapper));
     }
 
     @Override
     public void setItem(final Item item, final List<IPlaceholder> placeholderList,
                         final LoreWrapper loreWrapper) {
-        if (!item.enabled || item.slot == null) {
+        if (!item.isEnabled() || item.getSlot() == null) {
             return;
         }
 
-        inventory.setItem(item.slot, ItemStackUtils.makeItem(item, placeholderList, loreWrapper));
+        this.inventory.setItem(item.getSlot(), ItemStackUtils.makeItem(item, placeholderList, loreWrapper));
     }
 
     /**
@@ -108,7 +108,7 @@ public abstract class GUI implements InventoryHolder, ClickableInventory<Item, B
      * @param simpleGUI {@link SimpleGUI}
      */
     protected void fillInventory(final SimpleGUI simpleGUI) {
-        InventoryUtils.fillInventory(inventory, simpleGUI.getBackground());
+        InventoryUtils.fillInventory(this.inventory, simpleGUI.getBackground());
     }
 
     /**
@@ -118,7 +118,7 @@ public abstract class GUI implements InventoryHolder, ClickableInventory<Item, B
      * @return true if it's item
      */
     protected boolean isItem(final int slot, final Item item) {
-        return item != null && item.enabled && item.slot == slot;
+        return item != null && item.isEnabled() && item.getSlot() == slot;
     }
 
     /**
@@ -155,7 +155,7 @@ public abstract class GUI implements InventoryHolder, ClickableInventory<Item, B
         player.closeInventory();
 
         Optional.ofNullable(item)
-                .map(i -> i.command)
+                .map(Item::getCommand)
                 .filter(Objects::nonNull)
                 .ifPresent(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command.replace("%player%", player.getName())));
     }

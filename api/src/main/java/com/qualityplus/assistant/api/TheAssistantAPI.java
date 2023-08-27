@@ -4,6 +4,7 @@ import com.qualityplus.assistant.api.commands.CommandProvider;
 import com.qualityplus.assistant.api.commands.command.AssistantCommand;
 import com.qualityplus.assistant.api.dependency.resolver.DependencyResolver;
 import com.qualityplus.assistant.api.nms.NMS;
+import com.qualityplus.assistant.api.nms.tab.TabHandler;
 import com.qualityplus.assistant.api.service.AddonsService;
 import org.bukkit.plugin.Plugin;
 
@@ -30,6 +31,13 @@ public interface TheAssistantAPI {
      * @return {@link AddonsService}
      */
     public AddonsService getAddons();
+
+    /**
+     * Retrieves NMS Tab Handler handler
+     *
+     * @return {@link TabHandler}
+     */
+    public TabHandler getTabHandler();
 
     /**
      * Retrieves NMS Multi Version handler

@@ -4,6 +4,9 @@ import com.qualityplus.assistant.api.util.BukkitItemUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+
+import java.util.function.Function;
 
 /**
  * Represent Armor Types
@@ -14,20 +17,21 @@ public enum ArmorType {
     /**
      * Helmet
      */
-    HELMET(5),
+    HELMET(PlayerInventory::getHelmet, 5),
     /**
      * ChestPlate
      */
-    CHESTPLATE(6),
+    CHESTPLATE(PlayerInventory::getChestplate, 6),
     /**
      * Leggings
      */
-    LEGGINGS(7),
+    LEGGINGS(PlayerInventory::getLeggings, 7),
     /**
      * Boots
      */
-    BOOTS(8);
+    BOOTS(PlayerInventory::getBoots, 8);
 
+    private final Function<PlayerInventory, ItemStack> inventoryFunction;
     private final int slot;
 
     /**

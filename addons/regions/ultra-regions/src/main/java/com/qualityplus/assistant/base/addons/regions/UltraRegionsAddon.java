@@ -12,15 +12,7 @@ import java.util.Set;
 public final class UltraRegionsAddon implements RegionAddon {
     @Override
     public Set<String> getRegions(final Location location) {
-        return new HashSet<>()/*me.TechsCode.UltraRegions.UltraRegions.getInstance().getWorlds()
-        .find(location.getWorld()).map(managedWorld -> UltraRegions.getInstance()
-                .newRegionQuery(managedWorld)
-                .location(XYZ.from(location))
-                .sortBySize()
-                .getRegions()
-                .stream()
-                .map(Region::getName)
-                .collect(Collectors.toSet())).orElseGet(HashSet::new)*/;
+        return new HashSet<>();
     }
 
     @Override

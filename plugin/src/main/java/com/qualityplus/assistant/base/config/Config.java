@@ -2,7 +2,10 @@ package com.qualityplus.assistant.base.config;
 
 import com.qualityplus.assistant.api.config.ConfigSlimeWorldManager;
 import eu.okaeri.configs.OkaeriConfig;
-import eu.okaeri.configs.annotation.*;
+import eu.okaeri.configs.annotation.Header;
+import eu.okaeri.configs.annotation.NameModifier;
+import eu.okaeri.configs.annotation.NameStrategy;
+import eu.okaeri.configs.annotation.Names;
 import eu.okaeri.platform.core.annotation.Configuration;
 import lombok.Getter;
 import lombok.Setter;

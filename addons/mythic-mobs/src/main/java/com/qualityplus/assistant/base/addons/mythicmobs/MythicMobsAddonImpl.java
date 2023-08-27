@@ -15,10 +15,10 @@ public final class MythicMobsAddonImpl implements MythicMobsAddon {
     @Override
     public boolean isMythicMob(final Entity entity) {
         try {
-            final ActiveMob activeMob = bukkitAPIHelper.getMythicMobInstance(entity);
+            final ActiveMob activeMob = this.bukkitAPIHelper.getMythicMobInstance(entity);
 
             return activeMob != null;
-        }catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return false;
         }
     }
@@ -26,14 +26,14 @@ public final class MythicMobsAddonImpl implements MythicMobsAddon {
     @Override
     public String getInternalName(final Entity entity) {
         try {
-            final ActiveMob activeMob = bukkitAPIHelper.getMythicMobInstance(entity);
+            final ActiveMob activeMob = this.bukkitAPIHelper.getMythicMobInstance(entity);
 
             if (activeMob == null) {
                 return null;
             }
 
             return activeMob.getType().getInternalName();
-        }catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             return null;
         }
     }

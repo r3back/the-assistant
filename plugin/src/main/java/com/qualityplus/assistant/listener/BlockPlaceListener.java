@@ -24,7 +24,7 @@ public final class BlockPlaceListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlace(final BlockPlaceEvent e) {
 
-        final FixedMetadataValue metadata = new FixedMetadataValue(plugin, BlockUtils.getBlockMetadataValue());
+        final FixedMetadataValue metadata = new FixedMetadataValue(this.plugin, BlockUtils.getBlockMetadataValue());
 
         e.getBlock().setMetadata(BlockUtils.getBlockMetadataValue(), metadata);
     }

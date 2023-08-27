@@ -33,7 +33,7 @@ public final class SilentCommandsBukkit extends CommandsBukkit {
         if (plugin == null) {
             throw new NullPointerException("plugin is marked non-null but is null");
         } else {
-            SilentCommandsBukkit commandsBukkit = new SilentCommandsBukkit(plugin);
+            final SilentCommandsBukkit commandsBukkit = new SilentCommandsBukkit(plugin);
             commandsBukkit.registerListeners();
             return commandsBukkit;
         }
@@ -44,21 +44,21 @@ public final class SilentCommandsBukkit extends CommandsBukkit {
      */
     @Override
     public void registerListeners() {
-        Class AsyncTabCompleteEvent;
+        Class asyncTabCompleteEvent;
         try {
-            AsyncTabCompleteEvent = Class.forName("org.bukkit.event.player.PlayerCommandSendEvent");
-            PlayerCommandSendListener playerCommandSendListener = new PlayerCommandSendListener(this, AsyncTabCompleteEvent);
-            this.plugin.getServer().getPluginManager().registerEvent(AsyncTabCompleteEvent, new Listener() {
+            asyncTabCompleteEvent = Class.forName("org.bukkit.event.player.PlayerCommandSendEvent");
+            final PlayerCommandSendListener playerCommandSendListener = new PlayerCommandSendListener(this, asyncTabCompleteEvent);
+            this.plugin.getServer().getPluginManager().registerEvent(asyncTabCompleteEvent, new Listener() {
             }, EventPriority.HIGHEST, playerCommandSendListener, this.plugin, true);
-        } catch (Exception ignored) {
+        } catch (ClassNotFoundException ignored) {
         }
 
         try {
-            AsyncTabCompleteEvent = Class.forName("com.destroystokyo.paper.event.server.AsyncTabCompleteEvent");
-            AsyncTabCompleteListener asyncTabCompleteListener = new AsyncTabCompleteListener(this, AsyncTabCompleteEvent);
-            this.plugin.getServer().getPluginManager().registerEvent(AsyncTabCompleteEvent, new Listener() {
+            asyncTabCompleteEvent = Class.forName("com.destroystokyo.paper.event.server.AsyncTabCompleteEvent");
+            final AsyncTabCompleteListener asyncTabCompleteListener = new AsyncTabCompleteListener(this, asyncTabCompleteEvent);
+            this.plugin.getServer().getPluginManager().registerEvent(asyncTabCompleteEvent, new Listener() {
             }, EventPriority.HIGHEST, asyncTabCompleteListener, this.plugin, true);
-        } catch (Exception ignored) {
+        } catch (ClassNotFoundException ignored) {
         }
 
     }

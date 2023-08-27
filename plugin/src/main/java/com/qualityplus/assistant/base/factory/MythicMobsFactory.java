@@ -38,7 +38,7 @@ public final class MythicMobsFactory {
             Class.forName("io.lumine.mythic.bukkit.BukkitAPIHelper");
 
             return this.injector.createInstance(MythicMobsAddonImpl.class);
-        } catch (final Exception e) {
+        } catch (final ClassNotFoundException e) {
             return this.injector.createInstance(DefaultMythicMobsAddon.class);
         }
     }

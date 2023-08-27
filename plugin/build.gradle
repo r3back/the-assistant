@@ -41,6 +41,27 @@ processResources{
     }
 }
 
+def relocate_map = ['com.cryptomorin.xseries': 'com.qualityplus.assistant.lib.com.cryptomorin.xseries',
+                    'i18n-platform-commands': 'com.qualityplus.assistant.lib.i18n-platform-commands',
+                    'eu.okaeri': 'com.qualityplus.assistant.lib.eu.okaeri',
+                    'com.zaxxer.hikari': 'com.qualityplus.assistant.lib.com.zaxxer.hikari',
+                    'io.netty': 'com.qualityplus.assistant.lib.io.netty',
+                    'org.json.simple': 'com.qualityplus.assistant.lib.org.json.simple',
+                    'org.reactivestreams': 'com.qualityplus.assistant.lib.org.reactivestreams',
+                    'reactor': 'com.qualityplus.assistant.lib.reactor',
+                    'org.slf4j': 'com.qualityplus.assistant.lib.org.slf4j',
+                    'org.h2': 'com.qualityplus.assistant.lib.org.h2',
+                    'org.mariadb.jdbc': 'com.qualityplus.assistant.lib.org.mariadb.jdbc',
+                    'org.intellij.lang.annotations': 'com.qualityplus.assistant.lib.org.intellij.lang.annotations',
+                    'org.inventivetalent': 'com.qualityplus.assistant.lib.org.inventivetalent',
+                    'xyz.xenondevs.particle': 'com.qualityplus.assistant.lib.xyz.xenondevs.particle',
+                    'org.jetbrains.annotations': 'com.qualityplus.assistant.lib.org.jetbrains.annotations',
+                    'de.tr7zw': 'com.qualityplus.assistant.lib.de.tr7zw',
+                    'com.mysql': 'com.qualityplus.assistant.lib.com.mysql',
+                    'com.mongodb': 'com.qualityplus.assistant.lib.com.mongodb'/*,
+                    'io.lettuce': 'com.qualityplus.assistant.lib.io.lettuce',
+                    'io.bson': 'com.qualityplus.assistant.lib.io.bson'*/
+] as HashMap
 
 shadowJar {
     archiveClassifier.set('')
@@ -65,7 +86,6 @@ shadowJar {
         include(dependency('org.mongodb:mongodb-driver-sync:.*'))
         include(dependency('com.github.InventivetalentDev:BossBarAPI:.*'))
         include(dependency('mysql:.*'))
-
 
         include(project(':api'))
         include(project(':addons'))
@@ -107,10 +127,14 @@ shadowJar {
         include(project(':nms:v1_20_R1'))
     }
 
-    rootProject.relocate_map.each { k, v -> relocate(k, v)}
+    relocate_map.each { k, v -> relocate(k, v)}
 
     doLast {
-        rootProject.copyJars(archiveFile)
+        def rootPath = rootProject.projectDir.getAbsolutePath()
+        def saveFilesPath =  rootPath + '/all-generated'
+        def testSuitePath =  rootPath + '/test-suite/mc-config/plugins'
+        mkdir saveFilesPath
+        [saveFilesPath, testSuitePath].forEach(folder -> copy { into folder from archiveFile.get().getAsFile() })
     }
 }
 

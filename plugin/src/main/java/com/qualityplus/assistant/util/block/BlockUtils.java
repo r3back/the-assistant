@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
  */
 @UtilityClass
 public class BlockUtils {
-    private final String METADATA_VALUE = "theAssistantPlayerBlock";
+    private static final String METADATA_VALUE = "theAssistantPlayerBlock";
 
     /**
      *
@@ -78,7 +78,7 @@ public class BlockUtils {
             final Material mat = itemStack.getType();
 
             block.setType(mat);
-        } catch (final Exception e) {
+        } catch (final NullPointerException e) {
             e.printStackTrace();
         }
     }

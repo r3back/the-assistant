@@ -49,7 +49,6 @@ public interface ItemPayable {
                 .forEach(material -> InventoryUtils.removeItems(
                         player.getInventory(),
                         material.parseItem(),
-                        getItemCost().get(material))
-                );
+                        getItemCost().get(material)));
     }
 }

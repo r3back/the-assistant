@@ -2,10 +2,12 @@ package com.qualityplus.assistant.util.actionbar;
 
 import lombok.experimental.UtilityClass;
 
-
+/**
+ * Utility class for Skills ActionBar
+ */
 @UtilityClass
 public class ActionBarUtils {
-    private final int ACTION_BAR_LENGTH = 20;
+    private static final int ACTION_BAR_LENGTH = 20;
 
     /**
      * Retrieves what percentage from 0-100% is the amount
@@ -59,6 +61,6 @@ public class ActionBarUtils {
      * @return action bar
      */
     public String getReplacedBar(final double percentage) {
-        return getReplacedBar((int)percentage);
+        return getReplacedBar((int) percentage);
     }
 }

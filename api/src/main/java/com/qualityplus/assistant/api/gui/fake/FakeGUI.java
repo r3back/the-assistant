@@ -39,10 +39,10 @@ public final class FakeGUI implements InventoryHolder {
 
     @Override
     public @NotNull Inventory getInventory() {
-        for (int i = slots; i<inventory.getSize(); i++) {
-            inventory.setItem(i, XMaterial.BARRIER.parseItem());
+        for (int i = this.slots; i < this.inventory.getSize(); i++) {
+            this.inventory.setItem(i, XMaterial.BARRIER.parseItem());
         }
 
-        return inventory;
+        return this.inventory;
     }
 }

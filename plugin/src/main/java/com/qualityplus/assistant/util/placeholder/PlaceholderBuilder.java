@@ -34,6 +34,16 @@ public final class PlaceholderBuilder {
 
     /**
      *
+     * @param variable key
+     * @param value    value
+     * @return {@link PlaceholderBuilder}
+     */
+    public static PlaceholderBuilder init(final String variable, final String value) {
+        return create(new Placeholder(variable, value));
+    }
+
+    /**
+     *
      * @param placeholders List of {@link IPlaceholder}
      * @return {@link PlaceholderBuilder}
      */
@@ -58,6 +68,17 @@ public final class PlaceholderBuilder {
     @SafeVarargs
     public static PlaceholderBuilder create(final List<IPlaceholder>... placeholders) {
         return PlaceholderBuilder.create().with(placeholders);
+    }
+
+    /**
+     *
+     * @param variable key
+     * @param value    value
+     * @return {@link PlaceholderBuilder}
+     */
+    public PlaceholderBuilder with(final String variable, final String value) {
+        this.placeholderList.add(new Placeholder(variable, value));
+        return this;
     }
 
     /**
@@ -106,6 +127,16 @@ public final class PlaceholderBuilder {
     public PlaceholderBuilder with(final IPlaceholder... placeholder) {
         this.placeholderList.addAll(Arrays.asList(placeholder));
         return this;
+    }
+
+    /**
+     * Retrieves a copy with argument placeholders
+     *
+     * @param placeholders Array of {@link IPlaceholder}
+     * @return {@link PlaceholderBuilder}
+     */
+    public PlaceholderBuilder copyWith(final IPlaceholder... placeholders) {
+        return PlaceholderBuilder.create(this.placeholderList).with(placeholders);
     }
 
     /**

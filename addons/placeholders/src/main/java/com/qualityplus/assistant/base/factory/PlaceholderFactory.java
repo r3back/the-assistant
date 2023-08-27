@@ -29,7 +29,7 @@ public final class PlaceholderFactory {
     public PlaceholdersAddon configurePlaceholders() {
         if (this.resolver.isPlugin("PlaceholderAPI")) {
             return this.injector.createInstance(PlaceholderAPIAddon.class);
-        } else if (resolver.isPlugin("MVdWPlaceholderAPI")) {
+        } else if (this.resolver.isPlugin("MVdWPlaceholderAPI")) {
             return this.injector.createInstance(MVDWPlaceholderAddon.class);
         } else {
             return this.injector.createInstance(DefaultPlaceholdersAddon.class);

@@ -1,6 +1,13 @@
 package com.qualityplus.assistant.base.service;
 
-import com.qualityplus.assistant.api.addons.*;
+import com.qualityplus.assistant.api.addons.EconomyAddon;
+import com.qualityplus.assistant.api.addons.MMOItemsAddon;
+import com.qualityplus.assistant.api.addons.MythicMobsAddon;
+import com.qualityplus.assistant.api.addons.NPCAddon;
+import com.qualityplus.assistant.api.addons.PasterAddon;
+import com.qualityplus.assistant.api.addons.PlaceholdersAddon;
+import com.qualityplus.assistant.api.addons.RegionAddon;
+import com.qualityplus.assistant.api.addons.WorldManagerAddon;
 import com.qualityplus.assistant.api.dependency.DependencyPlugin;
 import com.qualityplus.assistant.api.service.AddonsService;
 import eu.okaeri.commons.bukkit.time.MinecraftTimeEquivalent;

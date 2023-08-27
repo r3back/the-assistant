@@ -14,6 +14,6 @@ public final class DependencyResolverImpl implements DependencyResolver {
 
     @Override
     public boolean isPlugin(final String name) {
-        return plugin.getServer().getPluginManager().getPlugin(name) != null;
+        return this.plugin.getServer().getPluginManager().getPlugin(name) != null;
     }
 }
