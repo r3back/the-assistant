@@ -2,7 +2,7 @@ package com.qualityplus.assistant.util.location;
 
 import com.qualityplus.assistant.api.util.IPlaceholder;
 import com.qualityplus.assistant.util.StringUtils;
-import com.qualityplus.assistant.util.number.NumberUtil;
+import com.qualityplus.assistant.api.util.NumberUtil;
 import com.qualityplus.assistant.util.placeholder.Placeholder;
 import com.qualityplus.assistant.util.placeholder.PlaceholderBuilder;
 import lombok.experimental.UtilityClass;
@@ -17,9 +17,9 @@ import java.util.Optional;
  */
 @UtilityClass
 public final class LocationUtils {
-    private final String FULL_LOCATION_FORMAT = "X: %x%, Y: %y%, Z: %z%, Yaw: %yaw%, Pitch: %pitch%, World: %world%";
-    private final String LOCATION_FORMAT = "X: %x%, Y: %y%, Z: %z%, World: %world%";
-    private final String NULL_LOCATION_FORMAT = "&c✘";
+    private static final String FULL_LOCATION_FORMAT = "X: %x%, Y: %y%, Z: %z%, Yaw: %yaw%, Pitch: %pitch%, World: %world%";
+    private static final String LOCATION_FORMAT = "X: %x%, Y: %y%, Z: %z%, World: %world%";
+    private static final String NULL_LOCATION_FORMAT = "&c✘";
 
     /**
      * Serialize full location data to string

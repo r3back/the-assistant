@@ -26,20 +26,20 @@ public final class SlimeWorldAddon implements WorldManagerAddon {
 
 
     @Override
-    public List<Entity> getChunkEntities(Location location) {
+    public List<Entity> getChunkEntities(final Location location) {
         return null;
     }
 
     @Override
-    public CompletableFuture<ChunkCheckResponse> chunksAreLoaded(Location location) {
+    public CompletableFuture<ChunkCheckResponse> chunksAreLoaded(final Location location) {
 
-        String name = location.getWorld().getName();
+        final String name = location.getWorld().getName();
 
         if (Bukkit.getWorld(name) != null) {
             return WorldManagerAddon.super.chunksAreLoaded(location);
         }
 
-        SlimeWorld slimeWorld = slimePlugin.getWorld(loader, location.getWorld().getName());
+        final SlimeWorld slimeWorld = this.slimePlugin.getWorld(this.loader, location.getWorld().getName());
 
         if (slimeWorld == null) {
             return CompletableFuture.completedFuture(ChunkCheckResponse.builder()
@@ -49,10 +49,12 @@ public final class SlimeWorldAddon implements WorldManagerAddon {
         }
 
 
-        CompletableFuture<ChunkCheckResponse> response = new CompletableFuture<>();
+        final CompletableFuture<ChunkCheckResponse> response = new CompletableFuture<>();
 
-        slimePlugin.asyncLoadWorld(loader, name, false, PROPERTIES).thenAccept(world -> {
-            if (!world.isPresent()) return;
+        this.slimePlugin.asyncLoadWorld(this.loader, name, false, PROPERTIES).thenAccept(world -> {
+            if (!world.isPresent()) {
+                return;
+            }
 
             response.complete(ChunkCheckResponse.builder()
                     .areLoaded(true)
@@ -64,7 +66,7 @@ public final class SlimeWorldAddon implements WorldManagerAddon {
     }
 
     @Override
-    public void loadChunks(Location location) {
+    public void loadChunks(final Location location) {
 
     }
 
@@ -73,11 +75,12 @@ public final class SlimeWorldAddon implements WorldManagerAddon {
         try {
             this.slimePlugin = (SlimePlugin) Bukkit.getPluginManager().getPlugin("SlimeWorldManager");
 
-            if (slimePlugin == null)
-                throw new RuntimeException();
+            if (this.slimePlugin == null) {
+                throw new NullPointerException();
+            }
 
-            this.loader = slimePlugin.getLoader(configSlimeWorldManager.getSlimeWorldManagerSource());
-        }catch (Exception e) {
+            this.loader = this.slimePlugin.getLoader(this.configSlimeWorldManager.getSlimeWorldManagerSource());
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 

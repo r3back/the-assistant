@@ -1,7 +1,11 @@
 package com.qualityplus.assistant.api.config;
 
 import eu.okaeri.configs.OkaeriConfig;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * Config for SlimeWorldManager

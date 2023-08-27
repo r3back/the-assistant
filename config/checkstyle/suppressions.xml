@@ -7,4 +7,6 @@
 <suppressions>
     <suppress files="[\\/]test[\\/]" checks="JavadocPackage"/>
     <suppress files="CustomErrorDecoder.java" checks="IllegalCatch"/>
+    <suppress files="SkinType.java" checks="LineLength"/>
+    <suppress files="SkinType.java" checks="Indentation"/>
 </suppressions>

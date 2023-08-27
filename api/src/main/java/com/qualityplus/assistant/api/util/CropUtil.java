@@ -3,7 +3,6 @@ package com.qualityplus.assistant.api.util;
 import com.cryptomorin.xseries.XMaterial;
 import com.google.common.collect.ImmutableMap;
 import lombok.experimental.UtilityClass;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
@@ -14,7 +13,7 @@ import java.util.Map;
  */
 @UtilityClass
 public class CropUtil {
-    private final Map<XMaterial, Integer> MAX_AGE = ImmutableMap.<XMaterial, Integer>builder()
+    private static final Map<XMaterial, Integer> MAX_AGE = ImmutableMap.<XMaterial, Integer>builder()
             .put(XMaterial.WHEAT, 7)
             .put(XMaterial.CARROTS, 7)
             .put(XMaterial.POTATOES, 3)
@@ -62,7 +61,7 @@ public class CropUtil {
         } else {
             try {
                 return Material.valueOf(material.getLegacy()[0]);
-            }catch (Exception e) {
+            } catch (final IllegalArgumentException e) {
                 return null;
             }
         }

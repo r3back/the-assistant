@@ -62,16 +62,16 @@ public final class RandomSelector<T extends Randomable> {
     }
 
     private T getCommonRandom() {
-        final int index = this.random.nextInt((int)this.totalSum);
+        final int index = this.random.nextInt((int) this.totalSum);
 
         double sum = 0;
 
         int i = 0;
 
-        while(sum < index) {
+        while (sum < index) {
             sum = sum + this.items.get(i++).getProbability();
         }
 
-        return this.items.get(Math.max(0,i-1));
+        return this.items.get(Math.max(0, i - 1));
     }
 }

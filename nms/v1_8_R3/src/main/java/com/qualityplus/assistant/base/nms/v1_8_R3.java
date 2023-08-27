@@ -7,7 +7,19 @@ import com.qualityplus.assistant.api.util.FakeInventoryFactory;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.server.v1_8_R3.*;
+import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.DedicatedPlayerList;
+import net.minecraft.server.v1_8_R3.EntityComplexPart;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
+import net.minecraft.server.v1_8_R3.EnumParticle;
+import net.minecraft.server.v1_8_R3.EnumProtocolDirection;
+import net.minecraft.server.v1_8_R3.MinecraftServer;
+import net.minecraft.server.v1_8_R3.NetworkManager;
+import net.minecraft.server.v1_8_R3.PacketPlayOutBlockBreakAnimation;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_8_R3.PlayerConnection;
+import net.minecraft.server.v1_8_R3.PlayerInteractManager;
+import net.minecraft.server.v1_8_R3.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -19,25 +31,33 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEnderDragon;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.BlockPopulator;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.inventivetalent.bossbar.BossBarAPI;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * NMS Implementation for Spigot v1_8_R3
  */
-public final class v1_8_R3 extends AbstractNMS{
+public final class v1_8_R3 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
 
     @Override
     public void setBlockAge(final Block block, final int age) {
         final CraftBlock craftBlock = (((CraftBlock) block));
-        craftBlock.setData((byte)age);
+        craftBlock.setData((byte) age);
     }
 
     @Override
@@ -109,13 +129,13 @@ public final class v1_8_R3 extends AbstractNMS{
 
     private EntityPlayer getFakePlayer(final String name) {
         final World playerWorld = Bukkit.getWorlds().get(0);
-        final Location location = new Location(playerWorld, 0,0,0);
+        final Location location = new Location(playerWorld, 0, 0, 0);
         final MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
         final WorldServer worldServer = ((CraftWorld) playerWorld).getHandle();
         final EntityPlayer fakePlayer = new EntityPlayer(minecraftServer, worldServer,
                 new GameProfile(UUID.randomUUID(), name),
                 new PlayerInteractManager(worldServer));
-        fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(plugin, "UUID"));
+        fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(this.plugin, "UUID"));
         fakePlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         fakePlayer.playerConnection = new PlayerConnection(minecraftServer,
                 new NetworkManager(EnumProtocolDirection.CLIENTBOUND), fakePlayer);
@@ -154,5 +174,62 @@ public final class v1_8_R3 extends AbstractNMS{
     @Override
     public void setEnderEye(final Block block, final boolean setEnderEye) {
         block.getState().setRawData(setEnderEye ? (byte) 4 : (byte) 3);
+    }
+
+    @Override
+    public void respawnPlayer(final Player player) {
+        final DedicatedPlayerList playerList = ((CraftServer) Bukkit.getServer()).getHandle();
+
+        playerList.moveToWorld(((CraftPlayer) player).getHandle(), 0, false);
+    }
+
+    @Override
+    public ChunkGenerator getChunkGenerator() {
+        return new ChunkGenerator() {
+            @Override
+            public @NotNull List<BlockPopulator> getDefaultPopulators(final @NotNull World world) {
+                return Collections.emptyList();
+            }
+
+            @Override
+            public boolean canSpawn(final @NotNull World world, final int x, final int z) {
+                return true;
+            }
+
+            @Override
+            public Location getFixedSpawnLocation(final @NotNull World world, final @NotNull Random random) {
+                return new Location(world, 0.0D, 64.0D, 0.0D);
+            }
+        };
+    }
+
+    @Override
+    public void setMaxHealth(final Player player, final int maxHealth) {
+        player.setMaxHealth(maxHealth);
+    }
+
+    @Override
+    public <T> void setGameRule(final World world, final String key, final T value) {
+        world.setGameRuleValue(key, (String) value);
+    }
+
+    @Override
+    public void sendParticles(final World world, final String type, final float x,
+                              final float y, final float z, final float offsetX,
+                              final float offsetY, final float offsetZ,
+                              final float data, final int amount) {
+        final EnumParticle particle = EnumParticle.valueOf(type);
+
+        final PacketPlayOutWorldParticles particles = new PacketPlayOutWorldParticles(
+                particle, false, x, y, z,
+                offsetX, offsetY, offsetZ, data, amount, 1
+        );
+
+        for (final Player player : world.getPlayers()) {
+            final CraftPlayer start = (CraftPlayer) player;
+            final EntityPlayer target = start.getHandle();
+            final PlayerConnection connect = target.playerConnection;
+            connect.sendPacket(particles);
+        }
     }
 }

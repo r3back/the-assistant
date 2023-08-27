@@ -7,7 +7,7 @@ import java.util.Arrays;
 /**
  * Config files reloader
  */
-public interface ConfigReloader{
+public interface ConfigReloader {
     /**
      * Reload all files
      */

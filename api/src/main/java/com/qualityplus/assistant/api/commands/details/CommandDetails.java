@@ -5,7 +5,6 @@ import eu.okaeri.configs.annotation.Exclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.command.CommandSender;
 
 import java.time.Duration;
@@ -67,7 +66,7 @@ public class CommandDetails extends OkaeriConfig {
      *
      * @param <T> Generic Type
      */
-    public static class CooldownProvider<T>{
+    public static class CooldownProvider<T> {
         protected final Map<T, Duration> cooldownTimes = new HashMap<>();
         protected final Duration duration;
 

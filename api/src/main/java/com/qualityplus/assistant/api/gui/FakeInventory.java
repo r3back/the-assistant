@@ -1,11 +1,9 @@
 package com.qualityplus.assistant.api.gui;
 
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Fake Inventory

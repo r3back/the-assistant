@@ -17,7 +17,7 @@ public final class DefaultPasterAddon implements PasterAddon {
     }
 
     @Override
-    public CompletableFuture<PasterSession> pasteSchematic(Location location, Schematic schematic) {
+    public CompletableFuture<PasterSession> pasteSchematic(final Location location, final Schematic schematic) {
         return new CompletableFuture<>();
     }
 }

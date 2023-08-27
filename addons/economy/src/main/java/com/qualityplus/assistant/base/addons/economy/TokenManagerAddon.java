@@ -16,17 +16,17 @@ public final class TokenManagerAddon implements EconomyAddon {
 
     @Override
     public double getMoney(final OfflinePlayer player) {
-        return Optional.ofNullable(tokenManager).map(tm -> tm.getTokens((Player) player).orElse(0L)).orElse(0L);
+        return Optional.ofNullable(this.tokenManager).map(tm -> tm.getTokens((Player) player).orElse(0L)).orElse(0L);
     }
 
     @Override
     public void withdrawMoney(final OfflinePlayer player, final double amount) {
-        Optional.ofNullable(tokenManager).ifPresent(tm -> tm.removeTokens(player.getName(), (long) amount));
+        Optional.ofNullable(this.tokenManager).ifPresent(tm -> tm.removeTokens(player.getName(), (long) amount));
     }
 
     @Override
     public void depositMoney(final OfflinePlayer player, final double amount) {
-        Optional.ofNullable(tokenManager).ifPresent(tm -> tm.addTokens(player.getName(), (long) amount));
+        Optional.ofNullable(this.tokenManager).ifPresent(tm -> tm.addTokens(player.getName(), (long) amount));
     }
 
     @Override

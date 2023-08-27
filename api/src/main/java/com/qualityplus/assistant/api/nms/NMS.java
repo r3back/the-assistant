@@ -4,9 +4,11 @@ import com.qualityplus.assistant.api.gui.FakeInventory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
@@ -140,15 +142,67 @@ public interface NMS {
      * @param stay     stay time
      * @param fadeOut  fade out time
      */
-    void sendTitle(final Player player, final String title, final String subtitle,
+    public void sendTitle(final Player player, final String title, final String subtitle,
                    final int fadeIn, final int stay, final int fadeOut);
+
+    /**
+     * Force a player to respawn
+     *
+     * @param player {@link Player}
+     */
+    public void respawnPlayer(final Player player);
+
+    /**
+     * Retrieves NMS ChunkGenerator
+     *
+     * @return {@link ChunkGenerator}
+     */
+    public ChunkGenerator getChunkGenerator();
+
+    /**
+     * Set player's max health
+     *
+     * @param player    {@link Player}
+     * @param maxHealth New player's max health
+     */
+    public void setMaxHealth(final Player player, final int maxHealth);
+
+    /**
+     * Change world's game rule
+     *
+     * @param world {@link World}
+     * @param key   Game Rule key
+     * @param value Game Rule value
+     * @param <T> Generic Game rule value type
+     */
+    public <T> void setGameRule(final World world, final String key, final T value);
+
+    /**
+     * Send particles for all players in a world
+     *
+     * @param world    {@link World}
+     * @param particle Particle name
+     * @param x        X Location
+     * @param y        Y Location
+     * @param z        Z Location
+     * @param offsetX  Location X Offset
+     * @param offsetY  Location Y Offset
+     * @param offsetZ  Location Z Offset
+     * @param data     Particle data
+     * @param amount   Particle amount
+     */
+    public void sendParticles(final World world, final String particle,
+                              final float x, final float y,
+                              final float z, final float offsetX,
+                              final float offsetY, final float offsetZ,
+                              final float data, final int amount);
 
     /**
      * Ender Dragon Parts representation
      */
     @Getter
     @AllArgsConstructor
-    enum DragonPart{
+    public static enum DragonPart {
         /**
          * Represents head position
          */

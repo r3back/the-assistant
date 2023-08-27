@@ -16,17 +16,17 @@ public final class VaultAddon implements EconomyAddon {
 
     @Override
     public double getMoney(final OfflinePlayer player) {
-        return Optional.ofNullable(economy).map(eco -> eco.getBalance(player)).orElse(0d);
+        return Optional.ofNullable(this.economy).map(eco -> eco.getBalance(player)).orElse(0d);
     }
 
     @Override
     public void withdrawMoney(final OfflinePlayer player, final double amount) {
-        Optional.ofNullable(economy).ifPresent(eco -> eco.withdrawPlayer(player, amount));
+        Optional.ofNullable(this.economy).ifPresent(eco -> eco.withdrawPlayer(player, amount));
     }
 
     @Override
     public void depositMoney(final OfflinePlayer player, final double amount) {
-        Optional.ofNullable(economy).ifPresent(eco -> eco.depositPlayer(player, amount));
+        Optional.ofNullable(this.economy).ifPresent(eco -> eco.depositPlayer(player, amount));
     }
 
     private Economy setupEconomy() {

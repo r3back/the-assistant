@@ -21,7 +21,7 @@ public final class CommandReward extends OkaeriConfig implements Reward {
     private String command;
 
     @Override
-    public void execute(Player player) {
+    public void execute(final Player player) {
         final String cmd = this.command.replace("%player%", player.getName());
 
         if (this.commandExecutor.equals(CommandExecutor.PLAYER)) {

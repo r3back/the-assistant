@@ -9,8 +9,6 @@ import com.qualityplus.assistant.util.StringUtils;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import de.tr7zw.changeme.nbtapi.NBTListCompound;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.enchantments.Enchantment;
@@ -19,7 +17,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +30,7 @@ import java.util.stream.Collectors;
  */
 @UtilityClass
 public final class ItemStackUtils {
-    private final LoreWrapper LORE_WRAPPER = new LoreWrapper(60, "&7");
+    private static final LoreWrapper LORE_WRAPPER = new LoreWrapper(60, "&7");
 
     /**
      *
@@ -39,7 +42,7 @@ public final class ItemStackUtils {
      * @return {@link ItemStack}
      */
     public ItemStack makeItem(final ItemStack item, final int amount, final String name,
-                                     final List<String> lore, final boolean hideEnchants) {
+                              final List<String> lore, final boolean hideEnchants) {
         if (item == null) {
             return null;
         }
@@ -122,7 +125,7 @@ public final class ItemStackUtils {
      */
     public ItemStack makeItem(final Item item, final List<IPlaceholder> placeholders,
                                      final ItemStack itemStack, final boolean useItemStackAmount,
-                                     boolean hideEnchantments) {
+                                     final boolean hideEnchantments) {
         return makeItem(item, placeholders, LORE_WRAPPER, itemStack, useItemStackAmount, hideEnchantments);
     }
 
@@ -167,12 +170,12 @@ public final class ItemStackUtils {
      */
     public ItemStack makeItem(final Item item, final LoreWrapper loreWrapper) {
         try {
-            final ItemStack itemstack = makeItem(item.material, item.amount, item.displayName, item.lore);
+            final ItemStack itemstack = makeItem(item.getMaterial(), item.getAmount(), item.getDisplayName(), item.getLore());
 
             return getFinalItem(item, itemstack, Collections.emptyList(), loreWrapper);
-        } catch (final Exception e) {
+        } catch (final NullPointerException e) {
             e.printStackTrace();
-            return makeItem(XMaterial.STONE, item.amount, item.displayName, item.lore);
+            return makeItem(XMaterial.STONE, item.getAmount(), item.getDisplayName(), item.getLore());
         }
     }
 
@@ -184,17 +187,17 @@ public final class ItemStackUtils {
      * @return {@link ItemStack}
      */
     public ItemStack makeItem(final Item item, final List<IPlaceholder> placeholders, final LoreWrapper lineWrapper) {
-        final String displayName = StringUtils.processMulti(item.displayName, placeholders);
+        final String displayName = StringUtils.processMulti(item.getDisplayName(), placeholders);
 
-        final List<String> lore = StringUtils.processMulti(item.lore, placeholders);
+        final List<String> lore = StringUtils.processMulti(item.getLore(), placeholders);
 
         try {
-            final ItemStack itemstack = makeItem(item.material, item.amount, displayName, lore);
+            final ItemStack itemstack = makeItem(item.getMaterial(), item.getAmount(), displayName, lore);
 
             return getFinalItem(item, itemstack, placeholders, lineWrapper);
-        } catch (final Exception e) {
+        } catch (final NullPointerException e) {
             e.printStackTrace();
-            return makeItem(XMaterial.STONE, item.amount, displayName, lore);
+            return makeItem(XMaterial.STONE, item.getAmount(), displayName, lore);
         }
     }
 
@@ -208,17 +211,17 @@ public final class ItemStackUtils {
      */
     public ItemStack makeItem(final Item item, final List<IPlaceholder> placeholders, final LoreWrapper lineWrapper,
                               final ItemStack itemStack) {
-        final String displayName = StringUtils.processMulti(item.displayName, placeholders);
+        final String displayName = StringUtils.processMulti(item.getDisplayName(), placeholders);
 
-        final List<String> lore = StringUtils.processMulti(item.lore, placeholders);
+        final List<String> lore = StringUtils.processMulti(item.getLore(), placeholders);
 
         try {
             final ItemStack itemstack = makeItem(itemStack.clone(), itemStack.getAmount(), displayName, lore, true);
 
             return getFinalItem(item, itemstack, placeholders, lineWrapper);
-        } catch (final Exception e) {
+        } catch (final NullPointerException e) {
             e.printStackTrace();
-            return makeItem(XMaterial.STONE, item.amount, displayName, lore);
+            return makeItem(XMaterial.STONE, item.getAmount(), displayName, lore);
         }
     }
 
@@ -235,19 +238,19 @@ public final class ItemStackUtils {
                                      final LoreWrapper lineWrapper, final ItemStack itemStack,
                                      final boolean useItemStackAmount) {
 
-        final String displayName = StringUtils.processMulti(item.displayName, placeholders);
+        final String displayName = StringUtils.processMulti(item.getDisplayName(), placeholders);
 
-        final List<String> lore = StringUtils.processMulti(item.lore, placeholders);
+        final List<String> lore = StringUtils.processMulti(item.getLore(), placeholders);
 
         try {
-            final int amount = useItemStackAmount ? itemStack.getAmount() : item.amount;
+            final int amount = useItemStackAmount ? itemStack.getAmount() : item.getAmount();
 
             final ItemStack itemstack = makeItem(itemStack.clone(), amount, displayName, lore, true);
 
             return getFinalItem(item, itemstack, placeholders, lineWrapper);
-        } catch (final Exception e) {
+        } catch (final NullPointerException e) {
             e.printStackTrace();
-            return makeItem(XMaterial.STONE, item.amount, displayName, lore);
+            return makeItem(XMaterial.STONE, item.getAmount(), displayName, lore);
         }
     }
 
@@ -264,19 +267,19 @@ public final class ItemStackUtils {
     public ItemStack makeItem(final Item item, final List<IPlaceholder> placeholders,
                               final LoreWrapper loreWrapper, final ItemStack itemStack,
                               final boolean useItemStackAmount, final boolean hideEnchants) {
-        final String displayName = StringUtils.processMulti(item.displayName, placeholders);
+        final String displayName = StringUtils.processMulti(item.getDisplayName(), placeholders);
 
-        final List<String> lore = StringUtils.processMulti(item.lore, placeholders);
+        final List<String> lore = StringUtils.processMulti(item.getLore(), placeholders);
 
         try {
-            final int amount = useItemStackAmount ? itemStack.getAmount() : item.amount;
+            final int amount = useItemStackAmount ? itemStack.getAmount() : item.getAmount();
 
             final ItemStack itemstack = makeItem(itemStack.clone(), amount, displayName, lore, hideEnchants);
 
             return getFinalItem(item, itemstack, placeholders, loreWrapper);
-        } catch (final Exception e) {
+        } catch (final NullPointerException e) {
             e.printStackTrace();
-            return makeItem(XMaterial.STONE, item.amount, displayName, lore);
+            return makeItem(XMaterial.STONE, item.getAmount(), displayName, lore);
         }
     }
 
@@ -309,16 +312,16 @@ public final class ItemStackUtils {
 
         parseEnchantment(itemstack, item);
 
-        if (item.material == XMaterial.PLAYER_HEAD && item.headOwner != null) {
-            SkullMeta m = (SkullMeta) itemstack.getItemMeta();
-            m.setOwner(StringUtils.processMulti(item.headOwner, placeholders));
+        if (item.getMaterial() == XMaterial.PLAYER_HEAD && item.getHeadOwner() != null) {
+            final SkullMeta m = (SkullMeta) itemstack.getItemMeta();
+            m.setOwner(StringUtils.processMulti(item.getHeadOwner(), placeholders));
             itemstack.setItemMeta(m);
         }
 
-        if (item.material == XMaterial.PLAYER_HEAD && item.headData != null) {
+        if (item.getMaterial() == XMaterial.PLAYER_HEAD && item.getHeadData() != null) {
             return parseTexture(itemstack, item);
         }
-        return BukkitItemUtil.addCustomModelData(itemstack, item.customModelData);
+        return BukkitItemUtil.addCustomModelData(itemstack, item.getCustomModelData());
 
     }
 
@@ -364,9 +367,9 @@ public final class ItemStackUtils {
                     .getCompoundList("textures")
                     .addCompound();
 
-            texture.setString("Value", item.headData);
+            texture.setString("Value", item.getHeadData());
             return nbtItem.getItem();
-        } catch (final Exception e) {
+        } catch (final NullPointerException e) {
             e.printStackTrace();
             return itemStack;
         }
@@ -374,7 +377,7 @@ public final class ItemStackUtils {
     }
 
     private void parseEnchantment(final ItemStack itemStack, final Item item) {
-        if (!item.enchanted) {
+        if (!item.isEnchanted()) {
             return;
         }
 

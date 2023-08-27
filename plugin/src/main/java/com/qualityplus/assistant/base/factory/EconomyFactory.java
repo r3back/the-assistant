@@ -2,7 +2,11 @@ package com.qualityplus.assistant.base.factory;
 
 import com.qualityplus.assistant.api.addons.EconomyAddon;
 import com.qualityplus.assistant.api.dependency.resolver.DependencyResolver;
-import com.qualityplus.assistant.base.addons.economy.*;
+import com.qualityplus.assistant.base.addons.economy.DefaultEconomyAddon;
+import com.qualityplus.assistant.base.addons.economy.PlayerPointsAddon;
+import com.qualityplus.assistant.base.addons.economy.RoyaleEconomyAddon;
+import com.qualityplus.assistant.base.addons.economy.TokenManagerAddon;
+import com.qualityplus.assistant.base.addons.economy.VaultAddon;
 import eu.okaeri.injector.OkaeriInjector;
 import eu.okaeri.injector.annotation.Inject;
 import eu.okaeri.platform.core.annotation.Bean;

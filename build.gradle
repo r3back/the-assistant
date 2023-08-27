@@ -1,21 +1,9 @@
 plugins {
     id 'com.github.johnrengelman.shadow' version '7.0.0'
     id 'maven-publish'
-    id 'checkstyle'
 }
 
 defaultTasks 'build'
-
-def copyJars =  {
-    file -> {
-        def dir = System.getenv("SAVE_FOLDER")
-        mkdir dir
-        copy {
-            into dir
-            from file
-        }
-    }
-}
 
 def okaeri_dependencies = ['eu.okaeri:okaeri-platform-bukkit:0.4.0-preview.72',
                            'eu.okaeri:okaeri-configs-json-simple:4.0.1',
@@ -34,40 +22,15 @@ def assistant_dependencies = [':plugin',
                               ':addons:addons-commons',
                               ':nms:nms-commons'] as HashSet
 
-
-def relocate_map = ['com.cryptomorin.xseries': 'com.qualityplus.assistant.lib.com.cryptomorin.xseries',
-                    'i18n-platform-commands': 'com.qualityplus.assistant.lib.i18n-platform-commands',
-                    'eu.okaeri': 'com.qualityplus.assistant.lib.eu.okaeri',
-                    'com.zaxxer.hikari': 'com.qualityplus.assistant.lib.com.zaxxer.hikari',
-                    'io.netty': 'com.qualityplus.assistant.lib.io.netty',
-                    'org.json.simple': 'com.qualityplus.assistant.lib.org.json.simple',
-                    'org.reactivestreams': 'com.qualityplus.assistant.lib.org.reactivestreams',
-                    'reactor': 'com.qualityplus.assistant.lib.reactor',
-                    'org.slf4j': 'com.qualityplus.assistant.lib.org.slf4j',
-                    'org.h2': 'com.qualityplus.assistant.lib.org.h2',
-                    'org.mariadb.jdbc': 'com.qualityplus.assistant.lib.org.mariadb.jdbc',
-                    'org.intellij.lang.annotations': 'com.qualityplus.assistant.lib.org.intellij.lang.annotations',
-                    'org.inventivetalent': 'com.qualityplus.assistant.lib.org.inventivetalent',
-                    'xyz.xenondevs.particle': 'com.qualityplus.assistant.lib.xyz.xenondevs.particle',
-                    'org.jetbrains.annotations': 'com.qualityplus.assistant.lib.org.jetbrains.annotations',
-                    'de.tr7zw': 'com.qualityplus.assistant.lib.de.tr7zw',
-                    'com.mysql': 'com.qualityplus.assistant.lib.com.mysql',
-                    'com.mongodb': 'com.qualityplus.assistant.lib.com.mongodb'/*,
-                    'io.lettuce': 'com.qualityplus.assistant.lib.io.lettuce',
-                    'io.bson': 'com.qualityplus.assistant.lib.io.bson'*/
-                    ] as HashMap
-
 group = 'com.github.r3back'
-version = '3.2.9'
-project.ext.copyJars = copyJars
-project.ext.relocate_map = relocate_map
+version = '3.2.10'
 project.ext.okaeri_dependencies = okaeri_dependencies
 project.ext.driver_dependencies = driver_dependencies
 project.ext.assistant_dependencies = assistant_dependencies
 
-
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'checkstyle'
     apply plugin: 'maven-publish'
 
     sourceCompatibility = 1.8
@@ -80,8 +43,6 @@ subprojects {
     jar {
         from '../LICENSE.txt'
     }
-
-    //configureCheckstyleForSubproject(it)
 
     repositories {
         mavenCentral()
@@ -127,6 +88,16 @@ subprojects {
 
         // Enable lombok annotation processing
         annotationProcessor("org.projectlombok:lombok:1.18.22")
+    }
+
+    checkstyle {
+        toolVersion = '8.20'
+        configFile = file(rootProject.projectDir.getAbsolutePath() + '/config/checkstyle/checkstyle.xml')
+        ignoreFailures = false
+        showViolations = true
+        showViolations = true
+        maxWarnings = 0
+        sourceSets = [sourceSets.main]
     }
 }
 

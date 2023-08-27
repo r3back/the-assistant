@@ -1,6 +1,13 @@
 package com.qualityplus.assistant.api.service;
 
-import com.qualityplus.assistant.api.addons.*;
+import com.qualityplus.assistant.api.addons.EconomyAddon;
+import com.qualityplus.assistant.api.addons.MMOItemsAddon;
+import com.qualityplus.assistant.api.addons.MythicMobsAddon;
+import com.qualityplus.assistant.api.addons.NPCAddon;
+import com.qualityplus.assistant.api.addons.PasterAddon;
+import com.qualityplus.assistant.api.addons.PlaceholdersAddon;
+import com.qualityplus.assistant.api.addons.RegionAddon;
+import com.qualityplus.assistant.api.addons.WorldManagerAddon;
 
 /**
  * Addons Service

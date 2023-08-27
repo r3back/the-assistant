@@ -8,13 +8,16 @@ import com.qualityplus.assistant.api.dependency.resolver.DependencyResolver;
 import com.qualityplus.assistant.base.addons.paster.session.WorldEditSession6;
 import com.sk89q.worldedit.CuboidClipboard;
 import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.Vector;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.world.DataException;
 import eu.okaeri.injector.annotation.Inject;
 import eu.okaeri.platform.bukkit.scheduler.PlatformScheduler;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -36,15 +39,15 @@ public final class WorldEdit6 implements WEPasterAddon {
                 final EditSession editSession = new EditSession(world, 999999999);
                 cuboidClipboard.paste(editSession, vector, true);
                 future.complete(new WorldEditSession6(editSession, getCuboid(location, cuboidClipboard)));
-            } catch (Exception e) {
+            } catch (DataException | MaxChangedBlocksException | IOException e) {
                 e.printStackTrace();
             }
         };
 
-        if (isAsync(resolver)) {
-            scheduler.runAsync(pasteTask);
+        if (isAsync(this.resolver)) {
+            this.scheduler.runAsync(pasteTask);
         } else {
-            scheduler.runSync(pasteTask);
+            this.scheduler.runSync(pasteTask);
         }
 
         return future;

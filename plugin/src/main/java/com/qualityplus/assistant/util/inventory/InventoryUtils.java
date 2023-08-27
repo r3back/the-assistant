@@ -19,19 +19,21 @@ public final class InventoryUtils {
      * @param background {@link Background}
      */
     public static void fillInventory(final Inventory inventory, final Background background) {
-        if (background.useFiller && background.filler != null) {
+        if (background.isUseFiller() && background.getFiller() != null) {
             for (int i = 0; i < inventory.getSize(); i++) {
-                inventory.setItem(i, ItemStackUtils.makeItem(background.filler));
+                inventory.setItem(i, ItemStackUtils.makeItem(background.getFiller()));
             }
         }
 
-        if (background.items == null) return;
+        if (background.getItems() == null) {
+            return;
+        }
 
-        for (int slot : background.items.keySet()) {
+        for (int slot : background.getItems().keySet()) {
             if (slot >= inventory.getSize()) {
                 continue;
             }
-            inventory.setItem(slot, ItemStackUtils.makeItem(background.items.get(slot)));
+            inventory.setItem(slot, ItemStackUtils.makeItem(background.getItems().get(slot)));
         }
     }
 
@@ -67,12 +69,14 @@ public final class InventoryUtils {
     /**
      * Removes specific amount of items from inventory
      *
-     * @param inventory {@link Inventory}
-     * @param stack     {@link ItemStack}
-     * @param amount    amount to be removed
+     * @param inventory   {@link Inventory}
+     * @param stack       {@link ItemStack}
+     * @param amountParam amount to be removed
      */
-    public static void removeItems(final Inventory inventory, final ItemStack stack, int amount) {
-        for (int i = 0; i<64; i++) {
+    public static void removeItems(final Inventory inventory, final ItemStack stack, final int amountParam) {
+        int amount = amountParam;
+
+        for (int i = 0; i < 64; i++) {
             if (amount <= 0 || !inventory.containsAtLeast(stack, amount)) {
                 break;
             }
@@ -102,7 +106,7 @@ public final class InventoryUtils {
 
         toAdd.setAmount(1);
 
-        for (int i = 0; i<amount; i++) {
+        for (int i = 0; i < amount; i++) {
             inventory.addItem(toAdd.clone());
         }
     }

@@ -10,8 +10,8 @@ import lombok.experimental.UtilityClass;
  */
 @UtilityClass
 public final class ProtocolLibDependency {
-    private final String PROTOCOL_LIB_PLUGIN_NAME = "ProtocolLib";
-    private final Boolean IS_PROTOCOL_LIB;
+    private static final String PROTOCOL_LIB_PLUGIN_NAME = "ProtocolLib";
+    private static final Boolean IS_PROTOCOL_LIB;
 
     static {
         IS_PROTOCOL_LIB = TheAssistantPlugin.getAPI()

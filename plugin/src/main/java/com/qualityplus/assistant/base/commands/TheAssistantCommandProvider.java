@@ -18,7 +18,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -58,6 +65,9 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
         this.commands.put(label, ListUtils.listWith(this.commands.getOrDefault(label, new ArrayList<>()), command));
     }
 
+    /**
+     * Reload all commands
+     */
     @Override
     public void reloadCommands() {
         this.commands.values()
@@ -66,6 +76,9 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
                 .forEach(AssistantCommand::reload);
     }
 
+    /**
+     * Register all commands
+     */
     @Delayed(time = MinecraftTimeEquivalent.SECOND, async = true)
     public void registerCommands() {
         final Iterator<List<AssistantCommand>> iterator = this.commands.values().iterator();

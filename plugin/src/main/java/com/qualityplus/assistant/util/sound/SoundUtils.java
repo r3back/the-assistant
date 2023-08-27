@@ -25,7 +25,7 @@ public final class SoundUtils {
     public void playSound(final Player player, final XSound xsound, final float volume, final float pitch) {
         try {
             player.playSound(player.getLocation(), xsound.parseSound(), volume, pitch);
-        } catch (final Exception e) {
+        } catch (final NullPointerException e) {
             ConsoleUtils.msg(String.format(INVALID_SOUND_NAME_MESSAGE, getSound(xsound)));
         }
     }
@@ -79,7 +79,7 @@ public final class SoundUtils {
     private XSound byName(final String name) {
         try {
             return XSound.valueOf(name);
-        } catch (final Exception e) {
+        } catch (final IllegalArgumentException e) {
             return null;
         }
     }
@@ -87,7 +87,7 @@ public final class SoundUtils {
     private String getSound(final XSound sound) {
         try {
             return sound.toString();
-        } catch (final Exception e) {
+        } catch (final IllegalArgumentException | NullPointerException e) {
             return UNRECOGNIZED_SOUND_MESSAGE;
         }
     }

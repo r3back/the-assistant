@@ -60,10 +60,12 @@ public final class TimeUtils {
     /**
      * Retrieves how many long ago happened given a pastime
      *
-     * @param millis pasttime
+     * @param millisParam pasttime
      * @return {@link RemainingTime}
      */
-    public RemainingTime getRemainingTime(long millis) {
+    public RemainingTime getRemainingTime(final long millisParam) {
+        long millis = millisParam;
+
         final long nanos = TimeUnit.MILLISECONDS.toNanos(millis);
         final long days = TimeUnit.MILLISECONDS.toDays(millis);
         millis -= TimeUnit.DAYS.toMillis(days);

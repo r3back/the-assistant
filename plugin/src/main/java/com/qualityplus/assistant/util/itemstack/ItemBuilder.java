@@ -80,17 +80,17 @@ public final class ItemBuilder {
      */
     public static ItemBuilder of(final Item item) {
         return of()
-                .material(item.material)
-                .amount(item.amount)
-                .displayName(item.displayName)
-                .headData(item.headData)
-                .headOwner(item.headOwner)
-                .headOwnerUUID(item.headOwnerUUID)
-                .lore(item.lore)
-                .slot(Optional.ofNullable(item.slot).orElse(0))
-                .enabled(item.enabled)
-                .command(item.command)
-                .enchanted(item.enchanted);
+                .material(item.getMaterial())
+                .amount(item.getAmount())
+                .displayName(item.getDisplayName())
+                .headData(item.getHeadData())
+                .headOwner(item.getHeadOwner())
+                .headOwnerUUID(item.getHeadOwnerUUID())
+                .lore(item.getLore())
+                .slot(Optional.ofNullable(item.getSlot()).orElse(0))
+                .enabled(item.isEnabled())
+                .command(item.getCommand())
+                .enchanted(item.isEnchanted());
     }
 
     /**
@@ -99,7 +99,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder material(final XMaterial material) {
-        this.item.material = material;
+        this.item.setMaterial(material);
         return this;
     }
 
@@ -109,7 +109,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder displayName(final String displayName) {
-        this.item.displayName = displayName;
+        this.item.setDisplayName(displayName);
         return this;
     }
 
@@ -119,7 +119,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder headOwnerUUID(final UUID headOwnerUUID) {
-        this.item.headOwnerUUID = headOwnerUUID;
+        this.item.setHeadOwnerUUID(headOwnerUUID);
         return this;
     }
 
@@ -129,7 +129,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder slot(final int slot) {
-        this.item.slot = slot;
+        this.item.setSlot(slot);
         return this;
     }
 
@@ -139,7 +139,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder amount(final int amount) {
-        this.item.amount = amount;
+        this.item.setAmount(amount);
         return this;
     }
 
@@ -149,7 +149,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder lore(final List<String> lore) {
-        this.item.lore = lore;
+        this.item.setLore(lore);
         return this;
     }
 
@@ -159,7 +159,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder lore(final String... lore) {
-        this.item.lore = Arrays.stream(lore).collect(Collectors.toList());
+        this.item.setLore(Arrays.stream(lore).collect(Collectors.toList()));
         return this;
     }
 
@@ -169,7 +169,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder title(final String title) {
-        this.item.displayName = title;
+        this.item.setDisplayName(title);
         return this;
     }
 
@@ -179,7 +179,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder command(final String command) {
-        this.item.command = command;
+        this.item.setCommand(command);
         return this;
     }
 
@@ -189,7 +189,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder enabled(final boolean enabled) {
-        this.item.enabled = enabled;
+        this.item.setEnabled(enabled);
         return this;
     }
 
@@ -199,7 +199,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder headData(final String headData) {
-        this.item.headData = headData;
+        this.item.setHeadData(headData);
         return this;
     }
 
@@ -209,7 +209,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder headOwner(final String headOwner) {
-        this.item.headOwner = headOwner;
+        this.item.setHeadOwner(headOwner);
         return this;
     }
 
@@ -219,7 +219,7 @@ public final class ItemBuilder {
      * @return {@link ItemBuilder}
      */
     public ItemBuilder enchanted(final boolean enchanted) {
-        this.item.enchanted = enchanted;
+        this.item.setEnchanted(enchanted);
         return this;
     }
 

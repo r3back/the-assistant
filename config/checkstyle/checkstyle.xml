@@ -14,9 +14,9 @@
         </module>
         -->
 
-    <!-- <module name="SuppressionFilter">
-        <property name="file" value="suppressions.xml"/>
-    </module>   -->
+    <module name="SuppressionFilter">
+        <property name="file" value="${config_loc}/suppressions.xml"/>
+    </module>
 
     <module name="NewlineAtEndOfFile">
         <property name="lineSeparator" value="lf_cr_crlf" />

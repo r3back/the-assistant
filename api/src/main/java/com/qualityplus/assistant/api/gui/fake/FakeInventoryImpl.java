@@ -9,7 +9,12 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Fake Inventory Implementation
@@ -23,7 +28,7 @@ public final class FakeInventoryImpl implements FakeInventory {
 
     /**
      * Constructor with inventory view and slots
-     * 
+     *
      * @param inventoryView {@link InventoryView}
      * @param slots         max slots amount
      */
@@ -34,7 +39,7 @@ public final class FakeInventoryImpl implements FakeInventory {
 
     /**
      * Constructor with inventory and slots
-     * 
+     *
      * @param inventory {@link Inventory}
      * @param slots     max slots amount
      */
@@ -44,13 +49,14 @@ public final class FakeInventoryImpl implements FakeInventory {
     }
 
     @Override
-    public void removeItems(ItemStack toRemove, int amount) {
-        for (int i = slots; i >= 0; i--) {
+    public void removeItems(final ItemStack toRemove, final int paramAmount) {
+        int amount = paramAmount;
+        for (int i = this.slots; i >= 0; i--) {
             if (amount <= 0) {
                 break;
             }
 
-            final ItemStack itemStack = inventory.getItem(i);
+            final ItemStack itemStack = this.inventory.getItem(i);
 
             if (itemStack == null || itemStack.getType() == Material.AIR || !itemStack.isSimilar(toRemove)) {
                 continue;
@@ -60,7 +66,7 @@ public final class FakeInventoryImpl implements FakeInventory {
 
             final ItemStack newItemStack = BukkitItemUtil.getItemWithout(itemStack, toRemoveAmount);
 
-            inventory.setItem(i, newItemStack);
+            this.inventory.setItem(i, newItemStack);
 
             amount -= toRemoveAmount;
         }
@@ -70,8 +76,8 @@ public final class FakeInventoryImpl implements FakeInventory {
     public Map<ItemStack, Integer> getItemsWithAmount() {
         final Map<ItemStack, Integer> itemStackMap = new HashMap<>();
 
-        for (int i = 0; i<slots; i++) {
-            final ItemStack itemStack = inventory.getItem(i);
+        for (int i = 0; i < this.slots; i++) {
+            final ItemStack itemStack = this.inventory.getItem(i);
 
             if (itemStack == null || itemStack.getType() == Material.AIR) {
                 continue;
@@ -89,8 +95,8 @@ public final class FakeInventoryImpl implements FakeInventory {
 
     @Override
     public void setItems(final Map<Integer, ItemStack> items) {
-        for (int i = 0; i<=items.size(); i++) {
-            inventory.setItem(i, items.get(i));
+        for (int i = 0; i <= items.size(); i++) {
+            this.inventory.setItem(i, items.get(i));
         }
     }
 
@@ -98,8 +104,8 @@ public final class FakeInventoryImpl implements FakeInventory {
     public Map<Integer, ItemStack> getItems() {
         final Map<Integer, ItemStack> itemStackMap = new HashMap<>();
 
-        for (int i = 0; i<slots; i++) {
-            final ItemStack itemStack = inventory.getItem(i);
+        for (int i = 0; i < this.slots; i++) {
+            final ItemStack itemStack = this.inventory.getItem(i);
 
             if (itemStack == null || itemStack.getType() == Material.AIR) {
                 continue;
@@ -121,11 +127,11 @@ public final class FakeInventoryImpl implements FakeInventory {
     @Override
     public ItemStack removeOneFromLastItem() {
         final Map<Integer, ItemStack> itemStackMap = new HashMap<>();
-        
+
         Integer max = null;
 
-        for (int i = 0; i<slots; i++) {
-            final ItemStack itemStack = inventory.getItem(i);
+        for (int i = 0; i < this.slots; i++) {
+            final ItemStack itemStack = this.inventory.getItem(i);
 
             if (BukkitItemUtil.isNull(itemStack)) {
                 continue;
@@ -145,9 +151,9 @@ public final class FakeInventoryImpl implements FakeInventory {
 
             lastItem = lastItem.clone();
 
-            ItemStack toPut = BukkitItemUtil.getItemWithout(lastItem, 1);
+            final ItemStack toPut = BukkitItemUtil.getItemWithout(lastItem, 1);
 
-            inventory.setItem(max, toPut);
+            this.inventory.setItem(max, toPut);
 
             return BukkitItemUtil.getItemWith(lastItem, 1);
         }
@@ -159,8 +165,8 @@ public final class FakeInventoryImpl implements FakeInventory {
     public int getEmptySlots() {
         int emptySlots = 0;
 
-        for (int i = slots; i >= 0; i--) {
-            final ItemStack itemStack = inventory.getItem(i);
+        for (int i = this.slots; i >= 0; i--) {
+            final ItemStack itemStack = this.inventory.getItem(i);
 
             if (itemStack == null || itemStack.getType() == Material.AIR) {
                 emptySlots++;
@@ -172,22 +178,21 @@ public final class FakeInventoryImpl implements FakeInventory {
 
     @Override
     public void removeItems() {
-
-        for (int i = 0; i<slots; i++) {
-            ItemStack itemStack = inventory.getItem(i);
+        for (int i = 0; i < this.slots; i++) {
+            final ItemStack itemStack = this.inventory.getItem(i);
 
             if (itemStack == null || itemStack.getType() == Material.AIR) {
                 continue;
             }
 
-            inventory.setItem(i, null);
+            this.inventory.setItem(i, null);
         }
 
     }
 
     @Override
     public void remove() {
-        Optional.ofNullable(inventory)
+        Optional.ofNullable(this.inventory)
                 //.map(InventoryView::getPlayer)
                 .filter(Objects::nonNull)
                 .ifPresent(Inventory::clear);
