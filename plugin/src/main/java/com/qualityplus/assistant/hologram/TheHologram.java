@@ -39,6 +39,7 @@ public final class TheHologram {
      *
      * @param txt      hologram text lines
      * @param location {@link Location} hologram location
+     * @return {@link TheHologram}
      */
     public static TheHologram create(final List<String> txt, final Location location) {
         return new TheHologram(txt, location);
@@ -89,16 +90,16 @@ public final class TheHologram {
 
         final double amount = 0.25;
 
-        final double initial = txt.size() * amount;
+        final double initial = this.txt.size() * amount;
 
-        final Location initialLocation = location.clone().add(0, initial, 0);
+        final Location initialLocation = this.location.clone().add(0, initial, 0);
 
         int size = 0;
 
-        for (final String line : Lists.reverse(txt)) {
+        for (final String line : Lists.reverse(this.txt)) {
             final double newY = initial - (amount * size);
 
-            final ArmorStand armorStand = location.getWorld()
+            final ArmorStand armorStand = this.location.getWorld()
                     .spawn(initialLocation.clone().subtract(new Vector(0, newY, 0)), ArmorStand.class);
 
             armorStand.setArms(true);

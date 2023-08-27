@@ -4,17 +4,24 @@ import com.qualityplus.assistant.inventory.Item;
 import eu.okaeri.configs.OkaeriConfig;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Map;
 
+/**
+ * Represents inventory background
+ */
+@Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public final class Background extends OkaeriConfig {
-    public Map<Integer, Item> items;
-    public Item filler;
-    public boolean useFiller;
+    private Map<Integer, Item> items;
+    private Item filler;
+    private boolean useFiller;
 
     /**
      * Default Constructor

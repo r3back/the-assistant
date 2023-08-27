@@ -9,7 +9,11 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.util.Vector;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
 
 /**
  * Cuboid Structure Representation
@@ -30,6 +34,12 @@ public final class Cuboid implements Iterable<Block>, ConfigurationSerializable 
         this(location, location);
     }
 
+    /**
+     * Constructor with min and max location
+     *
+     * @param maxLocation Max Location
+     * @param minLocation Min Location
+     */
     public Cuboid(final Location maxLocation, final Location minLocation) {
         Validate.notNull(maxLocation);
         Validate.notNull(minLocation);

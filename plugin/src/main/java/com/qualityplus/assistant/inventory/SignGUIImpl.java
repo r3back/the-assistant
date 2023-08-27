@@ -24,6 +24,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -60,7 +61,7 @@ public final class SignGUIImpl implements SignGUI {
 
     @Override
     public void open() {
-        final Player player = Bukkit.getPlayer(uuid);
+        final Player player = Bukkit.getPlayer(this.uuid);
 
         if (player == null) {
             return;
@@ -68,11 +69,11 @@ public final class SignGUIImpl implements SignGUI {
 
         this.listener = new LeaveListener();
 
-        int x_start = player.getLocation().getBlockX();
+        final int x_start = player.getLocation().getBlockX();
 
         int y_start = 255;
 
-        int z_start = player.getLocation().getBlockZ();
+        final int z_start = player.getLocation().getBlockZ();
 
         Material material = Material.getMaterial("WALL_SIGN");
 
@@ -83,12 +84,13 @@ public final class SignGUIImpl implements SignGUI {
         while (!player.getWorld().getBlockAt(x_start, y_start, z_start).getType().equals(Material.AIR) &&
                 !player.getWorld().getBlockAt(x_start, y_start, z_start).getType().equals(material)) {
             y_start--;
-            if (y_start == 1)
+            if (y_start == 1) {
                 return;
+            }
         }
         player.getWorld().getBlockAt(x_start, y_start, z_start).setType(material);
 
-        this.sign = (Sign)player.getWorld().getBlockAt(x_start, y_start, z_start).getState();
+        this.sign = (Sign) player.getWorld().getBlockAt(x_start, y_start, z_start).getState();
 
         int i = 0;
         for (String line : this.lines) {
@@ -110,7 +112,7 @@ public final class SignGUIImpl implements SignGUI {
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
             try {
                 ProtocolLibrary.getProtocolManager().sendServerPacket(player, openSign);
-            } catch (final Exception e) {
+            } catch (final InvocationTargetException e) {
                 e.printStackTrace();
             }
         }, 3L);
@@ -142,14 +144,14 @@ public final class SignGUIImpl implements SignGUI {
 
     private void registerSignUpdateListener() {
         final ProtocolManager manager = ProtocolLibrary.getProtocolManager();
-        this.packetListener = new PacketAdapter(plugin, PacketType.Play.Client.UPDATE_SIGN) {
+        this.packetListener = new PacketAdapter(this.plugin, PacketType.Play.Client.UPDATE_SIGN) {
             public void onPacketReceiving(final PacketEvent event) {
                 if (event.getPlayer().getUniqueId().equals(SignGUIImpl.this.uuid)) {
                     final List<String> lines = Stream.of(0, 1, 2, 3)
                             .map(line -> getLine(event, line))
                             .collect(Collectors.toList());
 
-                    Bukkit.getScheduler().runTask(plugin, () -> {
+                    Bukkit.getScheduler().runTask(this.plugin, () -> {
                         manager.removePacketListener(this);
 
                         HandlerList.unregisterAll(SignGUIImpl.this.listener);

@@ -1,4 +1,4 @@
-package com.qualityplus.assistant.util.number;
+package com.qualityplus.assistant.api.util;
 
 import lombok.experimental.UtilityClass;
 
@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
  */
 @UtilityClass
 public final class NumberUtil {
-    private final TreeMap<Integer, String> ROMAN_FORMAT = new TreeMap<>();
+    private static final TreeMap<Integer, String> ROMAN_FORMAT = new TreeMap<>();
 
     static {
         ROMAN_FORMAT.put(1000, "M");
@@ -43,7 +43,7 @@ public final class NumberUtil {
         if (number == l) {
             return ROMAN_FORMAT.get(number);
         }
-        return ROMAN_FORMAT.get(l) + toRoman(number-l);
+        return ROMAN_FORMAT.get(l) + toRoman(number - l);
     }
 
     /**
@@ -88,6 +88,22 @@ public final class NumberUtil {
     }
 
     /**
+     * Retrieves a string converted to number or alternative number if
+     * there's an exception during conversion
+     *
+     * @param toTraslate string number
+     * @param number     alternative number
+     * @return number or alternative
+     */
+    public Integer intOrNumber(final String toTraslate, final Integer number) {
+        try {
+            return Integer.parseInt(toTraslate);
+        } catch (final NumberFormatException e) {
+            return number;
+        }
+    }
+
+    /**
      * Retrieves a string converted to number or a null if
      * there's an exception during conversion
      *
@@ -112,7 +128,7 @@ public final class NumberUtil {
     public Double doubleOrZero(final String toTraslate) {
         try {
             return Double.parseDouble(toTraslate);
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             return 0D;
         }
     }
@@ -147,7 +163,7 @@ public final class NumberUtil {
      */
     public List<Integer> secuence(final int begin, final int end) {
         final List<Integer> ret = new ArrayList<>(end - begin + 1);
-        for (int i = begin; i<=end; i++) {
+        for (int i = begin; i <= end; i++) {
             ret.add(i);
         }
         return ret;

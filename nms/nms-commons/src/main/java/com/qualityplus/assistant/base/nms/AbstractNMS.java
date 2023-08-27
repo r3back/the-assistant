@@ -45,7 +45,7 @@ public abstract class AbstractNMS implements NMS {
             final Event event = new ActionBarMessageEvent(player, message, type);
 
             Bukkit.getPluginManager().callEvent(event);
-        } catch (Exception e) {
+        } catch (final IllegalStateException e) {
             e.printStackTrace();
         }
     }
@@ -58,7 +58,7 @@ public abstract class AbstractNMS implements NMS {
 
 
     @Override
-    public int getMaxAge(Block block) {
+    public int getMaxAge(final Block block) {
         return CropUtil.getMaxAge(block);
     }
 

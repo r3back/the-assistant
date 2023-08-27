@@ -3,7 +3,6 @@ package com.qualityplus.assistant.util.player;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
  */
 @UtilityClass
 public class PlayerUtils {
-    private final String EMPTY_STRING = "";
+    private static final String EMPTY_STRING = "";
 
     /**
      * Retrieves player name given an uuid

@@ -19,7 +19,7 @@ public interface SimpleGUI {
      * @return gui size
      */
     public default int getSize() {
-        return getCommonGUI().size;
+        return getCommonGUI().getSize();
     }
 
     /**
@@ -28,7 +28,7 @@ public interface SimpleGUI {
      * @return gui title
      */
     public default String getTitle() {
-        return getCommonGUI().title;
+        return getCommonGUI().getTitle();
     }
 
     /**
@@ -37,7 +37,7 @@ public interface SimpleGUI {
      * @return gui background
      */
     public default Background getBackground() {
-        return getCommonGUI().background;
+        return getCommonGUI().getBackground();
     }
 
     /**
@@ -46,6 +46,6 @@ public interface SimpleGUI {
      * @return close gui item
      */
     public default Item getCloseGUI() {
-        return getCommonGUI().closeGUI;
+        return getCommonGUI().getCloseGUI();
     }
 }

@@ -28,7 +28,7 @@ public final class WorldEditSession7 implements PasterSession {
     }
 
     @Override
-    public void setAllBlocks(Material material) {
+    public void setAllBlocks(final Material material) {
         this.cuboid.getBlocks().forEach(block -> block.setType(material));
     }
 
@@ -38,7 +38,7 @@ public final class WorldEditSession7 implements PasterSession {
     }
 
     @Override
-    public boolean isInside(Location location) {
+    public boolean isInside(final Location location) {
         return this.cuboid.isInside(location);
     }
 }

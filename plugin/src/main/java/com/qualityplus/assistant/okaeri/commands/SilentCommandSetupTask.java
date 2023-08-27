@@ -13,7 +13,7 @@ import eu.okaeri.tasker.core.Tasker;
  * Modified Okaeri command setup with no logs
  */
 public final class SilentCommandSetupTask extends BukkitCommandsSetupTask {
-    private final boolean BRIGADIER = Boolean.parseBoolean(System.getProperty("okaeri.platform.brigadier", "true"));
+    private static final boolean BRIGADIER = Boolean.parseBoolean(System.getProperty("okaeri.platform.brigadier", "true"));
 
     /**
      * Execute commands task silently

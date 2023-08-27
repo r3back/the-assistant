@@ -3,14 +3,28 @@ package com.qualityplus.assistant.base.nms;
 import com.mojang.authlib.GameProfile;
 import com.qualityplus.assistant.api.gui.FakeInventory;
 import com.qualityplus.assistant.api.gui.fake.FakeInventoryImpl;
-import com.qualityplus.assistant.api.util.CropUtil;
 import com.qualityplus.assistant.api.util.FakeInventoryFactory;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.Getter;
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_12_R1.BlockPosition;
+import net.minecraft.server.v1_12_R1.DedicatedPlayerList;
+import net.minecraft.server.v1_12_R1.EntityComplexPart;
+import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.EnumParticle;
+import net.minecraft.server.v1_12_R1.EnumProtocolDirection;
+import net.minecraft.server.v1_12_R1.MinecraftServer;
+import net.minecraft.server.v1_12_R1.NetworkManager;
+import net.minecraft.server.v1_12_R1.PacketPlayOutBlockBreakAnimation;
+import net.minecraft.server.v1_12_R1.PacketPlayOutEntityDestroy;
+import net.minecraft.server.v1_12_R1.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_12_R1.PlayerConnection;
+import net.minecraft.server.v1_12_R1.PlayerInteractManager;
+import net.minecraft.server.v1_12_R1.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
@@ -23,25 +37,34 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEnderDragon;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * NMS Implementation for Spigot v1_12_R1
  */
-public final class v1_12_R1 extends AbstractNMS{
+public final class v1_12_R1 extends AbstractNMS {
     private static final Map<FakeInventory, EntityPlayer> ENTITIES = new HashMap<>();
     private @Getter @Inject Plugin plugin;
 
     @Override
     public void setBlockAge(final Block block, final int age) {
         final CraftBlock craftBlock = (((CraftBlock) block));
-        craftBlock.setData((byte)age);
+        craftBlock.setData((byte) age);
     }
 
     @Override
@@ -84,12 +107,12 @@ public final class v1_12_R1 extends AbstractNMS{
 
         final PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(id);
 
-        Bukkit.getOnlinePlayers().forEach(player -> ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet));
+        Bukkit.getOnlinePlayers().forEach(player -> ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet));
 
         entityPlayer.getBukkitEntity().remove();
 
         final World playerWorld = Bukkit.getWorlds().get(0);
-        WorldServer worldServer = ((CraftWorld) playerWorld).getHandle();
+        final WorldServer worldServer = ((CraftWorld) playerWorld).getHandle();
         worldServer.removeEntity(entityPlayer);
 
         ENTITIES.remove(fakeInventory);
@@ -128,13 +151,13 @@ public final class v1_12_R1 extends AbstractNMS{
 
     private EntityPlayer getFakePlayer(final String name) {
         final World playerWorld = Bukkit.getWorlds().get(0);
-        final Location location = new Location(playerWorld, 0,0,0);
+        final Location location = new Location(playerWorld, 0, 0, 0);
         final MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
         final WorldServer worldServer = ((CraftWorld) playerWorld).getHandle();
         final EntityPlayer fakePlayer = new EntityPlayer(minecraftServer, worldServer,
                 new GameProfile(UUID.randomUUID(), name),
                 new PlayerInteractManager(worldServer));
-        fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(plugin, "UUID"));
+        fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(this.plugin, "UUID"));
         fakePlayer.setLocation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         fakePlayer.playerConnection = new PlayerConnection(minecraftServer,
                 new NetworkManager(EnumProtocolDirection.CLIENTBOUND), fakePlayer);
@@ -171,5 +194,59 @@ public final class v1_12_R1 extends AbstractNMS{
     @Override
     public void setEnderEye(final Block block, final boolean setEnderEye) {
         block.getState().setRawData(setEnderEye ? (byte) 4 : (byte) 3);
+    }
+
+    @Override
+    public void respawnPlayer(final Player player) {
+        final DedicatedPlayerList playerList = ((CraftServer) Bukkit.getServer()).getHandle();
+
+        playerList.moveToWorld(((CraftPlayer) player).getHandle(), 0, false);
+    }
+
+    @Override
+    public ChunkGenerator getChunkGenerator() {
+        return new ChunkGenerator() {
+            public @NotNull ChunkData generateChunkData(final @NotNull World world, final @NotNull Random random, final int x,
+                                                        final int z, final @NotNull BiomeGrid chunkGererator) {
+                final ChunkData chunkData = createChunkData(world);
+                for (int i = 0; i < 16; i++) {
+                    for (int j = 0; j < 16; j++) {
+                        chunkGererator.setBiome(i, j, Biome.THE_VOID);
+                    }
+                }
+                return chunkData;
+            }
+        };
+    }
+
+    @Override
+    public void setMaxHealth(final Player player, final int maxHealth) {
+        Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH))
+                        .ifPresent(attribute -> attribute.setBaseValue(maxHealth));
+    }
+
+    @Override
+    public <T> void setGameRule(final World world, final String key, final T value) {
+        world.setGameRuleValue(key, (String) value);
+    }
+
+    @Override
+    public void sendParticles(final World world, final String type, final float x,
+                              final float y, final float z, final float offsetX,
+                              final float offsetY, final float offsetZ,
+                              final float data, final int amount) {
+        final EnumParticle particle = EnumParticle.valueOf(type);
+
+        final PacketPlayOutWorldParticles particles = new PacketPlayOutWorldParticles(
+                particle, false, x, y, z,
+                offsetX, offsetY, offsetZ, data, amount, 1
+        );
+
+        for (final Player player : world.getPlayers()) {
+            final CraftPlayer start = (CraftPlayer) player;
+            final EntityPlayer target = start.getHandle();
+            final PlayerConnection connect = target.playerConnection;
+            connect.sendPacket(particles);
+        }
     }
 }

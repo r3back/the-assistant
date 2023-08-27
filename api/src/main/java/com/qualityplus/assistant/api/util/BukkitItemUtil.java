@@ -5,7 +5,6 @@ import lombok.experimental.UtilityClass;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -15,7 +14,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.util.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Utility class to handle Bukkit Items
@@ -74,7 +79,7 @@ public class BukkitItemUtil {
             bukkitObjectOutputStream.flush();
 
             return Base64.getEncoder().encodeToString(byteArrayOutputStream.toByteArray());
-        } catch (Exception e) {
+        } catch (IOException e) {
             return "";
         }
     }
@@ -92,7 +97,7 @@ public class BukkitItemUtil {
             );
             final BukkitObjectInputStream bukkitObjectInputStream = new BukkitObjectInputStream(byteArrayInputStream);
             return (ItemStack) bukkitObjectInputStream.readObject();
-        } catch (Exception exception) {
+        } catch (final IOException | ClassNotFoundException exception) {
             return XMaterial.AIR.parseItem();
         }
     }
@@ -175,10 +180,11 @@ public class BukkitItemUtil {
         try {
             final ItemMeta meta = itemStack.getItemMeta();
 
-            meta.setCustomModelData(customModelData);
+            Optional.ofNullable(meta)
+                            .ifPresent(m -> m.setCustomModelData(customModelData));
 
             itemStack.setItemMeta(meta);
-        } catch (final Exception ignored) {
+        } catch (final NullPointerException ignored) {
         }
 
         return itemStack;

@@ -4,7 +4,6 @@ import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Utility class for Lists
@@ -35,5 +34,62 @@ public final class ListUtils {
     public <T> List<T> listWithout(final List<T> list, final T toRemove) {
         list.remove(toRemove);
         return list;
+    }
+
+    public static class ListBuilder<T>{
+        private final List<T> initialList;
+
+        private ListBuilder(final List<T> initialList) {
+            this.initialList = new ArrayList<>(initialList);
+        }
+
+        /**
+         * Creates a ListBuilder with a given list
+         *
+         * @param list Initial List
+         * @return {@link ListBuilder}
+         * @param <T> Generic type of {@link ListBuilder}
+         */
+        public static <T> ListBuilder<T> of(final List<T> list){
+            return new ListBuilder<>(list);
+        }
+
+        /**
+         * Creates a ListBuilder with given array of list
+         * @param lists Array of Lists
+         * @return {@link ListBuilder}
+         * @param <T> Generic type of {@link ListBuilder}
+         */
+        @SafeVarargs
+        public static <T> ListBuilder<T> of(final List<T>... lists){
+            final ListBuilder<T> builder = new ListBuilder<>(new ArrayList<>());
+
+            for (final List<T> list : lists) {
+                builder.with(list);
+            }
+            return builder;
+        }
+
+        /**
+         * Retrieves a ListBuilder with the given list
+         * added.
+         *
+         * @param with List to add
+         * @return {@link ListBuilder}
+         */
+        public ListBuilder<T> with(final List<T> with){
+            this.initialList.addAll(with);
+            return this;
+        }
+
+        /**
+         * Retrieves the List with all elements of
+         * ListBuilder
+         *
+         * @return List
+         */
+        public List<T> get(){
+            return this.initialList;
+        }
     }
 }

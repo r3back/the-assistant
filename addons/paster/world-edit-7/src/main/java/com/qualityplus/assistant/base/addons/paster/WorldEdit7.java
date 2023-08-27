@@ -72,10 +72,10 @@ public final class WorldEdit7 implements WEPasterAddon {
                 throw new RuntimeException(e);
             }
         };
-        if (isAsync(resolver)) {
+        if (isAsync(this.resolver)) {
             this.scheduler.runAsync(pasteTask);
         } else {
-            scheduler.runSync(pasteTask);
+            this.scheduler.runSync(pasteTask);
         }
 
         return future;
@@ -97,7 +97,7 @@ public final class WorldEdit7 implements WEPasterAddon {
             final Location maxLocation = new Location(world, realVector.getX(), realVector.getY(), realVector.getZ());
             final Location minLocation = new Location(world, maxVector.getX(), maxVector.getY(), maxVector.getZ());
             return new Cuboid(minLocation, maxLocation);
-        } catch (final Exception e) {
+        } catch (final NullPointerException e) {
             e.printStackTrace();
             return null;
         }

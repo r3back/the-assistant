@@ -36,7 +36,7 @@ public final class DriverLoader {
             RedisPersistence.class.getName();
 
             logger.info("Successfully loaded Database Drivers");
-        } catch (final Exception ignored) {
+        } catch (final NullPointerException ignored) {
             logger.info("Fail while loading Database Drivers!");
             Bukkit.getServer().getPluginManager().disablePlugin(plugin);
         }

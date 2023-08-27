@@ -4,7 +4,9 @@ import com.cryptomorin.xseries.XMaterial;
 import eu.okaeri.configs.OkaeriConfig;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,21 +15,23 @@ import java.util.UUID;
  * Item for guis
  */
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public final class Item extends OkaeriConfig {
-    public XMaterial material;
-    public int amount;
-    public String displayName;
-    public String headData;
-    public String headOwner;
-    public UUID headOwnerUUID;
-    public List<String> lore;
-    public Integer slot;
-    public boolean enabled;
-    public String command;
-    public boolean enchanted = false;
-    public Integer customModelData;
+    private XMaterial material;
+    private int amount;
+    private String displayName;
+    private String headData;
+    private String headOwner;
+    private UUID headOwnerUUID;
+    private List<String> lore;
+    private Integer slot;
+    private boolean enabled;
+    private String command;
+    private boolean enchanted = false;
+    private Integer customModelData;
 
     /**
      * Copy constructor

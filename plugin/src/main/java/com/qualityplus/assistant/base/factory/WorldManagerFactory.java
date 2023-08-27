@@ -44,7 +44,7 @@ public final class WorldManagerFactory {
             Class.forName("com.grinderwolf.swm.api.loaders.SlimeLoader");
 
             return true;
-        } catch (final Exception e) {
+        } catch (final ClassNotFoundException e) {
             return false;
         }
     }

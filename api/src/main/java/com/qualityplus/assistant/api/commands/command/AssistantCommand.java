@@ -4,7 +4,11 @@ import com.qualityplus.assistant.api.commands.CommandProvider;
 import com.qualityplus.assistant.api.commands.details.CommandDetails;
 import com.qualityplus.assistant.api.commands.setup.event.CommandSetupEvent;
 import com.qualityplus.assistant.api.commands.setup.CommandHandler;
-import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,8 +23,8 @@ import java.util.stream.Collectors;
  * Abstract command class
  */
 public abstract class AssistantCommand extends CommandDetails {
-    public CommandHandler<AssistantCommand> commandCompleteHandler;
-    public CommandDetails commandDetails;
+    private CommandHandler<AssistantCommand> commandCompleteHandler;
+    private CommandDetails commandDetails;
 
     /**
      * Retrieves if command was successfully executed
@@ -66,14 +70,14 @@ public abstract class AssistantCommand extends CommandDetails {
     public void reload() {
         //Setup Details
         this.commandCompleteHandler.onCompleteCommand(new CommandSetupEvent<>(this));
-        super.cooldownInSeconds = commandDetails.getCooldownInSeconds();
-        super.onlyForPlayers = commandDetails.isOnlyForPlayers();
-        super.labelProvider = commandDetails.getLabelProvider();
-        super.description = commandDetails.getDescription();
-        super.permission = commandDetails.getPermission();
-        super.enabled = commandDetails.isEnabled();
-        super.aliases = commandDetails.getAliases();
-        super.syntax = commandDetails.getSyntax();
+        super.cooldownInSeconds = this.commandDetails.getCooldownInSeconds();
+        super.onlyForPlayers = this.commandDetails.isOnlyForPlayers();
+        super.labelProvider = this.commandDetails.getLabelProvider();
+        super.description = this.commandDetails.getDescription();
+        super.permission = this.commandDetails.getPermission();
+        super.enabled = this.commandDetails.isEnabled();
+        super.aliases = this.commandDetails.getAliases();
+        super.syntax = this.commandDetails.getSyntax();
     }
 
 
@@ -128,44 +132,79 @@ public abstract class AssistantCommand extends CommandDetails {
      * @param previousPage         Previous page message
      * @param helpPageHoverMessage Help Page Hover Message
      */
-    protected void sendHelpCommands(final CommandSender sender, final String[] args, final CommandProvider<AssistantCommand> commands, final String helpHeader, final String helpMessage,
-                                    final String helpFooter, final String nextPage, final String previousPage, final String helpPageHoverMessage) {
-        Player p = (Player) sender;
+    protected void sendHelpCommands(final CommandSender sender, final String[] args, final CommandProvider<AssistantCommand> commands,
+                                    final String helpHeader, final String helpMessage, final String helpFooter, final String nextPage,
+                                    final String previousPage, final String helpPageHoverMessage) {
+        final Player p = (Player) sender;
         int page = 1;
         if (args.length == 2) {
-            if (!org.apache.commons.lang.StringUtils.isNumeric(args[1])) return;
+            if (!org.apache.commons.lang.StringUtils.isNumeric(args[1])) {
+                return;
+            }
 
             page = Integer.parseInt(args[1]);
         }
 
-        double maxPerPage = 8;
-        List<AssistantCommand> list = commands.getCommands().stream().filter(command -> command.labelProvider.equals(labelProvider)).collect(Collectors.toList());
+        final double maxPerPage = 8;
+        final List<AssistantCommand> list = commands.getCommands()
+                .stream()
+                .filter(command -> command.labelProvider.equals(labelProvider))
+                .collect(Collectors.toList());
 
-        int maxpage = (int) Math.ceil(list.size() / maxPerPage);
+        final int maxpage = (int) Math.ceil(list.size() / maxPerPage);
         int current = 0;
         p.sendMessage(ChatColor.translateAlternateColorCodes('&', helpHeader));
         for (AssistantCommand command : list) {
-            if ((p.hasPermission(command.permission) || command.permission.equalsIgnoreCase("") || command.permission.equalsIgnoreCase(command.labelProvider + ".")) && command.enabled) {
-                if (current >= (page - 1) * maxPerPage && current < page * maxPerPage)
-                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', helpMessage.replace("%command%", command.syntax).replace("%description%", command.description)));
+            if ((p.hasPermission(command.permission)
+                    || command.permission.equalsIgnoreCase("")
+                    || command.permission.equalsIgnoreCase(command.labelProvider + ".")) && command.enabled) {
+                if (current >= (page - 1) * maxPerPage && current < page * maxPerPage) {
+                    p.sendMessage(getHelpMessage(helpMessage, command));
+                }
                 current++;
             }
         }
-        BaseComponent[] components = TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', helpFooter.replace("%maxpage%", maxpage + "").replace("%page%", page + "")));
+        final BaseComponent[] components = TextComponent.fromLegacyText(getFooterMessage(helpFooter, maxpage, page));
 
         for (BaseComponent component : components) {
             if (ChatColor.stripColor(component.toLegacyText()).contains(nextPage)) {
                 if (page < maxpage) {
-                    component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + commandDetails.getLabelProvider() +" help " + (page + 1)));
-                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(helpPageHoverMessage.replace("%page%", "" + (page + 1))).create()));
+                    component.setClickEvent(getClickEvent(this.commandDetails.getLabelProvider(), page + 1));
+                    component.setHoverEvent(getHoverEvent(helpPageHoverMessage, page + 1));
                 }
             } else if (ChatColor.stripColor(component.toLegacyText()).contains(previousPage)) {
                 if (page > 1) {
-                    component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + commandDetails.getLabelProvider() +" help " + (page - 1)));
-                    component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(helpPageHoverMessage.replace("%page%", "" + (page - 1))).create()));
+                    component.setClickEvent(getClickEvent(this.commandDetails.getLabelProvider(), page - 1));
+                    component.setHoverEvent(getHoverEvent(helpPageHoverMessage, page - 1));
                 }
             }
         }
         p.getPlayer().spigot().sendMessage(components);
+    }
+
+    private ClickEvent getClickEvent(final String labelProvider, final int page) {
+        return new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/" + labelProvider + " help " + page);
+    }
+
+    private HoverEvent getHoverEvent(final String helpPageHoverMessage, final int page) {
+        final ComponentBuilder builder = new ComponentBuilder(helpPageHoverMessage.replace("%page%", "" + page));
+        return new HoverEvent(HoverEvent.Action.SHOW_TEXT, builder.create());
+    }
+
+    private String getFooterMessage(final String helpFooter, final int maxPage, final int page) {
+        final String text = helpFooter
+                .replace("%maxpage%", maxPage + "")
+                .replace("%page%", page + "");
+
+        return ChatColor.translateAlternateColorCodes('&', text);
+    }
+
+    private String getHelpMessage(final String helpMessage, final AssistantCommand command) {
+        final String text = helpMessage
+                .replace("%command%", command.syntax)
+                .replace("%description%", command.description);
+
+        return ChatColor.translateAlternateColorCodes('&', text);
+
     }
 }

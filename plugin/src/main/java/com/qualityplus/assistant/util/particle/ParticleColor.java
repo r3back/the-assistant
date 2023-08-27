@@ -3,7 +3,7 @@ package com.qualityplus.assistant.util.particle;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * Represent color of particles

@@ -17,11 +17,13 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
+/**
+ * Utility class for Strings
+ */
 @UtilityClass
 public final class StringUtils {
-    private final Pattern PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
+    private static final Pattern PATTERN = Pattern.compile("#[a-fA-F0-9]{6}");
 
     /**
      * Removes Color from a string
@@ -60,14 +62,15 @@ public final class StringUtils {
     /**
      * Retrieves a message with hex colors parsed
      *
-     * @param message message to be parsed
+     * @param messageParam message to be parsed
      * @return message with hex colors
      */
-    public String hexColor(String message) {
+    public String hexColor(final String messageParam) {
+        String message = messageParam;
         Matcher matcher = PATTERN.matcher(message);
 
         while (matcher.find()) {
-            String color = message.substring(matcher.start(), matcher.end());
+            final String color = message.substring(matcher.start(), matcher.end());
             message = message.replace(color, "" + net.md_5.bungee.api.ChatColor.of(color));
             matcher = PATTERN.matcher(message);
         }
@@ -98,7 +101,7 @@ public final class StringUtils {
 
             //Se parsean todas las lineas incluidas las nuevas
             return finalLore.stream().map(s -> processMulti(s, placeholders)).collect(Collectors.toList());
-        }else{
+        } else {
             return lines.stream().map(s -> processMulti(s, placeholders)).collect(Collectors.toList());
         }
     }
@@ -129,7 +132,7 @@ public final class StringUtils {
      */
     public TextComponent getMessage(final MultipleSpecialMessage multipleSpecialMessage,
                                     final List<IPlaceholder> placeholders) {
-        final List<TextComponent> textComponents = multipleSpecialMessage.specialMessages.stream()
+        final List<TextComponent> textComponents = multipleSpecialMessage.getSpecialMessages().stream()
                 .map(specialMessage -> getMessage(specialMessage, placeholders))
                 .collect(Collectors.toList());
 
@@ -149,13 +152,13 @@ public final class StringUtils {
     public TextComponent getMessage(final SpecialMessage specialMessage, final List<IPlaceholder> placeholders) {
         final TextComponent component = new TextComponent();
 
-        final List<String> messages = specialMessage.message
+        final List<String> messages = specialMessage.getMessage()
                 .stream()
                 .map(message -> processMulti(message, placeholders))
                 .collect(Collectors.toList());
 
-        final String action = processMulti(specialMessage.action, placeholders);
-        final String aboveMessage = processMulti(specialMessage.aboveMessage, placeholders);
+        final String action = processMulti(specialMessage.getAction(), placeholders);
+        final String aboveMessage = processMulti(specialMessage.getAboveMessage(), placeholders);
 
         messages.stream()
                 .map(message -> MessageBuilder.get(message, action, aboveMessage))
@@ -167,7 +170,7 @@ public final class StringUtils {
     /**
      * Spigot Chat Message Builder
      */
-    public class MessageBuilder{
+    public class MessageBuilder {
         /**
          *
          * @param message message

@@ -25,6 +25,6 @@ public final class RemainingTime extends OkaeriConfig {
      * @return true if remaining time is zero
      */
     public boolean isZero() {
-        return days <= 0 && hours <= 0 && minutes <= 0 && seconds <= 0;
+        return this.days <= 0 && this.hours <= 0 && this.minutes <= 0 && this.seconds <= 0;
     }
 }

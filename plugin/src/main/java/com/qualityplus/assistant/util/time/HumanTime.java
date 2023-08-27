@@ -40,15 +40,15 @@ public final class HumanTime extends OkaeriConfig {
     }
 
     private Duration getDuration() {
-        switch (type) {
+        switch (this.type) {
             case MINUTES:
-                return Duration.ofMinutes(amount);
+                return Duration.ofMinutes(this.amount);
             case DAYS:
-                return Duration.ofDays(amount);
+                return Duration.ofDays(this.amount);
             case HOURS:
-                return Duration.ofHours(amount);
+                return Duration.ofHours(this.amount);
             default:
-                return Duration.ofSeconds(amount);
+                return Duration.ofSeconds(this.amount);
         }
     }
 
@@ -57,7 +57,7 @@ public final class HumanTime extends OkaeriConfig {
      */
     @Getter
     @RequiredArgsConstructor
-    public enum TimeType{
+    public enum TimeType {
         /**
          * Minutes
          */

@@ -2,7 +2,9 @@ package com.qualityplus.assistant.util.message;
 
 import eu.okaeri.configs.OkaeriConfig;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,12 +12,14 @@ import java.util.List;
 /**
  * Spigot chat message
  */
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public final class SpecialMessage extends OkaeriConfig {
-    public List<String> message;
-    public String action;
-    public String aboveMessage;
+    private List<String> message;
+    private String action;
+    private String aboveMessage;
 
     /**
      * Constructor with message as argument

@@ -12,16 +12,16 @@ import java.text.DecimalFormat;
 @UtilityClass
 @SuppressWarnings("all")
 public final class MathUtil {
-    private final DecimalFormat ROUND_COMMA_FORMAT = new DecimalFormat("#,###");
-    private final DecimalFormat ROUND_DOT_FORMAT = new DecimalFormat("#.##");
-    private final double[] SIN_FORMAT = new double[65536];
+    private static final DecimalFormat ROUND_COMMA_FORMAT = new DecimalFormat("#,###");
+    private static final DecimalFormat ROUND_DOT_FORMAT = new DecimalFormat("#.##");
+    private static final double[] SIN_FORMAT = new double[65536];
 
     /**
      * Retrieves percentage of a number over a total
      *
      * @param number     number
      * @param percentage percentage
-     * @return
+     * @return percentage
      */
     public double getPercentage(final double number, final double percentage) {
         return (percentage * number) / 100;

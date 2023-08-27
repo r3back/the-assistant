@@ -3,8 +3,9 @@ version = rootProject.version
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
-    //implementation 'com.github.Zrips:Residence:2.5.8'
 
     compileOnly project(':addons:regions:regions-commons')
     compileOnly project(':addons:addons-commons')
+
+    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
 }
