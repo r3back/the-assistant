@@ -11,7 +11,7 @@ public interface NPCAddon extends DependencyPlugin {
      * Retrieves if an entity is an npc
      *
      * @param entity {@link Entity}
-     * @return true if it's npc
+     * @return true if it"s npc
      */
     public boolean isNPC(final Entity entity);
 }

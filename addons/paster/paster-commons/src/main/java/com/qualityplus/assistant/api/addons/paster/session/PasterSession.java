@@ -35,7 +35,7 @@ public interface PasterSession {
      * area
      *
      * @param location {@link Location}
-     * @return true if it's inside
+     * @return true if it"s inside
      */
     public boolean isInside(final Location location);
 }

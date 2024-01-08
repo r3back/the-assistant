@@ -80,7 +80,7 @@ public abstract class AbstractNMS implements NMS {
      * Retrieves if a UUID is blacklisted
      *
      * @param uuid {@link UUID}
-     * @return true if it's blacklisted
+     * @return true if it"s blacklisted
      */
     public boolean isBlacklisted(final UUID uuid) {
         if (!this.disabled.containsKey(uuid)) {
@@ -104,7 +104,7 @@ public abstract class AbstractNMS implements NMS {
      * Retrieves if a UUID is whitelisted
      *
      * @param uuid {@link UUID}
-     * @return true if it's whitelisted
+     * @return true if it"s whitelisted
      */
     public boolean isWhitelisted(final UUID uuid) {
         if (!this.enabled.containsKey(uuid)) {

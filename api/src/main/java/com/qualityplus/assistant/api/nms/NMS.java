@@ -160,15 +160,15 @@ public interface NMS {
     public ChunkGenerator getChunkGenerator();
 
     /**
-     * Set player's max health
+     * Set player"s max health
      *
      * @param player    {@link Player}
-     * @param maxHealth New player's max health
+     * @param maxHealth New player"s max health
      */
     public void setMaxHealth(final Player player, final int maxHealth);
 
     /**
-     * Change world's game rule
+     * Change world"s game rule
      *
      * @param world {@link World}
      * @param key   Game Rule key

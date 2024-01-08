@@ -83,7 +83,7 @@ public class CommandDetails extends OkaeriConfig {
          * Retrieve if is on cooldown for specific key
          *
          * @param t key
-         * @return true if it's on cooldown
+         * @return true if it"s on cooldown
          */
         public boolean isOnCooldown(final T t) {
             return this.cooldownTimes.containsKey(t) && this.cooldownTimes.get(t).toMillis() > System.currentTimeMillis();

@@ -23,7 +23,7 @@ public interface DependencyPlugin {
     /**
      * Retrieves if addon is enabled
      *
-     * @return true if it's enabled
+     * @return true if it"s enabled
      */
     public default boolean isEnabled() {
         return getAddonName() != null;

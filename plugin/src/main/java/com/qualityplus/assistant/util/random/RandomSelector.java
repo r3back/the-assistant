@@ -30,7 +30,7 @@ public final class RandomSelector<T extends Randomable> {
 
     /**
      * Retrieves a random item or null if list is empty
-     * or items aren't more than 1
+     * or items aren"t more than 1
      *
      * @return Generic Random item
      */

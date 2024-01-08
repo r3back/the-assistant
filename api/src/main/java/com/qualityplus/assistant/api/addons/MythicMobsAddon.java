@@ -12,7 +12,7 @@ public interface MythicMobsAddon extends DependencyPlugin {
      * Retrieves if an entity is from Mythic Mobs
      *
      * @param entity {@link Entity}
-     * @return true if it's from mythic mobs
+     * @return true if it"s from mythic mobs
      */
     public boolean isMythicMob(final Entity entity);
 

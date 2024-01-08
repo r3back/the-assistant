@@ -20,7 +20,7 @@ public final class SkinUtil {
     private final static Map<UUID, String[]> CACHE = new HashMap<>();
 
     /**
-     * Get the skin data by a player's unique identifier
+     * Get the skin data by a player"s unique identifier
      *
      * @param uuid the unique identifier to get the skin data by
      * @return the skin data
@@ -47,7 +47,7 @@ public final class SkinUtil {
     }
 
     /**
-     * Get the skin data by a player's unique identifier
+     * Get the skin data by a player"s unique identifier
      *
      * @param uuid the unique identifier to get the skin data by
      * @return the skin data

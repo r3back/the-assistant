@@ -117,12 +117,12 @@ public final class v1_19_R2_Tab extends TabAdapter {
     }
 
     /**
-     * Send an entry's data to a player
+     * Send an entry"s data to a player
      *
      * @param player the player
      * @param axis   the axis of the entry
-     * @param ping   the ping to display on the entry's position
-     * @param text   the text to display on the entry's position
+     * @param ping   the ping to display on the entry"s position
+     * @param text   the text to display on the entry"s position
      * @return the current adapter instance
      */
     @Override
@@ -143,7 +143,7 @@ public final class v1_19_R2_Tab extends TabAdapter {
     }
 
     /**
-     * Add fake players to the player's tablist
+     * Add fake players to the player"s tablist
      *
      * @param player the player to send the fake players to
      * @return the current adapter instance

@@ -22,7 +22,7 @@ public class PlayerUtils {
      * Retrieves player name given an uuid
      *
      * @param uuid {@link UUID} player uuid
-     * @return player's name
+     * @return player"s name
      */
     public String getPlayerName(final UUID uuid) {
         if (uuid == null) {
@@ -38,7 +38,7 @@ public class PlayerUtils {
      *
      * @param list   List of lines
      * @param player {@link Player}
-     * @return List of lines with player's name parsed
+     * @return List of lines with player"s name parsed
      */
     public List<String> parseWithName(final List<String> list, final Player player) {
         return list.stream()

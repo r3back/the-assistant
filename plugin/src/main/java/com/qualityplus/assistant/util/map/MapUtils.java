@@ -14,7 +14,7 @@ import java.util.Optional;
 @UtilityClass
 public class MapUtils {
     /**
-     * Retrieves the input map or an empty map if it's null
+     * Retrieves the input map or an empty map if it"s null
      *
      * @param map input map
      * @return input map or empty map
@@ -27,7 +27,7 @@ public class MapUtils {
     }
 
     /**
-     * Retrieves the input map or the alternative map if it's null
+     * Retrieves the input map or the alternative map if it"s null
      *
      * @param map input map
      * @param or  alternative map

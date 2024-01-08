@@ -45,7 +45,7 @@ public interface RegionAddon extends DependencyPlugin {
     }
 
     /**
-     * Retrieves location's regions
+     * Retrieves location"s regions
      *
      * @param location {@link Location}
      * @return Set of regions

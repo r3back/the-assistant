@@ -115,7 +115,7 @@ public abstract class GUI implements InventoryHolder, ClickableInventory<Item, B
      *
      * @param slot slot
      * @param item {@link Item}
-     * @return true if it's item
+     * @return true if it"s item
      */
     protected boolean isItem(final int slot, final Item item) {
         return item != null && item.isEnabled() && item.getSlot() == slot;
