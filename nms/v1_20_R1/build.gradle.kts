@@ -3,7 +3,7 @@ version = rootProject.version
 
 tasks {
     remap {
-        version.set("1.20")
+        version.set("1.20.2")
     }
 }
 
@@ -22,7 +22,9 @@ dependencies {
     compileOnly("org.spigotmc:spigot:1.20-R0.1-SNAPSHOT:remapped-mojang@jar") {
         isTransitive = false
     }
-    compileOnly("org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20-R0.1-SNAPSHOT") {
+        isTransitive = false
+    }
     compileOnly(project(":nms:nms-commons"))
     implementation("eu.okaeri:okaeri-platform-bukkit:0.4.0-preview54")
 }
