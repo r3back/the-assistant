@@ -3,7 +3,7 @@ version = rootProject.version
 
 tasks {
     remap {
-        version.set("1.20")
+        version.set("1.20.2")
     }
 }
 

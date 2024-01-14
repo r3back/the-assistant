@@ -20,8 +20,13 @@ dependencies {
     implementation("io.freefair.gradle:lombok-plugin:8.4")
 }
 
+
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(18))
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
+}
+
+kotlin {
+    jvmToolchain(17)
 }

@@ -52,6 +52,7 @@ val copyJars = {
             val path = "$folder/all-generated/$name"
             val testPath = "$folder/test-suite/mc-config/plugins/$name"
 
+            println("Moved project to: $folder/all-generated/$name")
             file.get().asFile.copyTo(File(path), true)
             file.get().asFile.copyTo(File(testPath), true)
         }
@@ -80,12 +81,19 @@ dependencies {
     implementation(project(":api"))
     implementation(project(":nms"))
 
-
     val addonsModules = project(":addons").dependencyProject.subprojects
     val nmsModules = project(":nms").dependencyProject.subprojects
     addonsModules.forEach { implementation(it) }
-    nmsModules.forEach { implementation(it) }
-
+    nmsModules.forEach {
+        run {
+            if (it.name.contains("v1_20_R2")) {
+                implementation(project(":nms:${it.name}", "remapped"))
+                //implementation(it)
+            } else {
+                implementation(it)
+            }
+        }
+    }
 
     okaeriDependencies.forEach{ implementation (it) }
     driverDependencies.forEach{ implementation (it) }
@@ -99,9 +107,71 @@ dependencies {
 
 tasks {
     shadowJar {
-        //archiveClassifier.set("")
+        archiveClassifier.set("")
 
-        relocateMap.forEach { (k, v) -> relocate(k, v)}
+        dependencies {
+            //include("com.qualityplus.helper:.*")
+            include(dependency("com.h2database:.*"))
+            include(dependency("com.github.cryptomorin:.*"))
+            include(dependency("i18n-platform-commands:.*"))
+            include(dependency("eu.okaeri:.*"))
+            include(dependency("org.json.simple:.*"))
+            include(dependency("org.mariadb.jdbc:.*"))
+            include(dependency("com.zaxxer:.*"))
+            include(dependency("org.slf4j:.*"))
+            include(dependency("com.googlecode.json-simple:.*"))
+            include(dependency("org.jetbrains:.*"))
+            include(dependency("de.tr7zw:.*"))
+            include(dependency("xyz.xenondevs:.*"))
+            //include(dependency("org.mongodb:.*"))
+            //include(dependency("io.lettuce:lettuce-core:.*"))
+
+            include(dependency("org.mongodb:mongodb-driver-sync:.*"))
+            include(dependency("com.github.InventivetalentDev:BossBarAPI:.*"))
+            include(dependency("mysql:.*"))
+
+            include(project(":api"))
+            include(project(":addons"))
+            include(project(":addons:world-manager"))
+            include(project(":addons:addons-commons"))
+            include(project(":addons:economy"))
+            include(project(":addons:npc"))
+            include(project(":addons:mmo-items"))
+            include(project(":addons:placeholders"))
+            include(project(":addons:mythic-mobs"))
+
+            include(project(":addons:paster"))
+            include(project(":addons:paster:paster-commons"))
+            include(project(":addons:paster:world-edit-6"))
+            include(project(":addons:paster:world-edit-7"))
+            include(project(":addons:regions"))
+            include(project(":addons:regions:regions-commons"))
+            include(project(":addons:regions:residence"))
+            include(project(":addons:regions:ultra-regions"))
+            include(project(":addons:regions:world-guard-6"))
+            include(project(":addons:regions:world-guard-7"))
+
+            include(project(":nms"))
+            include(project(":nms:nms-commons"))
+            include(project(":nms:v1_8_R1"))
+            include(project(":nms:v1_8_R3"))
+            include(project(":nms:v1_12_R1"))
+            include(project(":nms:v1_13_R1"))
+            include(project(":nms:v1_14_R1"))
+            include(project(":nms:v1_15_R1"))
+            include(project(":nms:v1_16_R1"))
+            include(project(":nms:v1_16_R3"))
+            include(project(":nms:v1_17_R1"))
+            include(project(":nms:v1_18_R1"))
+            include(project(":nms:v1_18_R2"))
+            include(project(":nms:v1_19_R1"))
+            include(project(":nms:v1_19_R2"))
+            include(project(":nms:v1_19_R3"))
+            include(project(":nms:v1_20_R1"))
+            include(project(":nms:v1_20_R2"))
+        }
+
+        relocateMap.forEach { k, v -> relocate(k, v)}
 
         doLast {
             @Suppress("UNCHECKED_CAST")

@@ -1,5 +1,3 @@
-import com.gradle.scan.agent.serialization.scan.serializer.kryo.it
-
 plugins {
     base
     idea
@@ -7,12 +5,6 @@ plugins {
     id("maven-publish")
     id("java")
 }
-
-
-val assistant_dependencies = setOf(":plugin",
-                              ":api",
-                              ":addons:addons-commons",
-                              ":nms:nms-commons")
 
 group = "com.github.r3back"
 version = "3.2.11"
@@ -22,20 +14,15 @@ subprojects {
     //plugins.apply("checkstyle")
     plugins.apply("maven-publish")
 
-    val moduleName = this.name
-    val nmsRegex = "v1_[0-9]+_R[0-9]+".toRegex()
     val mappingModules = setOf("v1_20_R2", "v1_20_R1")
 
-    /*if (nmsRegex.containsMatchIn(moduleName)) {
-        plugins.apply("the-assistant-mapping")
-    }*/
     if (mappingModules.contains(this.name)) {
         plugins.apply("the-assistant-mapping")
     }
 
     tasks.withType<JavaCompile> {
-        sourceCompatibility = "18"
-        targetCompatibility = "18"
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
     }
 
     repositories {

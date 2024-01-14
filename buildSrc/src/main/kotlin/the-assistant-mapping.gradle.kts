@@ -12,7 +12,10 @@ tasks.named("build").get().dependsOn("remap")
 
 configurations {
     create("remapped") {
-        val resultFile = File(File(project.buildDir, "libs"), "${project.name}-${project.version}-remapped.jar")
+        println("File: ${project.buildDir.absolutePath}")
+
+        val resultFile = File(File(project.buildDir, "libs"), "${project.name}-${rootProject.version}-remapped.jar")
+        println("resultFile: ${resultFile.name}")
 
         val files = project.files(resultFile)
         files.builtBy("remap")
