@@ -9,7 +9,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import sun.misc.Unsafe;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,6 +21,17 @@ import java.util.Map;
 public abstract class TabAdapter {
     public static final Map<String, TeamInfo> PLAYER_COLORS = new HashMap<>();
     private static final Integer ROWS = 2;
+    protected static Unsafe unsafe;
+
+    static {
+        try {
+            final Field field = Unsafe.class.getDeclaredField("theUnsafe");
+            field.setAccessible(true);
+            unsafe = (Unsafe) field.get(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Setup the profiles of the tab adapter

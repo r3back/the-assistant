@@ -1,15 +1,6 @@
-group = rootProject.group
-version = rootProject.version
-
 tasks {
     remap {
         version.set("1.20")
-    }
-}
-
-repositories {
-    maven("https://repo.codemc.org/repository/nms/") {
-        name = "CodeMC"
     }
 }
 
@@ -18,8 +9,6 @@ dependencies {
     compileOnly("com.mojang:authlib:1.5.25")
     compileOnly("com.mojang:brigadier:1.0.18")
     compileOnly("io.netty:netty-all:4.1.90.Final")
-    compileOnly(project(":nms:nms-commons"))
-    implementation("eu.okaeri:okaeri-platform-bukkit:0.4.0-preview54")
 
     compileOnly("org.spigotmc:spigot:1.20-R0.1-SNAPSHOT:remapped-mojang@jar") {
         isTransitive = false

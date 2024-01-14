@@ -6,16 +6,15 @@ import com.qualityplus.assistant.api.gui.fake.FakeInventoryImpl;
 import com.qualityplus.assistant.api.util.FakeInventoryFactory;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.Getter;
-import net.minecraft.core.BlockPosition;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.protocol.EnumProtocolDirection;
-import net.minecraft.network.protocol.game.PacketPlayOutBlockBreakAnimation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.EntityPlayer;
-import net.minecraft.server.level.WorldServer;
-import net.minecraft.server.network.PlayerConnection;
-import net.minecraft.world.entity.boss.EntityComplexPart;
-import net.minecraft.world.entity.player.ProfilePublicKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.entity.boss.EnderDragonPart;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
@@ -90,18 +89,18 @@ public final class v1_19_R1 extends AbstractNMS {
         final int y = block.getY();
         final int z = block.getZ();
 
-        final BlockPosition position = new BlockPosition(x, y, z);
+        final BlockPos position = new BlockPos(x, y, z);
 
         //Keeps the same id to prevent packet glitch
         final Integer id = Optional.ofNullable(this.clickCache.getIfPresent(block)).orElse(new Random().nextInt(2000));
 
         this.clickCache.put(block, id);
 
-        final PacketPlayOutBlockBreakAnimation packet = new PacketPlayOutBlockBreakAnimation(id, position, damage);
+        final ClientboundBlockDestructionPacket packet = new ClientboundBlockDestructionPacket(id, position, damage);
 
         players.stream()
                 .filter(Objects::nonNull)
-                .forEach(player -> ((CraftPlayer) player).getHandle().b.a(packet));
+                .forEach(player -> ((CraftPlayer) player).getHandle().connection.send(packet));
     }
 
     @Override
@@ -110,12 +109,8 @@ public final class v1_19_R1 extends AbstractNMS {
     }
 
     @Override
-    public void removeFakePlayer(final FakeInventory fakeInventory) {
-    }
-
-    @Override
     public InventoryView createWorkBench(final Player player) {
-        final EntityPlayer entityPlayer = getFakePlayer("Fake Inventory");
+        final ServerPlayer entityPlayer = getFakePlayer("Fake Inventory");
 
         return entityPlayer.getBukkitEntity().openWorkbench(entityPlayer.getBukkitEntity().getLocation(), true);
     }
@@ -139,24 +134,28 @@ public final class v1_19_R1 extends AbstractNMS {
         return getInventory(inventory, maxSlots);
     }
 
+
+    @Override
+    public void removeFakePlayer(final FakeInventory fakeInventory) {
+    }
+
     private FakeInventory getInventory(final Inventory inventory, final int maxSlots) {
         return new FakeInventoryImpl(inventory, maxSlots);
     }
 
-    private EntityPlayer getFakePlayer(final String name) {
+    private ServerPlayer getFakePlayer(final String name) {
         final World playerWorld = Bukkit.getWorlds().get(0);
         final Location location = new Location(playerWorld, 0, 0, 0);
         final MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
-        final WorldServer worldServer = ((CraftWorld) playerWorld).getHandle();
-        final ProfilePublicKey profilePublicKey = null;
-        final EntityPlayer fakePlayer = new EntityPlayer(minecraftServer, worldServer,
-                new GameProfile(UUID.randomUUID(), name), profilePublicKey);
-        fakePlayer.getBukkitEntity().setMetadata("NPC",
-                new FixedMetadataValue(this.plugin, "UUID"));
-        fakePlayer.a(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        fakePlayer.b = new PlayerConnection(minecraftServer,
-                new NetworkManager(EnumProtocolDirection.a), fakePlayer);
-        worldServer.b(fakePlayer);
+        final ServerLevel worldServer = ((CraftWorld) playerWorld).getHandle();
+        final UUID uuid = UUID.randomUUID();
+        final ServerPlayer fakePlayer = new ServerPlayer(minecraftServer, worldServer, new GameProfile(uuid, name), null);
+        fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(this.plugin, "UUID"));
+        fakePlayer.forceSetPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        final Connection connection = new Connection(PacketFlow.SERVERBOUND);
+        fakePlayer.connection = new ServerGamePacketListenerImpl(minecraftServer, connection, fakePlayer);
+        worldServer.addDuringPortalTeleport(fakePlayer);
+        Bukkit.getOnlinePlayers().forEach(player1 -> player1.hidePlayer(fakePlayer.getBukkitEntity()));
         return fakePlayer;
     }
 
@@ -167,13 +166,11 @@ public final class v1_19_R1 extends AbstractNMS {
 
     @Override
     public Location getDragonPart(final EnderDragon enderDragon, final DragonPart dragonPart) {
-        final EntityComplexPart part = ((CraftEnderDragon) enderDragon).getHandle().e;
+        final EnderDragonPart part = ((CraftEnderDragon) enderDragon).getHandle().head;
 
-        final double x = part.t;
-        final double y = dragonPart.equals(DragonPart.HEAD) ?
-                part.u :
-                part.u - DragonPart.BODY.getNmsDistance();
-        final double z = part.v;
+        final double x = part.xo;
+        final double y = dragonPart.equals(DragonPart.HEAD) ? part.yo : part.yo - DragonPart.BODY.getNmsDistance();
+        final double z = part.zo;
 
         return new Location(enderDragon.getWorld(), x, y, z);
     }
@@ -193,6 +190,7 @@ public final class v1_19_R1 extends AbstractNMS {
 
     @Override
     public void setEnderEye(final Block block, final boolean setEnderEye) {
+
         if (!(block.getBlockData() instanceof EndPortalFrame)) {
             return;
         }

@@ -13,8 +13,7 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
 import net.minecraft.network.protocol.game.ClientboundRespawnPacket;
 import net.minecraft.network.protocol.game.ClientboundTabListPacket;
 import net.minecraft.server.MinecraftServer;
@@ -22,9 +21,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -42,13 +41,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * NMS Tab Implementation for Spigot v1_20_R1
+ * NMS Tab Implementation for Spigot v1_18_R2
  */
-public final class v1_20_R1_Tab extends TabAdapter {
+public final class v1_18_R2_Tab extends TabAdapter {
     private final Map<Player, GameProfile[]> profiles = new HashMap<>();
     private final List<Player> initialized = new ArrayList<>();
     private static final Integer MAX_SLOTS = 24;
-
 
     /**
      * Send a packet to the player
@@ -104,7 +102,7 @@ public final class v1_20_R1_Tab extends TabAdapter {
             profile.getProperties().remove("textures", property);
             profile.getProperties().put("textures", new Property("textures", skinData[0], skinData[1]));
 
-            this.sendInfoPacket(player, ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, entityPlayer);
+            this.sendInfoPacket(player, ClientboundPlayerInfoPacket.Action.ADD_PLAYER, entityPlayer);
         }
     }
 
@@ -149,7 +147,7 @@ public final class v1_20_R1_Tab extends TabAdapter {
         setFakePing(entityPlayer.getBukkitEntity());
 
         this.setupScoreboard(player, text, profile.getName());
-        this.sendInfoPacket(player, ClientboundPlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE, entityPlayer);
+        this.sendInfoPacket(player, ClientboundPlayerInfoPacket.Action.UPDATE_GAME_MODE, entityPlayer);
 
         return this;
     }
@@ -167,7 +165,7 @@ public final class v1_20_R1_Tab extends TabAdapter {
                 final GameProfile profile = this.profiles.get(player)[i];
                 final ServerPlayer entityPlayer = this.getEntityPlayer(profile);
 
-                this.sendInfoPacket(player, ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, entityPlayer);
+                this.sendInfoPacket(player, ClientboundPlayerInfoPacket.Action.ADD_PLAYER, entityPlayer);
             }
 
             this.initialized.add(player);
@@ -177,7 +175,7 @@ public final class v1_20_R1_Tab extends TabAdapter {
     }
 
     /**
-     * Set fake ping to player
+     * Set Fake ping to player
      *
      * @param play {@link Player}
      */
@@ -205,6 +203,7 @@ public final class v1_20_R1_Tab extends TabAdapter {
                 final int ping = (int) pingField.get(player);
 
                 ob.getScore(play).setScore(ping);
+
 
                 final TeamInfo teamInfo = TabAdapter.PLAYER_COLORS.getOrDefault(p.getName(), null);
 
@@ -272,7 +271,9 @@ public final class v1_20_R1_Tab extends TabAdapter {
     @Override
     public TabAdapter hidePlayer(final Player player, final Player target) {
         if (player.canSee(target) || target.equals(player)) {
-            this.getPlayerConnection(player).send(new ClientboundPlayerInfoRemovePacket(Collections.singletonList(getHandle(target).getUUID())));
+            final ServerPlayer entityPlayer = ((CraftPlayer) target).getHandle();
+            final List<ServerPlayer> playersToHide = Collections.singletonList(entityPlayer);
+            this.getPlayerConnection(player).send(new ClientboundPlayerInfoPacket(ClientboundPlayerInfoPacket.Action.REMOVE_PLAYER, playersToHide));
         }
 
         return this;
@@ -321,7 +322,6 @@ public final class v1_20_R1_Tab extends TabAdapter {
         return this;
     }
 
-
     /**
      * Show a real player to a player
      *
@@ -331,7 +331,7 @@ public final class v1_20_R1_Tab extends TabAdapter {
      */
     @Override
     public TabAdapter showPlayer(final Player player, final Player target) {
-        this.sendInfoPacket(player, ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, target);
+        this.sendInfoPacket(player, ClientboundPlayerInfoPacket.Action.ADD_PLAYER, target);
 
         return this;
     }
@@ -377,26 +377,27 @@ public final class v1_20_R1_Tab extends TabAdapter {
     }
 
     /**
-     * Send the {@link ClientboundPlayerInfoUpdatePacket} to a player
+     * Send the {@link ClientboundPlayerInfoPacket} to a player
      *
      * @param player the player
      * @param action the action
      * @param target the target
      */
-    private void sendInfoPacket(final Player player, final ClientboundPlayerInfoUpdatePacket.Action action, final ServerPlayer target) {
-        this.sendPacket(player, new ClientboundPlayerInfoUpdatePacket(action, target));
+    private void sendInfoPacket(final Player player, final ClientboundPlayerInfoPacket.Action action, final ServerPlayer target) {
+        this.sendPacket(player, new ClientboundPlayerInfoPacket(action, target));
     }
 
     /**
-     * Send the {@link ClientboundPlayerInfoUpdatePacket} to a player
+     * Send the {@link ClientboundPlayerInfoPacket} to a player
      *
      * @param player the player
      * @param action the action
      * @param target the target
      */
-    private void sendInfoPacket(final Player player, final ClientboundPlayerInfoUpdatePacket.Action action, final Player target) {
+    private void sendInfoPacket(final Player player, final ClientboundPlayerInfoPacket.Action action, final Player target) {
         this.sendInfoPacket(player, action, ((CraftPlayer) target).getHandle());
     }
+
 
     /**
      * Create a new game profile

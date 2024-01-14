@@ -7,7 +7,6 @@ import com.qualityplus.assistant.api.util.FakeInventoryFactory;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.Getter;
 import net.minecraft.server.v1_16_R3.BlockPosition;
-import net.minecraft.server.v1_16_R3.DedicatedPlayerList;
 import net.minecraft.server.v1_16_R3.EntityComplexPart;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.EnumProtocolDirection;
@@ -203,11 +202,7 @@ public final class v1_16_R3 extends AbstractNMS {
 
     @Override
     public void respawnPlayer(final Player player) {
-        final DedicatedPlayerList playerList = ((CraftServer) Bukkit.getServer()).getHandle();
-
-        final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
-
-        playerList.moveToWorld(entityPlayer, false);
+        player.spigot().respawn();
     }
 
     @Override

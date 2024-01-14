@@ -21,50 +21,27 @@ val driverDependencies = setOf("com.zaxxer:HikariCP:4.0.3",
     "mysql:mysql-connector-java:8.0.27",
     "org.mongodb:mongodb-driver-sync:4.6.1")
 
-val relocateMap = mutableMapOf("com.cryptomorin.xseries" to "com.qualityplus.assistant.lib.com.cryptomorin.xseries",
-    "i18n-platform-commands" to "com.qualityplus.assistant.lib.i18n-platform-commands",
-    "eu.okaeri" to "com.qualityplus.assistant.lib.eu.okaeri",
-    "com.zaxxer.hikari" to "com.qualityplus.assistant.lib.com.zaxxer.hikari",
-    /*"io.netty": "com.qualityplus.assistant.lib.io.netty",*/
-    "org.json.simple" to "com.qualityplus.assistant.lib.org.json.simple",
-    "org.reactivestreams" to "com.qualityplus.assistant.lib.org.reactivestreams",
-    "reactor" to "com.qualityplus.assistant.lib.reactor",
-    "org.slf4j" to "com.qualityplus.assistant.lib.org.slf4j",
-    "org.h2" to "com.qualityplus.assistant.lib.org.h2",
-    "org.mariadb.jdbc" to "com.qualityplus.assistant.lib.org.mariadb.jdbc",
-    "org.intellij.lang.annotations" to "com.qualityplus.assistant.lib.org.intellij.lang.annotations",
-    "org.inventivetalent" to "com.qualityplus.assistant.lib.org.inventivetalent",
-    "xyz.xenondevs.particle" to "com.qualityplus.assistant.lib.xyz.xenondevs.particle",
-    "org.jetbrains.annotations" to "com.qualityplus.assistant.lib.org.jetbrains.annotations",
-    "de.tr7zw" to "com.qualityplus.assistant.lib.de.tr7zw",
-    "com.mysql" to "com.qualityplus.assistant.lib.com.mysql",
-    "com.mongodb" to "com.qualityplus.assistant.lib.com.mongodb"/*,
-                        "io.lettuce": "com.qualityplus.assistant.lib.io.lettuce",
-                        "io.bson": "com.qualityplus.assistant.lib.io.bson"*/
-)
+val relocatePackages = setOf("com.cryptomorin.xseries",
+    "i18n-platform-commands", "eu.okaeri",
+    "com.zaxxer.hikari", "org.json.simple",
+    "org.reactivestreams", "reactor",
+    "org.slf4j", "org.h2", "org.mariadb.jdbc",
+    "org.intellij.lang.annotations", "org.inventivetalent",
+    "xyz.xenondevs.particle", "org.jetbrains.annotations",
+    "de.tr7zw", "com.mysql", "com.mongodb")
 
 val copyJars = {
         file: Provider<RegularFile> -> run {
-            val name = file.get().asFile.name
-
             val folder = rootProject.rootDir.absolutePath
 
-            val path = "$folder/all-generated/$name"
-            val testPath = "$folder/test-suite/mc-config/plugins/$name"
+            val newFileName = "${rootProject.name}-${rootProject.version}.jar"
+
+            val path = "${folder}/all-generated/${newFileName}"
+            val testPath = "${folder}/test-suite/mc-config/plugins/${newFileName}"
 
             file.get().asFile.copyTo(File(path), true)
             file.get().asFile.copyTo(File(testPath), true)
         }
-}
-
-repositories {
-    //TODO CHECK THIS
-    maven("org.spigotmc:") {
-        name = "Spigot"
-    }
-    maven("https://repo.dmulloy2.net/repository/public/") {
-        name = "Dmulloy2 ProtocolLib"
-    }
 }
 
 dependencies {
@@ -74,8 +51,6 @@ dependencies {
     implementation("com.comphenix.protocol:ProtocolLib:4.7.0")
     implementation("com.github.InventivetalentDev:BossBarAPI:2.4.3-SNAPSHOT")
     implementation("com.github.r3back:fast-try:0.0.6")
-    //implementation "io.lettuce:lettuce-core:6.1.1.RELEASE"
-    //implementation "org.mongodb:mongo-java-driver:3.12.10"
 
     implementation(project(":api"))
     implementation(project(":nms"))
@@ -87,7 +62,6 @@ dependencies {
         run {
             if (it.name.contains("v1_20_R2")) {
                 implementation(project(":nms:${it.name}", "remapped"))
-                //implementation(it)
             } else {
                 implementation(it)
             }
@@ -99,7 +73,6 @@ dependencies {
 
     implementation("de.tr7zw:item-nbt-api:2.11.3")
     implementation("xyz.xenondevs:particle:1.8.4")
-
     implementation("org.slf4j:slf4j-nop:2.0.5")
 }
 
@@ -109,7 +82,6 @@ tasks {
         archiveClassifier.set("")
 
         dependencies {
-            //include("com.qualityplus.helper:.*")
             include(dependency("com.h2database:.*"))
             include(dependency("com.github.cryptomorin:.*"))
             include(dependency("i18n-platform-commands:.*"))
@@ -122,8 +94,6 @@ tasks {
             include(dependency("org.jetbrains:.*"))
             include(dependency("de.tr7zw:.*"))
             include(dependency("xyz.xenondevs:.*"))
-            //include(dependency("org.mongodb:.*"))
-            //include(dependency("io.lettuce:lettuce-core:.*"))
 
             include(dependency("org.mongodb:mongodb-driver-sync:.*"))
             include(dependency("com.github.InventivetalentDev:BossBarAPI:.*"))
@@ -170,11 +140,18 @@ tasks {
             include(project(":nms:v1_20_R2"))
         }
 
-        relocateMap.forEach { k, v -> relocate(k, v)}
+        relocatePackages.forEach { packageName -> relocate(packageName, "com.qualityplus.assistant.lib.${packageName}")}
 
         doLast {
-            @Suppress("UNCHECKED_CAST")
             (copyJars as? ((Provider<RegularFile>) -> File) ?: return@doLast)(archiveFile)
+        }
+    }
+    build {
+        dependsOn(shadowJar)
+    }
+    processResources {
+        filesMatching(listOf("plugin.yml")) {
+            expand("version" to project.version)
         }
     }
 }

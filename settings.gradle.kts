@@ -8,6 +8,7 @@ pluginManagement {
         }
     }
     plugins {
+        id("checkstyle")
         id("com.github.johnrengelman.shadow") version "8.1.1"
         id("org.cadixdev.licenser") version "0.6.1"
         id("net.kyori.indra") version "3.1.3"
@@ -32,43 +33,18 @@ include (
         "addons",
         "api",
         "plugin",
-        "addons:addons-commons",
-        "addons:economy",
-        "addons:mmo-items",
-        "addons:mythic-mobs",
-        "addons:npc",
-        "addons:placeholders",
-        "addons:world-manager",
-
-        "addons:regions",
-        "addons:paster",
-        "addons:paster:paster-commons",
-        "addons:paster:world-edit-6",
-        "addons:paster:world-edit-7",
-        "addons:regions:regions-commons",
-        "addons:regions:residence",
-        "addons:regions:ultra-regions",
-        "addons:regions:world-guard-6",
-        "addons:regions:world-guard-7",
-
         "nms",
-        "nms:nms-commons",
-        "nms:v1_8_R1",
-        "nms:v1_8_R3",
-        "nms:v1_12_R1",
-        "nms:v1_13_R1",
-        "nms:v1_14_R1",
-        "nms:v1_15_R1",
-        "nms:v1_16_R1",
-        "nms:v1_16_R3",
-        "nms:v1_17_R1",
-        "nms:v1_18_R1",
-        "nms:v1_18_R2",
-        "nms:v1_19_R1",
-        "nms:v1_19_R2",
-        "nms:v1_19_R3",
-        "nms:v1_20_R1",
-        "nms:v1_20_R2",
 )
+
+setOf("regions", "paster", "paster:paster-commons", "paster:world-edit-6", "paster:world-edit-7",
+    "regions:regions-commons", "regions:residence", "regions:ultra-regions",
+    "regions:world-guard-6", "regions:world-guard-7", "addons-commons", "economy",
+    "mmo-items", "mythic-mobs", "npc", "placeholders", "world-manager", "regions", "paster",
+    "paster:paster-commons").forEach { include("addons:${it}") }
+
+setOf("nms-commons", "v1_8_R1", "v1_8_R3", "v1_12_R1", "v1_13_R1",
+    "v1_14_R1", "v1_15_R1", "v1_16_R1", "v1_16_R3", "v1_17_R1",
+    "v1_18_R1", "v1_18_R2", "v1_19_R1", "v1_19_R2", "v1_19_R3",
+    "v1_20_R1", "v1_20_R2").forEach { include("nms:${it}") }
 
 

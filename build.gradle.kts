@@ -3,6 +3,7 @@ plugins {
     idea
     id("com.github.johnrengelman.shadow")
     id("maven-publish")
+    id("checkstyle")
     id("java")
 }
 
@@ -10,25 +11,21 @@ group = "com.github.r3back"
 version = "3.2.11"
 
 subprojects {
+    group = rootProject.group
+    version = rootProject.version
+
     plugins.apply("java")
-    //plugins.apply("checkstyle")
+    plugins.apply("checkstyle")
     plugins.apply("maven-publish")
 
-    val mappingModules = setOf("v1_20_R2", "v1_20_R1")
+    val regex = """v\d_[0-9]+_R\d""".toRegex()
 
-    if (mappingModules.contains(this.name)) {
+    if (regex.containsMatchIn(this.name)) {
         plugins.apply("the-assistant-mapping")
-    }
-
-    tasks.withType<JavaCompile> {
-        sourceCompatibility = "17"
-        targetCompatibility = "17"
     }
 
     repositories {
         mavenCentral()
-        //NMS Repo
-
         maven("https://repo.rosewooddev.io/repository/public/") {
             name = "RosewoodDev"
         }
@@ -60,22 +57,37 @@ subprojects {
 
     dependencies {
         implementation("org.jetbrains:annotations:22.0.0")
-
         compileOnly("org.projectlombok:lombok:1.18.30")
 
         // Enable lombok annotation processing
         annotationProcessor("org.projectlombok:lombok:1.18.30")
     }
 
-    /*checkstyle {
+
+    tasks.withType<JavaCompile> {
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
+    }
+
+    val projectSourceSets = sourceSets
+    val checkStyleFile = "${rootProject.projectDir.absolutePath}/config/checkstyle/checkstyle.xml"
+
+    checkstyle {
         toolVersion = "8.20"
-        configFile = file(rootProject.projectDir.getAbsolutePath() + "/config/checkstyle/checkstyle.xml")
-        ignoreFailures = false
-        showViolations = true
-        showViolations = true
+        configFile = file(checkStyleFile)
+        config = resources.text.fromFile(checkStyleFile)
+        isIgnoreFailures = false
+        isShowViolations = true
+        isShowViolations = true
         maxWarnings = 0
-        sourceSets = [sourceSets.main]
-    }*/
+        sourceSets = mutableListOf(projectSourceSets.main.get())
+    }
+
+    tasks {
+        build {
+            dependsOn(checkstyleMain)
+        }
+    }
 }
 
 

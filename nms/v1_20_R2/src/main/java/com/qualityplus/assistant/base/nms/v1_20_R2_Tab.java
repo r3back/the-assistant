@@ -31,7 +31,6 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -50,17 +49,6 @@ public final class v1_20_R2_Tab extends TabAdapter {
     private final Map<Player, GameProfile[]> profiles = new HashMap<>();
     private final List<Player> initialized = new ArrayList<>();
     private static final Integer MAX_SLOTS = 24;
-    private static Unsafe unsafe;
-
-    static {
-        try {
-            final Field field = Unsafe.class.getDeclaredField("theUnsafe");
-            field.setAccessible(true);
-            unsafe = (Unsafe) field.get(null);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Send a packet to the player
