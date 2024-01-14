@@ -28,14 +28,14 @@ Libraries aimed to developers with multiple functions that will make you things 
 ```groovy
 repositories {
     maven { 
-        url "https://jitpack.io" 
+        url 'https://jitpack.io' 
     }
 }
 ```
 
 ```groovy
 dependencies {
-    compileOnly "com.github.r3back:the-assistant:LATEST"
+    compileOnly 'com.github.r3back:the-assistant:LATEST'
 }
 ```
 
@@ -43,7 +43,7 @@ dependencies {
 The-Assistant uses Gradle to handle dependencies & building.
 
 ### Requirements
-* Java 8 JDK or newer
+* Java 17 JDK or newer
 * Git
 
 ### Compiling from source
