@@ -99,7 +99,7 @@ public final class LocationUtils {
     }
 
     private String getWorld(final Location location) {
-        //Don"t change this to prevent getName taken from WorldInfo
+        //Don't change this to prevent getName taken from WorldInfo
         return Optional.ofNullable(location.getWorld())
                 .map(world1 -> world1.getName())
                 .orElse(NULL_LOCATION_FORMAT);
