@@ -59,7 +59,7 @@ public final class NumberUtil {
 
     /**
      * Retrieves a string converted to number or a null if
-     * there"s an exception during conversion
+     * there's an exception during conversion
      *
      * @param toTraslate string number
      * @return number or null
@@ -74,7 +74,7 @@ public final class NumberUtil {
 
     /**
      * Retrieves a string converted to number or a zero if
-     * there"s an exception during conversion
+     * there's an exception during conversion
      *
      * @param toTraslate string number
      * @return number or zero
@@ -89,7 +89,7 @@ public final class NumberUtil {
 
     /**
      * Retrieves a string converted to number or alternative number if
-     * there"s an exception during conversion
+     * there's an exception during conversion
      *
      * @param toTraslate string number
      * @param number     alternative number
@@ -105,7 +105,7 @@ public final class NumberUtil {
 
     /**
      * Retrieves a string converted to number or a null if
-     * there"s an exception during conversion
+     * there's an exception during conversion
      *
      * @param toTraslate string number
      * @return number or null
@@ -120,7 +120,7 @@ public final class NumberUtil {
 
     /**
      * Retrieves a string converted to number or a zero if
-     * there"s an exception during conversion
+     * there's an exception during conversion
      *
      * @param toTraslate string number
      * @return number or zero
@@ -134,7 +134,7 @@ public final class NumberUtil {
     }
 
     /**
-     * Retrieves the number in a string or zero if there"s
+     * Retrieves the number in a string or zero if there's
      * nothing
      *
      * @param from text to find

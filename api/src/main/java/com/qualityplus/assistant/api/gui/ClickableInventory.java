@@ -56,7 +56,7 @@ public interface ClickableInventory<T, B> {
      *
      * @param clickedSlot clicked slot
      * @param background  Generic Inventory background
-     * @return true if it"s clicking decoration
+     * @return true if it's clicking decoration
      */
     public boolean isClickingDecoration(final Integer clickedSlot, final B background);
 }

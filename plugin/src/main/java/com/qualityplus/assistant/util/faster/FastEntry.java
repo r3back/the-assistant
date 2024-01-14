@@ -49,7 +49,7 @@ public final class FastEntry<T, K> implements Map.Entry<T, K> {
     }
 
     /**
-     * Update entry"s value
+     * Update entry's value
      *
      * @param value new value to be stored in this entry
      * @return entry

@@ -125,7 +125,7 @@ public final class Cuboid implements Iterable<Block>, ConfigurationSerializable 
      * Retrieves if a location is inside cuboid
      *
      * @param location {@link Location}
-     * @return true if it"s inside
+     * @return true if it's inside
      */
     public boolean isInside(final Location location) {
         final Vector v1 = getVector(this.minLocation);
