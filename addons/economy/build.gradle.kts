@@ -1,6 +1,3 @@
-group = rootProject.group
-version = rootProject.version
-
 repositories {
     maven("https://nexus.lucko.me/repository/all/") {
         name = "Lucko"

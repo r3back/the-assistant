@@ -1,6 +1,3 @@
-group = rootProject.group
-version = rootProject.version
-
 repositories{
     maven("https://mvn.lumine.io/repository/maven-public/") {
         name = "Lumine"

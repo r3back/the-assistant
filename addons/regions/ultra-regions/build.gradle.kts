@@ -1,6 +1,3 @@
-group = rootProject.group
-version = rootProject.version
-
 repositories {
     maven("https://repo.techscode.com/repository/maven-releases/") {
         name = "TechsCodeAPI"

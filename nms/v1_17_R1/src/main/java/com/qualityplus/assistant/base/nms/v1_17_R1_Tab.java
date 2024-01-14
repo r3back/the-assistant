@@ -142,7 +142,7 @@ public final class v1_17_R1_Tab extends TabAdapter {
     }
 
     /**
-     * Add fake players to the player"s tablist
+     * Add fake players to the player's tablist
      *
      * @param player the player to send the fake players to
      * @return the current adapter instance

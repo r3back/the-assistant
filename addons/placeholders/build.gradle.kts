@@ -1,6 +1,3 @@
-group = rootProject.group
-version = rootProject.version
-
 repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
         name = "PlaceholderAPI"

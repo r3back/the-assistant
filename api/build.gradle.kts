@@ -1,6 +1,3 @@
-group = rootProject.group
-version = rootProject.version
-
 dependencies {
     compileOnly("eu.okaeri:okaeri-persistence-mongo:1.5.12")
     compileOnly("com.zaxxer:HikariCP:4.0.3")
