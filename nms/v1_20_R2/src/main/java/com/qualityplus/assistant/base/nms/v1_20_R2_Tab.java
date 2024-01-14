@@ -43,7 +43,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * NMS Tab Implementation for Spigot v1_20_R1
+ * NMS Tab Implementation for Spigot v1_20_R2
  */
 public final class v1_20_R2_Tab extends TabAdapter {
     private final Map<Player, GameProfile[]> profiles = new HashMap<>();

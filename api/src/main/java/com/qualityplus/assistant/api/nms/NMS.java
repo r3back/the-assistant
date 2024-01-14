@@ -168,7 +168,7 @@ public interface NMS {
     public void setMaxHealth(final Player player, final int maxHealth);
 
     /**
-     * Change world"s game rule
+     * Change world's game rule
      *
      * @param world {@link World}
      * @param key   Game Rule key

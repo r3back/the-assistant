@@ -1,5 +1,3 @@
-import com.gradle.scan.agent.serialization.scan.serializer.kryo.it
-
 plugins {
     id ("java-library")
     id ("com.github.johnrengelman.shadow")

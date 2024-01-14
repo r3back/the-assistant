@@ -53,7 +53,7 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * NMS Implementation for Spigot v1_19_R3
+ * NMS Implementation for Spigot v1_20_R2
  */
 public final class v1_20_R2 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
