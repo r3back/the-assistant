@@ -52,7 +52,6 @@ val copyJars = {
             val path = "$folder/all-generated/$name"
             val testPath = "$folder/test-suite/mc-config/plugins/$name"
 
-            println("Moved project to: $folder/all-generated/$name")
             file.get().asFile.copyTo(File(path), true)
             file.get().asFile.copyTo(File(testPath), true)
         }
