@@ -16,6 +16,5 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.20.2-experimental-SNAPSHOT") {
         isTransitive = false
     }
-
 }
 

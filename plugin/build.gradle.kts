@@ -58,7 +58,7 @@ dependencies {
     addonsModules.forEach { implementation(it) }
     nmsModules.forEach {
         run {
-            if (it.name.contains("v1_20_R2")) {
+            if (setOf("v1_20_R2", "v1_20_R1", "v1_19_R1", "v1_19_R2", "v1_19_R3", "v1_18_R1", "v1_18_R2", "v1_17_R1").contains(it.name)) {
                 implementation(project(":nms:${it.name}", "remapped"))
             } else {
                 implementation(it)
