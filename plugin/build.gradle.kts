@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 plugins {
     id ("java-library")
     id ("com.github.johnrengelman.shadow")
@@ -45,7 +47,6 @@ val copyJars = {
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT")
     implementation("eu.okaeri:okaeri-commons-core:0.2.21")
-    implementation("com.github.cryptomorin:XSeries:9.4.0")
     implementation("com.comphenix.protocol:ProtocolLib:4.7.0")
     implementation("com.github.InventivetalentDev:BossBarAPI:2.4.3-SNAPSHOT")
     implementation("com.github.r3back:fast-try:0.0.6")
@@ -57,8 +58,9 @@ dependencies {
     val nmsModules = project(":nms").dependencyProject.subprojects
     addonsModules.forEach { implementation(it) }
     nmsModules.forEach {
+        val mojangUnmappedVersions: Set<String> = rootProject.ext.get("mojangUnmappedVersions") as Set<String>
         run {
-            if (it.name.contains("v1_20_R2")) {
+            if (mojangUnmappedVersions.contains(it.name)) {
                 implementation(project(":nms:${it.name}", "remapped"))
             } else {
                 implementation(it)
@@ -69,7 +71,7 @@ dependencies {
     okaeriDependencies.forEach{ implementation (it) }
     driverDependencies.forEach{ implementation (it) }
 
-    implementation("de.tr7zw:item-nbt-api:2.11.3")
+    implementation("de.tr7zw:item-nbt-api:2.12.2")
     implementation("xyz.xenondevs:particle:1.8.4")
     implementation("org.slf4j:slf4j-nop:2.0.5")
 }

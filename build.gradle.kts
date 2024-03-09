@@ -8,7 +8,9 @@ plugins {
 }
 
 group = "com.github.r3back"
-version = "3.2.11"
+version = "3.2.12"
+
+ext.set("mojangUnmappedVersions", setOf("v1_20_R2", "v1_20_R1", "v1_19_R1", "v1_19_R2", "v1_19_R3", "v1_18_R1", "v1_18_R2", "v1_17_R1"))
 
 subprojects {
     group = rootProject.group

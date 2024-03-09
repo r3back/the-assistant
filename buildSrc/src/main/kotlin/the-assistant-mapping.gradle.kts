@@ -1,3 +1,4 @@
+@file:Suppress("UNCHECKED_CAST")
 plugins {
     id("java")
     id("io.github.patrick.remapper")
@@ -8,7 +9,9 @@ repositories.maven("https://repo.codemc.org/repository/nms/")
 dependencies.compileOnly(project(":nms:nms-commons"))
 dependencies.compileOnly("eu.okaeri:okaeri-platform-bukkit:0.4.0-preview54")
 
-if (setOf("v1_20_R2", "v1_20_R1", "v1_19_R1", "v1_19_R2", "v1_19_R3", "v1_18_R1", "v1_18_R2", "v1_17_R1").contains(project.name)) {
+val mojangUnmappedVersions: Set<String> = rootProject.ext.get("mojangUnmappedVersions") as Set<String>
+
+if (mojangUnmappedVersions.contains(project.name)) {
 
     tasks.named("remap").get().dependsOn("jar")
     tasks.named("build").get().dependsOn("remap")
