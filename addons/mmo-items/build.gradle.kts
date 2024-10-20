@@ -2,6 +2,9 @@ repositories{
     maven("https://mvn.lumine.io/repository/maven-public/") {
         name = "Lumine"
     }
+    maven("https://nexus.phoenixdevt.fr/repository/maven-public/") {
+        name = "MMO Items"
+    }
 }
 
 dependencies {
@@ -10,6 +13,6 @@ dependencies {
     compileOnly(project(":api"))
     compileOnly(project(":addons:addons-commons"))
 
-    compileOnly("net.Indyuce:MMOItems:6.7.1-SNAPSHOT")
-    compileOnly("io.lumine:MythicLib-dist:1.4")
+    compileOnly("net.Indyuce:MMOItems-API:6.9.5-SNAPSHOT")
+    compileOnly("io.lumine:MythicLib-dist:1.6.2-SNAPSHOT")
 }

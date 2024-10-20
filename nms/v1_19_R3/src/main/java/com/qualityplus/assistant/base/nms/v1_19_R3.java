@@ -6,6 +6,8 @@ import com.qualityplus.assistant.api.gui.fake.FakeInventoryImpl;
 import com.qualityplus.assistant.api.util.FakeInventoryFactory;
 import eu.okaeri.injector.annotation.Inject;
 import lombok.Getter;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.PacketFlow;
@@ -258,5 +260,11 @@ public final class v1_19_R3 extends AbstractNMS {
         for (final Player player : world.getPlayers()) {
             player.spawnParticle(particle, x, y, z, amount, offsetX, offsetY, offsetZ, data);
         }
+    }
+
+
+    @Override
+    public void sendActionBar(final Player player, final String message) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
     }
 }

@@ -1,5 +1,6 @@
 package com.qualityplus.assistant.base.nms;
 
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.qualityplus.assistant.api.nms.tab.TabAdapter;
@@ -12,20 +13,21 @@ import io.netty.channel.ChannelPromise;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
-import net.minecraft.network.protocol.game.ClientboundRespawnPacket;
 import net.minecraft.network.protocol.game.ClientboundTabListPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerCommonPacketListenerImpl;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.GameType;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -33,6 +35,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -43,9 +47,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * NMS Tab Implementation for Spigot v1_20_R2
+ * NMS Tab Implementation for Spigot v1_20_R3
  */
-public final class v1_20_R2_Tab extends TabAdapter {
+public final class v1_20_R3_Tab extends TabAdapter {
     private final Map<Player, GameProfile[]> profiles = new HashMap<>();
     private final List<Player> initialized = new ArrayList<>();
     private static final Integer MAX_SLOTS = 24;
@@ -100,12 +104,22 @@ public final class v1_20_R2_Tab extends TabAdapter {
                 ? skinData
                 : SkinType.DARK_GRAY.getSkinData();
 
-        if (!property.getSignature().equals(skinData[1]) || !property.getValue().equals(skinData[0])) {
-            profile.getProperties().remove("textures", property);
-            profile.getProperties().put("textures", new Property("textures", skinData[0], skinData[1]));
+        try {
+            final Method method = property.getClass().getDeclaredMethod("signature");
+            final Object value = method.invoke(property);
+            final String signature = (String) value;
 
-            this.sendInfoPacket(player, ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, entityPlayer);
+            if (!signature.equals(skinData[1]) || !signature.equals(skinData[0])) {
+                profile.getProperties().remove("textures", property);
+                profile.getProperties().put("textures", new Property("textures", skinData[0], skinData[1]));
+
+                this.sendInfoPacket(player, ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, entityPlayer);
+            }
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            e.printStackTrace();
         }
+
+
     }
 
 
@@ -134,10 +148,14 @@ public final class v1_20_R2_Tab extends TabAdapter {
         final GameProfile profile = this.profiles.get(player)[axis];
         final ServerPlayer entityPlayer = this.getEntityPlayer(profile);
 
-        entityPlayer.listName = Component.Serializer.fromJsonLenient(text);
+        if (text == null || text.isEmpty()) {
+            entityPlayer.listName = Component.Serializer.fromJsonLenient("test nul");
+        } else {
+            entityPlayer.listName = Component.Serializer.fromJsonLenient(text);
+        }
 
         try {
-            final Field pingField = entityPlayer.getClass().getDeclaredField("containerCounter");
+            final Field pingField = ServerPlayer.class.getDeclaredField("df");
 
             pingField.setAccessible(true);
 
@@ -167,17 +185,56 @@ public final class v1_20_R2_Tab extends TabAdapter {
                 final GameProfile profile = this.profiles.get(player)[i];
                 final ServerPlayer entityPlayer = this.getEntityPlayer(profile);
 
-                //setFake(entityPlayer.getBukkitEntity());
+                final ClientboundPlayerInfoUpdatePacket.Entry entry = new ClientboundPlayerInfoUpdatePacket.Entry(
+                        entityPlayer.getUUID(),
+                        entityPlayer.getGameProfile(),
+                        true,
+                        entityPlayer.connection.latency(),
+                        GameType.SURVIVAL,
+                        entityPlayer.listName,
+                        null
+                );
 
-                //this.getPlayerConnection(player).a(new ClientboundPlayerInfoUpdatePacket(Collections.singletonList(getHandle(target).cs())));
+                final ClientboundPlayerInfoUpdatePacket packet = ClientboundPlayerInfoUpdatePacket
+                        .createPlayerInitializing(Collections.singletonList(entityPlayer));
+                try {
+                    final Field field = ClientboundPlayerInfoUpdatePacket.class.getDeclaredField("b");
+                    field.setAccessible(true);
+                    field.set(packet, Lists.newArrayList(entry));
 
-                this.sendInfoPacket(player, ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, entityPlayer);
+                    final List<ClientboundPlayerInfoUpdatePacket.Entry> entries = (List<ClientboundPlayerInfoUpdatePacket.Entry>) field.get(packet);
+
+                    //NMSImpl.test(packet, Lists.newArrayList(entry));
+                } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+
+
+                //this.sendInfoPacket(player, , entityPlayer);
+                this.sendPacket(player, packet);
+
             }
 
             this.initialized.add(player);
         }
 
         return this;
+    }
+
+    /**
+     * Get an entity player by a profile
+     *
+     * @param profile the profile
+     * @return the entity player
+     */
+    private ServerPlayer getEntityPlayer(final GameProfile profile) {
+        final MinecraftServer server = MinecraftServer.getServer();
+
+        final ServerLevel worldServer = ((CraftWorld) Bukkit.getWorlds().get(0)).getHandle();
+
+        final ClientInformation clientInfo = ClientInformation.createDefault();
+
+        return new EntityHumanNPC(server, worldServer, profile, clientInfo);
     }
 
     /**
@@ -202,18 +259,24 @@ public final class v1_20_R2_Tab extends TabAdapter {
 
                 final ServerPlayer player = ((CraftPlayer) play).getHandle();
 
-                final Field pingField = player.getClass().getDeclaredField("containerCounter");
+                try {
+                    final Field pingField = ServerPlayer.class.getDeclaredField("df");
 
-                pingField.setAccessible(true);
+                    pingField.setAccessible(true);
 
-                final int ping = (int) pingField.get(player);
+                    final int ping = (int) pingField.get(player);
 
-                ob.getScore(play).setScore(ping);
+                    ob.getScore(play).setScore(ping);
+
+                } catch (SecurityException | IllegalAccessException | IllegalArgumentException | NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
+
+
 
                 final TeamInfo teamInfo = TabAdapter.PLAYER_COLORS.getOrDefault(p.getName(), null);
 
                 if (teamInfo != null) {
-
                     Team existentTeam = playerBoard.getTeam(teamInfo.getName());
 
                     if (existentTeam == null) {
@@ -231,25 +294,12 @@ public final class v1_20_R2_Tab extends TabAdapter {
                 }
 
                 p.setScoreboard(playerBoard);
-            } catch (NoSuchFieldException | SecurityException | IllegalAccessException e) {
+            } catch (SecurityException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    /**
-     * Get an entity player by a profile
-     *
-     * @param profile the profile
-     * @return the entity player
-     */
-    private ServerPlayer getEntityPlayer(final GameProfile profile) {
-        final MinecraftServer server = MinecraftServer.getServer();
-
-        final ServerLevel worldServer = ((CraftWorld) Bukkit.getWorlds().get(0)).getHandle();
-
-        return new ServerPlayer(server, worldServer, profile, ClientInformation.createDefault());
-    }
 
     /**
      * Hide all real players from the tab
@@ -277,14 +327,12 @@ public final class v1_20_R2_Tab extends TabAdapter {
     public TabAdapter hidePlayer(final Player player, final Player target) {
         if (player.canSee(target) || target.equals(player)) {
             this.getPlayerConnection(player).send(new ClientboundPlayerInfoRemovePacket(Collections.singletonList(getHandle(target).getUUID())));
-
-            //this.sendInfoPacket(player, ClientboundPlayerInfoUpdatePacket.a.e, target);
         }
 
         return this;
     }
 
-    private static net.minecraft.world.entity.Entity getHandle(final org.bukkit.entity.Entity entity) {
+    private static Entity getHandle(final org.bukkit.entity.Entity entity) {
         if (!(entity instanceof CraftEntity)) {
             return null;
         }
@@ -302,9 +350,10 @@ public final class v1_20_R2_Tab extends TabAdapter {
         if (!this.initialized.contains(player)) {
             final ServerGamePacketListenerImpl connection = this.getPlayerConnection(player);
 
-            try {
+            final ServerCommonPacketListenerImpl commonPacketListener = connection;
 
-                final Field networkField = connection.getClass().getDeclaredField("h");
+            try {
+                final Field networkField = commonPacketListener.getClass().getSuperclass().getDeclaredField("c");
 
                 networkField.setAccessible(true);
 
@@ -352,20 +401,28 @@ public final class v1_20_R2_Tab extends TabAdapter {
         return new ChannelDuplexHandler() {
             @Override
             public void write(final ChannelHandlerContext context, final Object packet, final ChannelPromise promise) throws Exception {
-                if (packet instanceof ClientboundAddEntityPacket) {
-                    final ClientboundAddEntityPacket entitySpawn = (ClientboundAddEntityPacket) packet;
-                    final Field uuidField = entitySpawn.getClass().getDeclaredField("uuid");
+                /*if (packet instanceof ClientboundPlayerInfoUpdatePacket) {
+                    final ClientboundPlayerInfoUpdatePacket entitySpawn = (ClientboundPlayerInfoUpdatePacket) packet;
 
-                    uuidField.setAccessible(true);
+                    final Field entriesField = entitySpawn.getClass().getDeclaredField("b");
 
-                    final Player target = Bukkit.getPlayer((UUID) uuidField.get(entitySpawn));
+                    entriesField.setAccessible(true);
+
+                    final List<ClientboundPlayerInfoUpdatePacket.Entry> entries =
+                            (List<ClientboundPlayerInfoUpdatePacket.Entry>) entriesField.get(entitySpawn);
+
+                    final UUID uuid = entries.get(0).profileId();
+
+                    Bukkit.getConsoleSender().sendMessage("UUID Listener: " + uuid.toString());
+
+                    final Player target = Bukkit.getPlayer((UUID) uuid);
 
                     if (target != null) {
                         showPlayer(player, target);
                     }
                 } else if (packet instanceof ClientboundRespawnPacket) {
                     showPlayer(player, player);
-                }
+                }*/
 
                 super.write(context, packet, promise);
             }

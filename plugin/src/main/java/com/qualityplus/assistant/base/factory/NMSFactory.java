@@ -3,18 +3,20 @@ package com.qualityplus.assistant.base.factory;
 import com.qualityplus.assistant.api.nms.NMS;
 import com.qualityplus.assistant.api.nms.tab.TabAdapter;
 import com.qualityplus.assistant.api.nms.tab.TabHandler;
-import com.qualityplus.assistant.base.nms.v1_12_R1;
 import com.qualityplus.assistant.base.nms.v1_12_R1_Tab;
-import com.qualityplus.assistant.base.nms.v1_13_R1;
-import com.qualityplus.assistant.base.nms.v1_14_R1;
-import com.qualityplus.assistant.base.nms.v1_15_R1;
 import com.qualityplus.assistant.base.nms.v1_16_R1;
 import com.qualityplus.assistant.base.nms.v1_16_R3;
 import com.qualityplus.assistant.base.nms.v1_17_R1;
 import com.qualityplus.assistant.base.nms.v1_17_R1_Tab;
 import com.qualityplus.assistant.base.nms.v1_18_R1;
+import com.qualityplus.assistant.base.nms.v1_13_R1;
+import com.qualityplus.assistant.base.nms.v1_14_R1;
+import com.qualityplus.assistant.base.nms.v1_15_R1;
 import com.qualityplus.assistant.base.nms.v1_18_R2;
 import com.qualityplus.assistant.base.nms.v1_19_R1;
+import com.qualityplus.assistant.base.nms.v1_8_R1;
+import com.qualityplus.assistant.base.nms.v1_8_R3;
+import com.qualityplus.assistant.base.nms.v1_12_R1;
 import com.qualityplus.assistant.base.nms.v1_19_R1_Tab;
 import com.qualityplus.assistant.base.nms.v1_19_R2;
 import com.qualityplus.assistant.base.nms.v1_19_R2_Tab;
@@ -24,8 +26,8 @@ import com.qualityplus.assistant.base.nms.v1_20_R1;
 import com.qualityplus.assistant.base.nms.v1_20_R1_Tab;
 import com.qualityplus.assistant.base.nms.v1_20_R2;
 import com.qualityplus.assistant.base.nms.v1_20_R2_Tab;
-import com.qualityplus.assistant.base.nms.v1_8_R1;
-import com.qualityplus.assistant.base.nms.v1_8_R3;
+import com.qualityplus.assistant.base.nms.v1_20_R3;
+import com.qualityplus.assistant.base.nms.v1_20_R3_Tab;
 import eu.okaeri.injector.OkaeriInjector;
 import eu.okaeri.injector.annotation.Inject;
 import eu.okaeri.platform.core.annotation.Bean;
@@ -189,7 +191,12 @@ public final class NMSFactory {
         /**
          * V1_20_R2
          */
-        V1_20_R2(() -> v1_20_R2.class, () -> v1_20_R2_Tab.class);
+        V1_20_R2(() -> v1_20_R2.class, () -> v1_20_R2_Tab.class),
+        /**
+         * V1_20_R3
+         */
+        V1_20_R3(() -> v1_20_R3.class, () -> v1_20_R3_Tab.class);
+
 
         private final Supplier<Class<? extends NMS>> nms;
         private final Supplier<Class<? extends TabAdapter>> tab;

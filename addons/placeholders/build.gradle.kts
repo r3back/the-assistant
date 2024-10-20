@@ -1,7 +1,4 @@
 repositories {
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
-        name = "PlaceholderAPI"
-    }
     maven("https://nexus.lucko.me/repository/all/") {
         name = "Lucko"
     }
@@ -17,5 +14,5 @@ dependencies {
     compileOnly("be.maximvdw:MVdWPlaceholderAPI:3.0.1-SNAPSHOT") {
         exclude(group = "org.spigotmc")
     }
-    compileOnly("me.clip:placeholderapi:2.11.3")
+    compileOnly("me.clip:placeholderapi:2.11.6")
 }
