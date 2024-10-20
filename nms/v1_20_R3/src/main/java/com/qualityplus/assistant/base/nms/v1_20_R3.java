@@ -13,8 +13,10 @@ import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import org.bukkit.Bukkit;
@@ -31,10 +33,10 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEnderDragon;
-import org.bukkit.craftbukkit.v1_19_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEnderDragon;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
@@ -53,9 +55,9 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * NMS Implementation for Spigot v1_19_R1
+ * NMS Implementation for Spigot v1_20_R3
  */
-public final class v1_19_R1 extends AbstractNMS {
+public final class v1_20_R3 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
 
     @Override
@@ -151,11 +153,12 @@ public final class v1_19_R1 extends AbstractNMS {
         final MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
         final ServerLevel worldServer = ((CraftWorld) playerWorld).getHandle();
         final UUID uuid = UUID.randomUUID();
-        final ServerPlayer fakePlayer = new ServerPlayer(minecraftServer, worldServer, new GameProfile(uuid, name), null);
+        final ServerPlayer fakePlayer = new ServerPlayer(minecraftServer, worldServer, new GameProfile(uuid, name), ClientInformation.createDefault());
         fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(this.plugin, "UUID"));
         fakePlayer.forceSetPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        final Connection connection = new Connection(PacketFlow.SERVERBOUND);
-        fakePlayer.connection = new ServerGamePacketListenerImpl(minecraftServer, connection, fakePlayer);
+        final Connection connection = new Connection(PacketFlow.CLIENTBOUND);
+        final CommonListenerCookie cookie = CommonListenerCookie.createInitial(fakePlayer.getGameProfile());
+        fakePlayer.connection = new ServerGamePacketListenerImpl(minecraftServer, connection, fakePlayer, cookie);
         worldServer.addDuringPortalTeleport(fakePlayer);
         Bukkit.getOnlinePlayers().forEach(player1 -> player1.hidePlayer(fakePlayer.getBukkitEntity()));
         return fakePlayer;
@@ -261,6 +264,7 @@ public final class v1_19_R1 extends AbstractNMS {
             player.spawnParticle(particle, x, y, z, amount, offsetX, offsetY, offsetZ, data);
         }
     }
+
 
     @Override
     public void sendActionBar(final Player player, final String message) {

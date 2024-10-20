@@ -24,7 +24,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -110,11 +109,7 @@ public final class SignGUIImpl implements SignGUI {
         openSign.getBlockPositionModifier().write(0, position);
 
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            try {
-                ProtocolLibrary.getProtocolManager().sendServerPacket(player, openSign);
-            } catch (final InvocationTargetException e) {
-                e.printStackTrace();
-            }
+            ProtocolLibrary.getProtocolManager().sendServerPacket(player, openSign);
         }, 3L);
 
         Bukkit.getPluginManager().registerEvents(this.listener, this.plugin);

@@ -10,3 +10,5 @@ build
 */*/*/*/build
 /all-generated
 /test-suite/mc-config/plugins/*
+.runJitpackPublication/*
+.run/*/*

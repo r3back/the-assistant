@@ -10,7 +10,7 @@ plugins {
 group = "com.github.r3back"
 version = "3.2.12"
 
-ext.set("mojangUnmappedVersions", setOf("v1_20_R2", "v1_20_R1", "v1_19_R1", "v1_19_R2", "v1_19_R3", "v1_18_R1", "v1_18_R2", "v1_17_R1"))
+ext.set("mojangUnmappedVersions", setOf("v1_20_R3","v1_20_R2", "v1_20_R1", "v1_19_R1", "v1_19_R2", "v1_18_R1", "v1_18_R2", "v1_17_R1"))
 
 subprojects {
     group = rootProject.group
@@ -55,6 +55,12 @@ subprojects {
         maven("https://repo.rapture.pw/repository/maven-releases/") {
             name = "Rapture"
         }
+        maven("https://nexus.lucko.me/repository/all/") {
+            name = "Lucko"
+        }
+        maven("https://repo.georgev22.com/releases") {
+            name = "georgev22RepoReleases"
+        }
     }
 
     dependencies {
@@ -67,8 +73,8 @@ subprojects {
 
 
     tasks.withType<JavaCompile> {
-        sourceCompatibility = "17"
-        targetCompatibility = "17"
+        sourceCompatibility = "8"
+        targetCompatibility = "8"
     }
 
     val projectSourceSets = sourceSets
