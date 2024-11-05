@@ -1,3 +1,5 @@
+import com.gradle.scan.agent.serialization.scan.serializer.kryo.id
+
 plugins {
     base
     idea
@@ -40,6 +42,9 @@ subprojects {
         maven("https://papermc.io/repo/repository/maven-public/") {
             name = "Paper API"
         }
+        maven("https://repo.papermc.io/repository/maven-public/") {
+            name = "papermc"
+        }
         maven("https://storehouse.okaeri.eu/repository/maven-public/") {
             name = "Okaeri"
         }
@@ -60,6 +65,9 @@ subprojects {
         }
         maven("https://repo.georgev22.com/releases") {
             name = "georgev22RepoReleases"
+        }
+        maven("https://papermc.io/repo/repository/maven-snapshots/") {
+            name = "PaperReleases"
         }
     }
 
