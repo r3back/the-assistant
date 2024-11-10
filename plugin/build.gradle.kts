@@ -28,7 +28,7 @@ val relocatePackages = setOf("com.cryptomorin.xseries",
     "org.slf4j", "org.h2", "org.mariadb.jdbc",
     "org.intellij.lang.annotations", "org.inventivetalent",
     "xyz.xenondevs.particle", "org.jetbrains.annotations",
-    "de.tr7zw", "com.mysql", "com.mongodb", "com.georgev22")
+    "de.tr7zw", "com.mysql", "com.mongodb")
 
 val copyJars = {
         file: Provider<RegularFile> -> run {
@@ -73,7 +73,7 @@ dependencies {
 
     implementation("de.tr7zw:item-nbt-api:2.12.2")
     implementation("xyz.xenondevs:particle:1.8.4")
-    implementation("com.georgev22:particle:1.2.0")
+    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
 
     implementation("org.slf4j:slf4j-nop:2.0.5")
 }
@@ -96,7 +96,6 @@ tasks {
             include(dependency("org.jetbrains:.*"))
             include(dependency("de.tr7zw:.*"))
             include(dependency("xyz.xenondevs:.*"))
-            include(dependency("com.georgev22:.*"))
 
             include(dependency("org.mongodb:mongodb-driver-sync:.*"))
             include(dependency("com.github.InventivetalentDev:BossBarAPI:.*"))
