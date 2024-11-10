@@ -73,7 +73,6 @@ dependencies {
 
     implementation("de.tr7zw:item-nbt-api:2.12.2")
     implementation("xyz.xenondevs:particle:1.8.4")
-    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
 
     implementation("org.slf4j:slf4j-nop:2.0.5")
 }
