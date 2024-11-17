@@ -9,7 +9,7 @@ pluginManagement {
     }
     plugins {
         id("checkstyle")
-        id("com.github.johnrengelman.shadow") version "8.1.1"
+        id("com.gradleup.shadow") version "8.3.5"
         id("org.cadixdev.licenser") version "0.6.1"
         id("net.kyori.indra") version "3.1.3"
         id("net.kyori.indra.git") version "3.1.3"
@@ -45,6 +45,6 @@ setOf("regions", "paster", "paster:paster-commons", "paster:world-edit-6", "past
 setOf("nms-commons", "v1_8_R1", "v1_8_R3", "v1_12_R1", "v1_13_R1",
     "v1_14_R1", "v1_15_R1", "v1_16_R1", "v1_16_R3", "v1_17_R1",
     "v1_18_R1", "v1_18_R2", "v1_19_R1", "v1_19_R2", "v1_19_R3",
-    "v1_20_R1", "v1_20_R2", "v1_20_R3").forEach { include("nms:${it}") }
+    "v1_20_R1", "v1_20_R2", "v1_20_R3", "v1_21_R1").forEach { include("nms:${it}") }
 
 

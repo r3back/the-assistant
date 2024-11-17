@@ -2,7 +2,7 @@
 
 plugins {
     id ("java-library")
-    id ("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
     alias(libs.plugins.runpaper)
 }
 
@@ -76,7 +76,6 @@ dependencies {
     implementation("org.slf4j:slf4j-nop:2.0.5")
 }
 
-
 tasks {
     shadowJar {
         archiveClassifier.set("")
@@ -146,6 +145,9 @@ tasks {
             (copyJars as? ((Provider<RegularFile>) -> File) ?: return@doLast)(archiveFile)
         }
     }
+
+
+
     build {
         dependsOn(shadowJar)
     }

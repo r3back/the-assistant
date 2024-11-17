@@ -4,7 +4,6 @@ import com.qualityplus.assistant.api.nms.tab.entry.TabElement;
 import com.qualityplus.assistant.api.nms.tab.entry.TabElementHandler;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,9 +42,16 @@ public class TabHandler {
      * @param handler the handler to get the elements from
      * @param plugin  the plugin to register the thread to
      * @param ticks   the amount it should update
+     *
+     * @throws ClassNotFoundException When class is not found
+     * @throws IllegalAccessException when illegal access
+     * @throws InstantiationException when instantiation fails
      */
-    @SneakyThrows
-    public TabHandler(final TabElementHandler handler, final JavaPlugin plugin, final long ticks) {
+    public TabHandler(
+            final TabElementHandler handler,
+            final JavaPlugin plugin,
+            final long ticks
+    ) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         this.adapter = this.createAdapter();
         this.handler = handler;
         this.ticks = ticks;
