@@ -102,6 +102,13 @@ public final class NMSFactory {
      * @return {@link MinecraftVersion}
      */
     private MinecraftVersion getMcVersion() {
+        final String version = Bukkit.getServer().getVersion();
+
+        if (version.startsWith("1.21")) {
+            final String nmsVersion = "v1_21_R1";
+            return MinecraftVersion.byName(nmsVersion);
+        }
+
         final String nmsVersion = Bukkit.getServer().getClass()
                 .getPackage()
                 .getName()
