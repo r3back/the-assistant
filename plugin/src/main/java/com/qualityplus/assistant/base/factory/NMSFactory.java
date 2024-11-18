@@ -14,6 +14,8 @@ import com.qualityplus.assistant.base.nms.v1_14_R1;
 import com.qualityplus.assistant.base.nms.v1_15_R1;
 import com.qualityplus.assistant.base.nms.v1_18_R2;
 import com.qualityplus.assistant.base.nms.v1_19_R1;
+import com.qualityplus.assistant.base.nms.v1_21_R1;
+import com.qualityplus.assistant.base.nms.v1_21_R1_Tab;
 import com.qualityplus.assistant.base.nms.v1_8_R1;
 import com.qualityplus.assistant.base.nms.v1_8_R3;
 import com.qualityplus.assistant.base.nms.v1_12_R1;
@@ -202,7 +204,11 @@ public final class NMSFactory {
         /**
          * V1_20_R3
          */
-        V1_20_R3(() -> v1_20_R3.class, () -> v1_20_R3_Tab.class);
+        V1_20_R3(() -> v1_20_R3.class, () -> v1_20_R3_Tab.class),
+        /**
+         * V1_21_R1
+         */
+        V1_21_R1(() -> v1_21_R1.class, () -> v1_21_R1_Tab.class);
 
 
         private final Supplier<Class<? extends NMS>> nms;
