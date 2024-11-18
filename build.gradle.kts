@@ -1,5 +1,3 @@
-import com.gradle.scan.agent.serialization.scan.serializer.kryo.id
-
 plugins {
     base
     idea
