@@ -137,6 +137,7 @@ tasks {
             include(project(":nms:v1_20_R1"))
             include(project(":nms:v1_20_R2"))
             include(project(":nms:v1_20_R3"))
+            include(project(":nms:v1_20_R6"))
             include(project(":nms:v1_21_R1"))
         }
 

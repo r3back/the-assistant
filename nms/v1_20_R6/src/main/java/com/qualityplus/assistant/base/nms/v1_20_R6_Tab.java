@@ -25,9 +25,9 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_20_R4.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R4.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
@@ -49,7 +49,7 @@ import java.util.UUID;
 /**
  * NMS Tab Implementation for Spigot v1_20_R3
  */
-public final class v1_20_R3_Tab extends TabAdapter {
+public final class v1_20_R6_Tab extends TabAdapter {
     private final Map<Player, GameProfile[]> profiles = new HashMap<>();
     private final List<Player> initialized = new ArrayList<>();
     private static final Integer MAX_SLOTS = 24;
@@ -75,9 +75,11 @@ public final class v1_20_R3_Tab extends TabAdapter {
     @Override
     public TabAdapter sendHeaderFooter(final Player player, final String header, final String footer) {
         if (header != null || footer != null) {
+            final MinecraftServer server = MinecraftServer.getServer();
+
             final ClientboundTabListPacket packet = new ClientboundTabListPacket(
-                    Objects.requireNonNull(Component.Serializer.fromJson("{\"text\": \"" + header + "\"}")),
-                    Objects.requireNonNull(Component.Serializer.fromJson("{\"text\": \"" + footer + "\"}"))
+                    Objects.requireNonNull(Component.Serializer.fromJson("{\"text\": \"" + header + "\"}", server.registryAccess())),
+                    Objects.requireNonNull(Component.Serializer.fromJson("{\"text\": \"" + footer + "\"}", server.registryAccess()))
             );
 
             this.sendPacket(player, packet);
@@ -147,11 +149,10 @@ public final class v1_20_R3_Tab extends TabAdapter {
     public TabAdapter sendEntryData(final Player player, final int axis, final int ping, final String text) {
         final GameProfile profile = this.profiles.get(player)[axis];
         final ServerPlayer entityPlayer = this.getEntityPlayer(profile);
+        final MinecraftServer server = MinecraftServer.getServer();
 
         if (text == null || text.isEmpty()) {
-            entityPlayer.listName = Component.Serializer.fromJsonLenient("test nul");
-        } else {
-            entityPlayer.listName = Component.Serializer.fromJsonLenient(text);
+            entityPlayer.listName = Component.Serializer.fromJsonLenient(text, server.registryAccess());
         }
 
         try {
@@ -234,7 +235,7 @@ public final class v1_20_R3_Tab extends TabAdapter {
 
         final ClientInformation clientInfo = ClientInformation.createDefault();
 
-        return new EntityHumanNPC_1_20_R3(server, worldServer, profile, clientInfo);
+        return new EntityHumanNPC_1_20_R6(server, worldServer, profile, clientInfo);
     }
 
     /**

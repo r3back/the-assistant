@@ -16,7 +16,7 @@ import java.net.SocketAddress;
  * Empty connection class
  */
 @SuppressWarnings("all")
-public final class EmptyConnection extends Connection {
+public final class EmptyConnection_1_20_R6 extends Connection {
     @NotNull
     private static final MethodHandle CONNECTION_DISCONNECT_LISTENER = ReflectionUtil.getSetter(Connection.class, "p");
     @NotNull
@@ -28,9 +28,9 @@ public final class EmptyConnection extends Connection {
      * @param flag flag
      * @throws IOException exception
      */
-    public EmptyConnection(final PacketFlow flag) throws IOException {
+    public EmptyConnection_1_20_R6(final PacketFlow flag) throws IOException {
         super(flag);
-        channel = new EmptyChannel(null);
+        channel = new EmptyChannel_1_20_R6(null);
         address = new SocketAddress() {
             private static final long serialVersionUID = 8207338859896320185L;
         };
@@ -85,7 +85,7 @@ public final class EmptyConnection extends Connection {
      *
      * @param pl packet listener
      */
-    @Override
+    //@Override
     public void setListener(final PacketListener pl) {
         try {
             CONNECTION_PACKET_LISTENER.invoke(this, pl);

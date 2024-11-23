@@ -13,14 +13,14 @@ import java.net.SocketAddress;
 /**
  * Empty channel class
  */
-public final class EmptyChannel extends AbstractChannel {
+public final class EmptyChannel_1_20_R3 extends AbstractChannel {
     private final ChannelConfig config = new DefaultChannelConfig(this);
 
     /**
      *
      * @param parent  {@link Channel}
      */
-    public EmptyChannel(final Channel parent) {
+    public EmptyChannel_1_20_R3(final Channel parent) {
         super(parent);
     }
 
