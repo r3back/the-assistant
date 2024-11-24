@@ -33,10 +33,10 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEnderDragon;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_21_R2.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R2.entity.CraftEnderDragon;
+import org.bukkit.craftbukkit.v1_21_R2.entity.CraftPlayer;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
@@ -57,7 +57,7 @@ import java.util.UUID;
 /**
  * NMS Implementation for Spigot v1_20_R3
  */
-public final class v1_21_R1 extends AbstractNMS {
+public final class v1_21_R2 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
 
     @Override
@@ -236,7 +236,7 @@ public final class v1_21_R1 extends AbstractNMS {
 
     @Override
     public void setMaxHealth(final Player player, final int maxHealth) {
-        Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH))
+        Optional.ofNullable(player.getAttribute(Attribute.MAX_HEALTH))
                 .ifPresent(attribute -> attribute.setBaseValue(maxHealth));
     }
 

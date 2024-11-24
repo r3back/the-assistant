@@ -17,6 +17,8 @@ import com.qualityplus.assistant.base.nms.v1_18_R2;
 import com.qualityplus.assistant.base.nms.v1_19_R1;
 import com.qualityplus.assistant.base.nms.v1_21_R1;
 import com.qualityplus.assistant.base.nms.v1_21_R1_Tab;
+import com.qualityplus.assistant.base.nms.v1_21_R2;
+import com.qualityplus.assistant.base.nms.v1_21_R2_Tab;
 import com.qualityplus.assistant.base.nms.v1_8_R1;
 import com.qualityplus.assistant.base.nms.v1_8_R3;
 import com.qualityplus.assistant.base.nms.v1_12_R1;
@@ -54,8 +56,9 @@ import java.util.logging.Logger;
 @Component
 public final class NMSFactory {
     private static final Map<String, MinecraftVersion> NEW_NMS_VERSIONS = ImmutableMap.<String, MinecraftVersion>builder()
-            .put("1.21.1", MinecraftVersion.V1_21_R1)
             .put("1.20.6", MinecraftVersion.V1_20_R4)
+            .put("1.21.1", MinecraftVersion.V1_21_R1)
+            .put("1.21.3", MinecraftVersion.V1_21_R2)
             .build();
 
     private static final String RECOGNIZED_VERSION_MESSAGE = "Successfully recognized Version %s";
@@ -223,8 +226,11 @@ public final class NMSFactory {
         /**
          * V1_21_R1
          */
-        V1_21_R1(() -> v1_21_R1.class, () -> v1_21_R1_Tab.class);
-
+        V1_21_R1(() -> v1_21_R1.class, () -> v1_21_R1_Tab.class),
+        /**
+         * V1_21_R2
+         */
+        V1_21_R2(() -> v1_21_R2.class, () -> v1_21_R2_Tab.class);
 
         private final Supplier<Class<? extends NMS>> nms;
         private final Supplier<Class<? extends TabAdapter>> tab;

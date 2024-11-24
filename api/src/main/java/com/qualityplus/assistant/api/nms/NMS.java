@@ -19,13 +19,6 @@ import java.util.List;
  */
 public interface NMS {
     /**
-     * Open a fake sign gui
-     * @param player    {@link Player}
-     * @param withLines Sign lines
-     */
-    public void openFakeSignGUI(final Player player, final List<String> withLines);
-
-    /**
      * Set block age
      *
      * @param block {@link Block} block
