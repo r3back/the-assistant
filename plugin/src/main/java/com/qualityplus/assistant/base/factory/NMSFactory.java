@@ -59,6 +59,7 @@ public final class NMSFactory {
             .put("1.20.6", MinecraftVersion.V1_20_R4)
             .put("1.21", MinecraftVersion.V1_21_R1)
             .put("1.21.1", MinecraftVersion.V1_21_R1)
+            .put("1.21.2", MinecraftVersion.V1_21_R1)
             .put("1.21.3", MinecraftVersion.V1_21_R2)
             .build();
 
