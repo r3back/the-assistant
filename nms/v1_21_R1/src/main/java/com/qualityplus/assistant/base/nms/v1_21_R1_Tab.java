@@ -158,7 +158,7 @@ public final class v1_21_R1_Tab extends TabAdapter {
         }
 
         try {
-            final Field pingField = ServerPlayer.class.getDeclaredField("df");
+            final Field pingField = ServerPlayer.class.getDeclaredField("containerCounter");
 
             pingField.setAccessible(true);
 
@@ -201,7 +201,7 @@ public final class v1_21_R1_Tab extends TabAdapter {
                 final ClientboundPlayerInfoUpdatePacket packet = ClientboundPlayerInfoUpdatePacket
                         .createPlayerInitializing(Collections.singletonList(entityPlayer));
                 try {
-                    final Field field = ClientboundPlayerInfoUpdatePacket.class.getDeclaredField("b");
+                    final Field field = ClientboundPlayerInfoUpdatePacket.class.getDeclaredField("entries");
                     field.setAccessible(true);
                     field.set(packet, Lists.newArrayList(entry));
 
@@ -263,7 +263,7 @@ public final class v1_21_R1_Tab extends TabAdapter {
                 final ServerPlayer player = ((CraftPlayer) play).getHandle();
 
                 try {
-                    final Field pingField = ServerPlayer.class.getDeclaredField("df");
+                    final Field pingField = ServerPlayer.class.getDeclaredField("containerCounter");
 
                     pingField.setAccessible(true);
 
@@ -356,7 +356,7 @@ public final class v1_21_R1_Tab extends TabAdapter {
             final ServerCommonPacketListenerImpl commonPacketListener = connection;
 
             try {
-                final Field networkField = commonPacketListener.getClass().getSuperclass().getDeclaredField("c");
+                final Field networkField = commonPacketListener.getClass().getSuperclass().getDeclaredField("connection");
 
                 networkField.setAccessible(true);
 
