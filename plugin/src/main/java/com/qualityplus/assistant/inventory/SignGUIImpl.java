@@ -6,8 +6,8 @@ import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
-import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.qualityplus.assistant.TheAssistantPlugin;
 import com.qualityplus.assistant.api.event.SignCompletedEvent;
 import com.qualityplus.assistant.api.sign.SignGUI;
 import com.qualityplus.assistant.api.sign.handler.SignCompleteHandler;
@@ -68,48 +68,8 @@ public final class SignGUIImpl implements SignGUI {
 
         this.listener = new LeaveListener();
 
-        final int x_start = player.getLocation().getBlockX();
-
-        int y_start = 255;
-
-        final int z_start = player.getLocation().getBlockZ();
-
-        Material material = Material.getMaterial("WALL_SIGN");
-
-        if (material == null) {
-            material = Material.OAK_WALL_SIGN;
-        }
-
-        while (!player.getWorld().getBlockAt(x_start, y_start, z_start).getType().equals(Material.AIR) &&
-                !player.getWorld().getBlockAt(x_start, y_start, z_start).getType().equals(material)) {
-            y_start--;
-            if (y_start == 1) {
-                return;
-            }
-        }
-        player.getWorld().getBlockAt(x_start, y_start, z_start).setType(material);
-
-        this.sign = (Sign) player.getWorld().getBlockAt(x_start, y_start, z_start).getState();
-
-        int i = 0;
-        for (String line : this.lines) {
-            this.sign.setLine(i, line);
-            i++;
-        }
-
-        this.sign.update(false, false);
-
-
-        final PacketContainer openSign = ProtocolLibrary.getProtocolManager().createPacket(
-                PacketType.Play.Server.OPEN_SIGN_EDITOR
-        );
-
-        final BlockPosition position = new BlockPosition(x_start, y_start, z_start);
-
-        openSign.getBlockPositionModifier().write(0, position);
-
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            ProtocolLibrary.getProtocolManager().sendServerPacket(player, openSign);
+            TheAssistantPlugin.getAPI().getNms().openFakeSignGUI(player, this.lines);
         }, 3L);
 
         Bukkit.getPluginManager().registerEvents(this.listener, this.plugin);
@@ -146,12 +106,14 @@ public final class SignGUIImpl implements SignGUI {
                             .map(line -> getLine(event, line))
                             .collect(Collectors.toList());
 
+                    lines.forEach(line -> Bukkit.getConsoleSender().sendMessage("Line: " + line));
+
                     Bukkit.getScheduler().runTask(this.plugin, () -> {
                         manager.removePacketListener(this);
 
                         HandlerList.unregisterAll(SignGUIImpl.this.listener);
 
-                        SignGUIImpl.this.sign.getBlock().setType(Material.AIR);
+                        //SignGUIImpl.this.sign.getBlock().setType(Material.AIR);
 
                         SignGUIImpl.this.action.onSignClose(new SignCompletedEvent(event.getPlayer(), lines));
                     });

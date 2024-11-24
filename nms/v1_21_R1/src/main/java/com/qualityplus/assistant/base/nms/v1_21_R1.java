@@ -10,8 +10,11 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
+import net.minecraft.network.protocol.game.ClientboundOpenSignEditorPacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
@@ -19,6 +22,11 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignText;
+import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
@@ -59,6 +67,31 @@ import java.util.UUID;
  */
 public final class v1_21_R1 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
+
+    @Override
+    public void openFakeSignGUI(final Player player, final List<String> withLines) {
+        final ServerPlayer serverPlayer = ((CraftPlayer) player).getHandle();
+        final Level level = serverPlayer.level();
+
+
+        final BlockPos fakePos = serverPlayer.blockPosition().above();
+
+        final BlockState signState = Blocks.OAK_SIGN.defaultBlockState();
+        level.setBlockAndUpdate(fakePos, signState);
+
+        final SignBlockEntity fakeSign = (SignBlockEntity) level.getBlockEntity(fakePos);
+        final SignText signText = fakeSign.getFrontText();
+        int i = 0;
+        for (final String line : withLines) {
+            signText.setMessage(i, Component.literal(line));
+            i++;
+        }
+        fakeSign.setText(signText, true);
+        fakeSign.setChanged();
+
+        serverPlayer.connection.send(new ClientboundBlockUpdatePacket(fakePos, signState));
+        serverPlayer.connection.send(new ClientboundOpenSignEditorPacket(fakePos, true));
+    }
 
     @Override
     public void setBlockAge(final Block block, final int age) {

@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +32,9 @@ public abstract class AbstractNMS implements NMS {
     private final Map<UUID, Long> enabled = new HashMap<>();
     protected static BossBar bossBar;
 
+    @Override
+    public void openFakeSignGUI(final Player player, final List<String> withLines) {
+    }
 
     @Override
     public void sendActionBar(final Player player, final String message) {

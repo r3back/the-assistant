@@ -28,7 +28,7 @@ val relocatePackages = setOf("com.cryptomorin.xseries",
     "org.slf4j", "org.h2", "org.mariadb.jdbc",
     "org.intellij.lang.annotations", "org.inventivetalent",
      "org.jetbrains.annotations", "de.tr7zw", "com.mysql",
-    "com.mongodb")
+    "com.mongodb", "de.rapha149")
 
 val copyJars = {
         file: Provider<RegularFile> -> run {
@@ -50,6 +50,7 @@ dependencies {
     implementation("com.comphenix.protocol:ProtocolLib:5.0.0")
     implementation("com.github.InventivetalentDev:BossBarAPI:2.4.3-SNAPSHOT")
     implementation("com.github.r3back:fast-try:0.0.6")
+    implementation("de.rapha149.signgui:signgui:2.4.2")
 
     implementation(project(":api"))
     implementation(project(":nms"))
@@ -92,6 +93,8 @@ tasks {
             include(dependency("com.googlecode.json-simple:.*"))
             include(dependency("org.jetbrains:.*"))
             include(dependency("de.tr7zw:.*"))
+            include(dependency("de.rapha149:.*"))
+            include(dependency("de.rapha149.signgui:.*"))
 
             include(dependency("org.mongodb:mongodb-driver-sync:.*"))
             include(dependency("com.github.InventivetalentDev:BossBarAPI:.*"))
