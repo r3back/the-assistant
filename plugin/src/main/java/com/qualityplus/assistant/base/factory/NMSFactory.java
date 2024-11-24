@@ -57,6 +57,7 @@ import java.util.logging.Logger;
 public final class NMSFactory {
     private static final Map<String, MinecraftVersion> NEW_NMS_VERSIONS = ImmutableMap.<String, MinecraftVersion>builder()
             .put("1.20.6", MinecraftVersion.V1_20_R4)
+            .put("1.21", MinecraftVersion.V1_21_R1)
             .put("1.21.1", MinecraftVersion.V1_21_R1)
             .put("1.21.3", MinecraftVersion.V1_21_R2)
             .build();
