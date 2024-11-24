@@ -20,7 +20,7 @@ import java.io.IOException;
 /**
  * Entity human npc
  */
-public final class EntityHumanNPC_1_20_R6 extends ServerPlayer {
+public final class EntityHumanNPC_1_20_R4 extends ServerPlayer {
     /**
      * Default constructor
      *
@@ -29,7 +29,7 @@ public final class EntityHumanNPC_1_20_R6 extends ServerPlayer {
      * @param gameProfile     {@link GameProfile}
      * @param ci              {@link ClientInformation}
      */
-    public EntityHumanNPC_1_20_R6(final MinecraftServer minecraftServer, final ServerLevel world, final GameProfile gameProfile,
+    public EntityHumanNPC_1_20_R4(final MinecraftServer minecraftServer, final ServerLevel world, final GameProfile gameProfile,
                                   final ClientInformation ci) {
         super(minecraftServer, world, gameProfile, ci);
         initialise(minecraftServer, ci);
@@ -144,8 +144,8 @@ public final class EntityHumanNPC_1_20_R6 extends ServerPlayer {
      */
     private void initialise(final MinecraftServer minecraftServer, final ClientInformation clientInfo) {
         try {
-            final EmptyConnection_1_20_R6 conn = new EmptyConnection_1_20_R6(PacketFlow.CLIENTBOUND);
-            connection = new EmptyPacketListener_1_20_R6(minecraftServer, conn, this,
+            final EmptyConnection_1_20_R4 conn = new EmptyConnection_1_20_R4(PacketFlow.CLIENTBOUND);
+            connection = new EmptyPacketListener_1_20_R4(minecraftServer, conn, this,
                     new CommonListenerCookie(super.getGameProfile(), 0, clientInfo, true));
         } catch (IOException e) {
             e.printStackTrace();

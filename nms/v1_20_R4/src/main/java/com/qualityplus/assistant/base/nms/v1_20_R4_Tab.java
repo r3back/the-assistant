@@ -49,7 +49,7 @@ import java.util.UUID;
 /**
  * NMS Tab Implementation for Spigot v1_20_R3
  */
-public final class v1_20_R6_Tab extends TabAdapter {
+public final class v1_20_R4_Tab extends TabAdapter {
     private final Map<Player, GameProfile[]> profiles = new HashMap<>();
     private final List<Player> initialized = new ArrayList<>();
     private static final Integer MAX_SLOTS = 24;
@@ -235,7 +235,7 @@ public final class v1_20_R6_Tab extends TabAdapter {
 
         final ClientInformation clientInfo = ClientInformation.createDefault();
 
-        return new EntityHumanNPC_1_20_R6(server, worldServer, profile, clientInfo);
+        return new EntityHumanNPC_1_20_R4(server, worldServer, profile, clientInfo);
     }
 
     /**

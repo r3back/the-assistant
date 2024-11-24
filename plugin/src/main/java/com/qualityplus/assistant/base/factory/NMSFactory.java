@@ -1,5 +1,6 @@
 package com.qualityplus.assistant.base.factory;
 
+import com.google.common.collect.ImmutableMap;
 import com.qualityplus.assistant.api.nms.NMS;
 import com.qualityplus.assistant.api.nms.tab.TabAdapter;
 import com.qualityplus.assistant.api.nms.tab.TabHandler;
@@ -30,8 +31,8 @@ import com.qualityplus.assistant.base.nms.v1_20_R2;
 import com.qualityplus.assistant.base.nms.v1_20_R2_Tab;
 import com.qualityplus.assistant.base.nms.v1_20_R3;
 import com.qualityplus.assistant.base.nms.v1_20_R3_Tab;
-import com.qualityplus.assistant.base.nms.v1_20_R6;
-import com.qualityplus.assistant.base.nms.v1_20_R6_Tab;
+import com.qualityplus.assistant.base.nms.v1_20_R4;
+import com.qualityplus.assistant.base.nms.v1_20_R4_Tab;
 import eu.okaeri.injector.OkaeriInjector;
 import eu.okaeri.injector.annotation.Inject;
 import eu.okaeri.platform.core.annotation.Bean;
@@ -43,6 +44,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 
@@ -51,6 +53,11 @@ import java.util.logging.Logger;
  */
 @Component
 public final class NMSFactory {
+    private static final Map<String, MinecraftVersion> NEW_NMS_VERSIONS = ImmutableMap.<String, MinecraftVersion>builder()
+            .put("1.21.1", MinecraftVersion.V1_21_R1)
+            .put("1.20.6", MinecraftVersion.V1_20_R4)
+            .build();
+
     private static final String RECOGNIZED_VERSION_MESSAGE = "Successfully recognized Version %s";
     private static final String UNSUPPORTED_VERSION_MESSAGE = "Unsupported Version %s";
     private static final String DISABLING_PLUGIN_MESSAGE = "Disabling Plugin...";
@@ -108,9 +115,11 @@ public final class NMSFactory {
     private MinecraftVersion getMcVersion() {
         final String version = Bukkit.getServer().getVersion();
 
-        if (version.startsWith("1.21")) {
-            final String nmsVersion = "v1_21_R1";
-            return MinecraftVersion.byName(nmsVersion);
+        for (final Map.Entry<String, MinecraftVersion> nmsEntry : NEW_NMS_VERSIONS.entrySet()) {
+            if (!version.startsWith(nmsEntry.getKey())) {
+                continue;
+            }
+            return nmsEntry.getValue();
         }
 
         final String nmsVersion = Bukkit.getServer().getClass()
@@ -210,7 +219,7 @@ public final class NMSFactory {
         /**
          * V1_20_R4
          */
-        V1_20_R4(() -> v1_20_R6.class, () -> v1_20_R6_Tab.class),
+        V1_20_R4(() -> v1_20_R4.class, () -> v1_20_R4_Tab.class),
         /**
          * V1_21_R1
          */

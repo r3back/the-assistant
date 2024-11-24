@@ -57,7 +57,7 @@ import java.util.UUID;
 /**
  * NMS Implementation for Spigot v1_20_R3
  */
-public final class v1_20_R6 extends AbstractNMS {
+public final class v1_20_R4 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
 
     @Override

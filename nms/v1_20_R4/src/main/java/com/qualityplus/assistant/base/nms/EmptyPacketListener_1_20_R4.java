@@ -10,7 +10,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 /**
  * Empty packet listener
  */
-public class EmptyPacketListener_1_20_R6 extends ServerGamePacketListenerImpl {
+public class EmptyPacketListener_1_20_R4 extends ServerGamePacketListenerImpl {
     /**
      * Default constructor
      *
@@ -19,7 +19,7 @@ public class EmptyPacketListener_1_20_R6 extends ServerGamePacketListenerImpl {
      * @param entityPlayer    {@link MinecraftServer}
      * @param clc             {@link MinecraftServer}
      */
-    public EmptyPacketListener_1_20_R6(final MinecraftServer minecraftServer, final Connection networkManager, final ServerPlayer entityPlayer,
+    public EmptyPacketListener_1_20_R4(final MinecraftServer minecraftServer, final Connection networkManager, final ServerPlayer entityPlayer,
                                        final CommonListenerCookie clc) {
         super(minecraftServer, networkManager, entityPlayer, clc);
     }

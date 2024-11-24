@@ -156,7 +156,7 @@ public final class v1_20_R2 extends AbstractNMS {
         final CommonListenerCookie cookie = CommonListenerCookie.createInitial(fakePlayer.getGameProfile());
         fakePlayer.connection = new ServerGamePacketListenerImpl(minecraftServer, connection, fakePlayer, cookie);
         fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(this.plugin, "UUID"));
-        fakePlayer.forceSetPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch())
+        fakePlayer.forceSetPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         worldServer.addDuringPortalTeleport(fakePlayer);
         Bukkit.getOnlinePlayers().forEach(player1 -> player1.hidePlayer(fakePlayer.getBukkitEntity()));
         return fakePlayer;
