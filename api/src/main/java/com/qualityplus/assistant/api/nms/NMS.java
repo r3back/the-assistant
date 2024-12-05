@@ -19,6 +19,14 @@ import java.util.List;
  */
 public interface NMS {
     /**
+     * Set texture to item stack
+     *
+     * @param itemStack {@link ItemStack}
+     * @param texture   {@link String}
+     * @return {@link ItemStack}
+     */
+    public ItemStack setTexture(final ItemStack itemStack, final String texture);
+    /**
      * Set block age
      *
      * @param block {@link Block} block

@@ -1,14 +1,12 @@
 package com.qualityplus.assistant.util.itemstack;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.qualityplus.assistant.TheAssistantPlugin;
 import com.qualityplus.assistant.api.gui.LoreWrapper;
 import com.qualityplus.assistant.api.util.BukkitItemUtil;
 import com.qualityplus.assistant.api.util.IPlaceholder;
 import com.qualityplus.assistant.inventory.Item;
 import com.qualityplus.assistant.util.StringUtils;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
-import de.tr7zw.changeme.nbtapi.NBTItem;
-import de.tr7zw.changeme.nbtapi.NBTListCompound;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.enchantments.Enchantment;
@@ -22,7 +20,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -312,16 +309,18 @@ public final class ItemStackUtils {
 
         parseEnchantment(itemstack, item);
 
+        final ItemStack itemWithModelData = BukkitItemUtil.addCustomModelData(itemstack, item.getCustomModelData());
+
         if (item.getMaterial() == XMaterial.PLAYER_HEAD && item.getHeadOwner() != null) {
-            final SkullMeta m = (SkullMeta) itemstack.getItemMeta();
+            final SkullMeta m = (SkullMeta) itemWithModelData.getItemMeta();
             m.setOwner(StringUtils.processMulti(item.getHeadOwner(), placeholders));
-            itemstack.setItemMeta(m);
+            itemWithModelData.setItemMeta(m);
         }
 
         if (item.getMaterial() == XMaterial.PLAYER_HEAD && item.getHeadData() != null) {
-            return parseTexture(itemstack, item);
+            return parseTexture(itemWithModelData, item);
         }
-        return BukkitItemUtil.addCustomModelData(itemstack, item.getCustomModelData());
+        return itemWithModelData;
 
     }
 
@@ -357,18 +356,7 @@ public final class ItemStackUtils {
 
     private ItemStack parseTexture(final ItemStack itemStack, final Item item) {
         try {
-            final NBTItem nbtItem = new NBTItem(itemStack);
-            final NBTCompound skull = nbtItem.addCompound("SkullOwner");
-
-            skull.setString("Name", "tr7zw");
-            skull.setString("Id", UUID.randomUUID().toString());
-
-            final NBTListCompound texture = skull.addCompound("Properties")
-                    .getCompoundList("textures")
-                    .addCompound();
-
-            texture.setString("Value", item.getHeadData());
-            return nbtItem.getItem();
+            return TheAssistantPlugin.getAPI().getNms().setTexture(itemStack, item.getHeadData());
         } catch (final NullPointerException e) {
             e.printStackTrace();
             return itemStack;

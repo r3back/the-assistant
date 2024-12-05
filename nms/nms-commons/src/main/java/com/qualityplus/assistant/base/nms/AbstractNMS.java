@@ -12,7 +12,17 @@ import org.bukkit.block.Block;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
+import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -30,6 +40,37 @@ public abstract class AbstractNMS implements NMS {
     private final Map<UUID, Long> disabled = new HashMap<>();
     private final Map<UUID, Long> enabled = new HashMap<>();
     protected static BossBar bossBar;
+
+
+    @Override
+    public ItemStack setTexture(final ItemStack itemStack, final String texture) {
+        try {
+            final SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
+
+            final UUID uuid = UUID.randomUUID();
+
+            final PlayerProfile playerProfile = Bukkit.createPlayerProfile(uuid, uuid.toString().substring(0, 16));
+            final PlayerTextures textures = playerProfile.getTextures();
+            final String textureToURL = convertBase64ToURL(texture);
+            final URL url = URI.create(textureToURL).toURL();
+            textures.setSkin(url);
+            playerProfile.setTextures(textures);
+            meta.setOwnerProfile(playerProfile);
+            itemStack.setItemMeta(meta);
+        } catch (final MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return itemStack;
+    }
+
+    private String convertBase64ToURL(final String texture) {
+        final String jsonString = new String(Base64.getDecoder().decode(texture), StandardCharsets.UTF_8);
+        final JSONObject jsonObject = new JSONObject(jsonString);
+        final JSONObject jstextures = jsonObject.getJSONObject("textures");
+        final JSONObject skin = jstextures.getJSONObject("SKIN");
+        return skin.getString("url");
+    }
 
     @Override
     public void sendActionBar(final Player player, final String message) {
