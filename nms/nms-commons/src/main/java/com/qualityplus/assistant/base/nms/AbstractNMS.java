@@ -2,6 +2,8 @@ package com.qualityplus.assistant.base.nms;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import com.qualityplus.assistant.api.nms.NMS;
 import com.qualityplus.assistant.api.util.CropUtil;
 import com.qualityplus.assistant.base.event.ActionBarMessageEvent;
@@ -14,15 +16,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.profile.PlayerProfile;
-import org.bukkit.profile.PlayerTextures;
-import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -40,36 +37,64 @@ public abstract class AbstractNMS implements NMS {
     private final Map<UUID, Long> disabled = new HashMap<>();
     private final Map<UUID, Long> enabled = new HashMap<>();
     protected static BossBar bossBar;
+    private static Method metaSetProfileMethod;
+    private static Field metaProfileField;
 
-
+    /**
+     *
+     * @param itemStack {@link ItemStack}
+     * @param texture   {@link String}
+     * @return {@link ItemStack}
+     */
     @Override
     public ItemStack setTexture(final ItemStack itemStack, final String texture) {
         try {
             final SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
 
-            final UUID uuid = UUID.randomUUID();
-
-            final PlayerProfile playerProfile = Bukkit.createPlayerProfile(uuid, uuid.toString().substring(0, 16));
-            final PlayerTextures textures = playerProfile.getTextures();
-            final String textureToURL = convertBase64ToURL(texture);
-            final URL url = URI.create(textureToURL).toURL();
-            textures.setSkin(url);
-            playerProfile.setTextures(textures);
-            meta.setOwnerProfile(playerProfile);
+            mutateItemMeta(meta, texture);
             itemStack.setItemMeta(meta);
-        } catch (final MalformedURLException e) {
+
+            return itemStack;
+        } catch (final NullPointerException e) {
             e.printStackTrace();
         }
 
         return itemStack;
     }
 
-    private String convertBase64ToURL(final String texture) {
-        final String jsonString = new String(Base64.getDecoder().decode(texture), StandardCharsets.UTF_8);
-        final JSONObject jsonObject = new JSONObject(jsonString);
-        final JSONObject jstextures = jsonObject.getJSONObject("textures");
-        final JSONObject skin = jstextures.getJSONObject("SKIN");
-        return skin.getString("url");
+    private void mutateItemMeta(final SkullMeta meta, final String b64) {
+        try {
+            if (metaSetProfileMethod == null) {
+                metaSetProfileMethod = meta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
+                metaSetProfileMethod.setAccessible(true);
+            }
+            metaSetProfileMethod.invoke(meta, makeProfile(b64));
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
+            // if in an older API where there is no setProfile method,
+            // we set the profile field directly.
+            try {
+                if (metaProfileField == null) {
+                    metaProfileField = meta.getClass().getDeclaredField("profile");
+                    metaProfileField.setAccessible(true);
+                }
+                metaProfileField.set(meta, makeProfile(b64));
+
+            } catch (NoSuchFieldException | IllegalAccessException ex2) {
+                ex2.printStackTrace();
+            }
+        }
+    }
+
+
+    private static GameProfile makeProfile(final String b64) {
+        // random uuid based on the b64 string
+        final UUID id = new UUID(
+                b64.substring(b64.length() - 20).hashCode(),
+                b64.substring(b64.length() - 10).hashCode()
+        );
+        final GameProfile profile = new GameProfile(id, "Player");
+        profile.getProperties().put("textures", new Property("textures", b64));
+        return profile;
     }
 
     @Override
