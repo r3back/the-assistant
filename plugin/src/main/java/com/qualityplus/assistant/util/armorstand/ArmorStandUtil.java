@@ -1,6 +1,8 @@
 package com.qualityplus.assistant.util.armorstand;
 
+import com.qualityplus.assistant.TheAssistantPlugin;
 import lombok.experimental.UtilityClass;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
@@ -21,8 +23,8 @@ public class ArmorStandUtil {
      */
     public void rotate(final ArmorStand armorStand, final Location newLocation) {
         final Location location = armorStand.getLocation().clone();
-
-        armorStand.teleport(location.clone().setDirection(newLocation.clone().subtract(location).toVector()));
+        final Location finalLocation = location.clone().setDirection(newLocation.clone().subtract(location).toVector());
+        Bukkit.getScheduler().runTask(TheAssistantPlugin.getAPI().getPlugin(), () -> armorStand.teleport(finalLocation));
     }
 
     /**
