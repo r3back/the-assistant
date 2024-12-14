@@ -47,6 +47,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -59,6 +61,13 @@ import java.util.UUID;
  */
 public final class v1_21_R2 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
+    private static Method metaSetProfileMethod;
+    private static Field metaProfileField;
+
+    @Override
+    public boolean isNewNBTAPIResolver() {
+        return true;
+    }
 
     @Override
     public void setBlockAge(final Block block, final int age) {

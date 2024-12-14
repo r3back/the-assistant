@@ -19,14 +19,6 @@ import java.util.List;
  */
 public interface NMS {
     /**
-     * Set texture to item stack
-     *
-     * @param itemStack {@link ItemStack}
-     * @param texture   {@link String}
-     * @return {@link ItemStack}
-     */
-    public ItemStack setTexture(final ItemStack itemStack, final String texture);
-    /**
      * Set block age
      *
      * @param block {@link Block} block
@@ -204,6 +196,14 @@ public interface NMS {
                               final float z, final float offsetX,
                               final float offsetY, final float offsetZ,
                               final float data, final int amount);
+
+    /**
+     *
+     * @return if new nbt api resolver should be used
+     */
+    public default boolean isNewNBTAPIResolver() {
+        return false;
+    }
 
     /**
      * Ender Dragon Parts representation

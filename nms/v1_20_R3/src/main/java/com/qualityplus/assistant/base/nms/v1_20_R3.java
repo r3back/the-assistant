@@ -61,6 +61,11 @@ public final class v1_20_R3 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
 
     @Override
+    public boolean isNewNBTAPIResolver() {
+        return true;
+    }
+
+    @Override
     public void setBlockAge(final Block block, final int age) {
         if (block.getBlockData() instanceof Ageable) {
             final Ageable crop = (Ageable) block.getBlockData();

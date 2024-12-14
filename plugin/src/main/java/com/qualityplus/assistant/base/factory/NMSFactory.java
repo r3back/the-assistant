@@ -63,6 +63,7 @@ public final class NMSFactory {
             .put("1.21.3", MinecraftVersion.V1_21_R2)
             .build();
 
+    private static final String RECOGNIZED_MC_VERSION_MESSAGE = "Successfully recognized MC Version %s mapped with version %s";
     private static final String RECOGNIZED_VERSION_MESSAGE = "Successfully recognized Version %s";
     private static final String UNSUPPORTED_VERSION_MESSAGE = "Unsupported Version %s";
     private static final String DISABLING_PLUGIN_MESSAGE = "Disabling Plugin...";
@@ -118,13 +119,18 @@ public final class NMSFactory {
      * @return {@link MinecraftVersion}
      */
     private MinecraftVersion getMcVersion() {
-        final String version = Bukkit.getServer().getVersion();
+        final String[] versionSplit = Bukkit.getServer().getVersion().split("-");
 
-        for (final Map.Entry<String, MinecraftVersion> nmsEntry : NEW_NMS_VERSIONS.entrySet()) {
-            if (!version.startsWith(nmsEntry.getKey())) {
-                continue;
+        if (versionSplit.length > 1) {
+            for (final Map.Entry<String, MinecraftVersion> nmsEntry : NEW_NMS_VERSIONS.entrySet()) {
+                final String version = versionSplit[0];
+                if (!version.equals(nmsEntry.getKey())) {
+                    continue;
+                }
+                this.logger.info(String.format(RECOGNIZED_MC_VERSION_MESSAGE, version, nmsEntry.getValue()));
+
+                return nmsEntry.getValue();
             }
-            return nmsEntry.getValue();
         }
 
         final String nmsVersion = Bukkit.getServer().getClass()

@@ -7,6 +7,8 @@ import com.qualityplus.assistant.api.util.BukkitItemUtil;
 import com.qualityplus.assistant.api.util.IPlaceholder;
 import com.qualityplus.assistant.inventory.Item;
 import com.qualityplus.assistant.util.StringUtils;
+import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.enchantments.Enchantment;
@@ -20,6 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -356,12 +359,33 @@ public final class ItemStackUtils {
 
     private ItemStack parseTexture(final ItemStack itemStack, final Item item) {
         try {
-            return TheAssistantPlugin.getAPI().getNms().setTexture(itemStack, item.getHeadData());
+            final String textureValue = item.getHeadData();
+            final UUID uuid = UUID.randomUUID();
+            if (TheAssistantPlugin.getAPI().getNms().isNewNBTAPIResolver()) {
+                NBT.modifyComponents(itemStack, nbt -> {
+                    final ReadWriteNBT profileNbt = nbt.getOrCreateCompound("minecraft:profile");
+                    profileNbt.setUUID("id", uuid);
+                    final ReadWriteNBT propertiesNbt = profileNbt.getCompoundList("properties").addCompound();
+                    propertiesNbt.setString("name", "textures");
+                    propertiesNbt.setString("value", textureValue);
+                });
+            } else {
+                NBT.modify(itemStack, nbt -> {
+                    final ReadWriteNBT skullOwnerCompound = nbt.getOrCreateCompound("SkullOwner");
+
+                    skullOwnerCompound.setUUID("Id", UUID.randomUUID());
+
+                    skullOwnerCompound.getOrCreateCompound("Properties")
+                            .getCompoundList("textures")
+                            .addCompound()
+                            .setString("Value", textureValue);
+                });
+            }
+            return itemStack;
         } catch (final NullPointerException e) {
             e.printStackTrace();
             return itemStack;
         }
-
     }
 
     private void parseEnchantment(final ItemStack itemStack, final Item item) {
