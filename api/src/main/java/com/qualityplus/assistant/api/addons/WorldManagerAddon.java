@@ -7,6 +7,7 @@ import org.bukkit.entity.Entity;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -29,9 +30,13 @@ public interface WorldManagerAddon extends DependencyPlugin {
      * @return CompletableFuture of {@link ChunkCheckResponse}
      */
     public default CompletableFuture<ChunkCheckResponse> chunksAreLoaded(final Location location) {
+        final boolean loaded = Optional.ofNullable(location)
+                .map(Location::getChunk)
+                .map(Chunk::isLoaded)
+                .orElse(false);
         return CompletableFuture.completedFuture(ChunkCheckResponse.builder()
                 .canBeLoaded(true)
-                .areLoaded(location.getChunk().isLoaded())
+                .areLoaded(loaded)
                 .build());
     }
 
