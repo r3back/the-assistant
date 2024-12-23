@@ -12,3 +12,4 @@ build
 /test-suite/mc-config/plugins/*
 .runJitpackPublication/*
 .run/*/*
+.run/Publicar en Jitpack.run.xml
