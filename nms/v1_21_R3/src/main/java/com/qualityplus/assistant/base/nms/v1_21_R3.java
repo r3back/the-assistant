@@ -12,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
@@ -34,10 +33,10 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEnderDragon;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_21_R3.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R3.entity.CraftEnderDragon;
+import org.bukkit.craftbukkit.v1_21_R3.entity.CraftPlayer;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
@@ -48,8 +47,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -59,38 +59,14 @@ import java.util.UUID;
 /**
  * NMS Implementation for Spigot v1_20_R3
  */
-public final class v1_21_R1 extends AbstractNMS {
+public final class v1_21_R3 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
+    private static Method metaSetProfileMethod;
+    private static Field metaProfileField;
 
     @Override
     public boolean isNewNBTAPIResolver() {
         return true;
-    }
-
-    @Override
-    public void addPlayer(final Player player, final String name) {
-        final ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
-
-        final UUID uuid = UUID.randomUUID();
-
-        final GameProfile gameProfile = new GameProfile(uuid, "PLAYER");
-
-        final ServerPlayer npc = new ServerPlayer(
-                ((CraftServer) Bukkit.getServer()).getServer(),
-                ((CraftWorld) player.getWorld()).getHandle(),
-                gameProfile,
-                ClientInformation.createDefault()
-        );
-        final MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
-        final Connection connection = new Connection(PacketFlow.CLIENTBOUND);
-        final CommonListenerCookie cookie = CommonListenerCookie.createInitial(npc.getGameProfile(), true);
-        npc.connection = new ServerGamePacketListenerImpl(minecraftServer, connection, npc, cookie);
-
-        final ClientboundPlayerInfoUpdatePacket packet = new ClientboundPlayerInfoUpdatePacket(
-                EnumSet.of(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER),
-                Collections.singletonList(npc)
-        );
-        nmsPlayer.connection.sendPacket(packet);
     }
 
     @Override
@@ -269,7 +245,7 @@ public final class v1_21_R1 extends AbstractNMS {
 
     @Override
     public void setMaxHealth(final Player player, final int maxHealth) {
-        Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH))
+        Optional.ofNullable(player.getAttribute(Attribute.MAX_HEALTH))
                 .ifPresent(attribute -> attribute.setBaseValue(maxHealth));
     }
 

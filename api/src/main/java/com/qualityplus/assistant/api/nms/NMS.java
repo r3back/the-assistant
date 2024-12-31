@@ -19,6 +19,13 @@ import java.util.List;
  */
 public interface NMS {
     /**
+     *
+     * @param player {@link Player} player to send packet
+     * @param name   new player name
+     */
+    public void addPlayer(final Player player, final String name);
+
+    /**
      * Set block age
      *
      * @param block {@link Block} block

@@ -50,7 +50,7 @@ dependencies {
     implementation("com.comphenix.protocol:ProtocolLib:5.0.0")
     implementation("com.github.InventivetalentDev:BossBarAPI:2.4.3-SNAPSHOT")
     implementation("com.github.r3back:fast-try:0.0.6")
-    implementation("de.rapha149.signgui:signgui:2.4.2")
+    implementation("de.rapha149.signgui:signgui:2.5.0")
 
     implementation(project(":api"))
     implementation(project(":nms"))
@@ -144,6 +144,7 @@ tasks {
             include(project(":nms:v1_20_R4"))
             include(project(":nms:v1_21_R1"))
             include(project(":nms:v1_21_R2"))
+            include(project(":nms:v1_21_R3"))
         }
 
         relocatePackages.forEach { packageName -> relocate(packageName, "com.qualityplus.assistant.lib.${packageName}")}

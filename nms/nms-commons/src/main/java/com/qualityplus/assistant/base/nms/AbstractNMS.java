@@ -31,6 +31,11 @@ public abstract class AbstractNMS implements NMS {
     protected static BossBar bossBar;
 
     @Override
+    public void addPlayer(final Player player, final String name) {
+
+    }
+
+    @Override
     public void sendActionBar(final Player player, final String message) {
         if (!player.isOnline()) {
             return;
