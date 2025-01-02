@@ -73,7 +73,7 @@ public final class v1_21_R1 extends AbstractNMS {
 
         final UUID uuid = UUID.randomUUID();
 
-        final GameProfile gameProfile = new GameProfile(uuid, "PLAYER");
+        final GameProfile gameProfile = new GameProfile(uuid, name);
 
         final ServerPlayer npc = new ServerPlayer(
                 ((CraftServer) Bukkit.getServer()).getServer(),

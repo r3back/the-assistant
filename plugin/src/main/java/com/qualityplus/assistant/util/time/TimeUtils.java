@@ -1,6 +1,7 @@
 package com.qualityplus.assistant.util.time;
 
 import com.qualityplus.assistant.api.util.IPlaceholder;
+import com.qualityplus.assistant.api.util.NumberUtil;
 import com.qualityplus.assistant.util.StringUtils;
 import com.qualityplus.assistant.util.placeholder.Placeholder;
 import lombok.experimental.UtilityClass;
@@ -34,12 +35,13 @@ public final class TimeUtils {
                                 final String noTimeSymbol, final boolean show) {
 
         final String symbolWhenIsEmpty = show ? noTimeSymbol : "";
+        final String secondsParsed = NumberUtil.intOrZero(seconds) < 10 ? "0" + seconds : seconds;
 
         final List<IPlaceholder> placeholders = Arrays.asList(
                 getTimePlaceholder(time.getDays(), "days", days, symbolWhenIsEmpty),
                 getTimePlaceholder(time.getHours(), "hours", hours, symbolWhenIsEmpty),
                 getTimePlaceholder(time.getMinutes(), "minutes", minutes, symbolWhenIsEmpty),
-                getTimePlaceholder(time.getSeconds(), "seconds", seconds, symbolWhenIsEmpty)
+                getTimePlaceholder(time.getSeconds(), "seconds", secondsParsed, symbolWhenIsEmpty)
         );
 
         return StringUtils.processMulti(message, placeholders);
