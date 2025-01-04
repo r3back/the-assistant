@@ -78,7 +78,7 @@ public final class SoundUtils {
 
     private XSound byName(final String name) {
         try {
-            return XSound.REGISTRY.getByName(name).orElse(null);
+            return XSound.valueOf(name);
         } catch (final IllegalArgumentException e) {
             return null;
         }

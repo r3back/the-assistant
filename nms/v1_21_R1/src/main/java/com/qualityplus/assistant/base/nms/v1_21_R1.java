@@ -1,5 +1,6 @@
 package com.qualityplus.assistant.base.nms;
 
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.qualityplus.assistant.api.gui.FakeInventory;
 import com.qualityplus.assistant.api.gui.fake.FakeInventoryImpl;
@@ -8,8 +9,10 @@ import eu.okaeri.injector.annotation.Inject;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.Optionull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
+import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
@@ -20,6 +23,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.boss.EnderDragonPart;
+import net.minecraft.world.level.GameType;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
@@ -48,8 +52,8 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -75,22 +79,43 @@ public final class v1_21_R1 extends AbstractNMS {
 
         final GameProfile gameProfile = new GameProfile(uuid, name);
 
-        final ServerPlayer npc = new ServerPlayer(
-                ((CraftServer) Bukkit.getServer()).getServer(),
-                ((CraftWorld) player.getWorld()).getHandle(),
-                gameProfile,
-                ClientInformation.createDefault()
-        );
-        final MinecraftServer minecraftServer = ((CraftServer) Bukkit.getServer()).getServer();
-        final Connection connection = new Connection(PacketFlow.CLIENTBOUND);
-        final CommonListenerCookie cookie = CommonListenerCookie.createInitial(npc.getGameProfile(), true);
-        npc.connection = new ServerGamePacketListenerImpl(minecraftServer, connection, npc, cookie);
+        final ServerPlayer entityPlayer = getEntityPlayer(gameProfile);
 
-        final ClientboundPlayerInfoUpdatePacket packet = new ClientboundPlayerInfoUpdatePacket(
-                EnumSet.of(ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER),
-                Collections.singletonList(npc)
+        final ClientboundPlayerInfoUpdatePacket.Entry entry = new ClientboundPlayerInfoUpdatePacket.Entry(
+                entityPlayer.getUUID(),
+                entityPlayer.getGameProfile(),
+                true,
+                entityPlayer.connection.latency(),
+                GameType.SURVIVAL,
+                entityPlayer.getTabListDisplayName(),
+                Optionull.map(entityPlayer.getChatSession(), RemoteChatSession::asData)
         );
+
+        final ClientboundPlayerInfoUpdatePacket packet = ClientboundPlayerInfoUpdatePacket
+                .createPlayerInitializing(Collections.singletonList(entityPlayer));
+        try {
+            final Field field = ClientboundPlayerInfoUpdatePacket.class.getDeclaredField("entries");
+            field.setAccessible(true);
+            field.set(packet, Lists.newArrayList(entry));
+
+            //final List<ClientboundPlayerInfoUpdatePacket.Entry> entries = (List<ClientboundPlayerInfoUpdatePacket.Entry>) field.get(packet);
+
+            //NMSImpl.test(packet, Lists.newArrayList(entry));
+        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         nmsPlayer.connection.sendPacket(packet);
+    }
+
+    private ServerPlayer getEntityPlayer(final GameProfile profile) {
+        final MinecraftServer server = MinecraftServer.getServer();
+
+        final ServerLevel worldServer = ((CraftWorld) Bukkit.getWorlds().get(0)).getHandle();
+
+        final ClientInformation clientInfo = ClientInformation.createDefault();
+
+        return new EntityHumanNPC_1_21_R1(server, worldServer, profile, clientInfo);
     }
 
     @Override

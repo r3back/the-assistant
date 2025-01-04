@@ -32,7 +32,7 @@ public abstract class AbstractNMS implements NMS {
 
     @Override
     public void addPlayer(final Player player, final String name) {
-
+        Bukkit.getConsoleSender().sendMessage("DEFAULT IMPLEMENTATION");
     }
 
     @Override

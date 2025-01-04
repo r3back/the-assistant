@@ -7,7 +7,7 @@ dependencies {
     compileOnly("com.zaxxer:HikariCP:4.0.3")
     compileOnly("org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT")
     compileOnly("eu.okaeri:okaeri-platform-bukkit:0.4.0-preview.72")
-    api("com.github.cryptomorin:XSeries:12.1.0")
+    api("com.github.cryptomorin:XSeries:9.9.0")
 
     //Fix encode URI Problem
     implementation("eu.okaeri:okaeri-commons-core:0.2.17")
