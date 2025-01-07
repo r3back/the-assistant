@@ -124,7 +124,10 @@ public final class NMSFactory {
     private MinecraftVersion getMcVersion() {
         final String[] versionSplit = Bukkit.getServer().getVersion().split("-");
 
+
         if (versionSplit.length > 1) {
+            Bukkit.getConsoleSender().sendMessage("New Version Format found: " + versionSplit[0]);
+
             for (final Map.Entry<String, MinecraftVersion> nmsEntry : NEW_NMS_VERSIONS.entrySet()) {
                 final String version = versionSplit[0];
                 if (!version.equals(nmsEntry.getKey())) {
@@ -140,6 +143,8 @@ public final class NMSFactory {
                 .getPackage()
                 .getName()
                 .split("\\.")[3];
+
+        Bukkit.getConsoleSender().sendMessage("Old Version Format found: " + nmsVersion);
 
         return MinecraftVersion.byName(nmsVersion);
     }

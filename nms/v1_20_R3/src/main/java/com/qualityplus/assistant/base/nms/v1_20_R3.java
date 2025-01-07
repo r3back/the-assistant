@@ -62,7 +62,7 @@ public final class v1_20_R3 extends AbstractNMS {
 
     @Override
     public boolean isNewNBTAPIResolver() {
-        return true;
+        return false;
     }
 
     @Override

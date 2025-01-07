@@ -14,7 +14,8 @@ import eu.okaeri.platform.core.annotation.Scan;
 @Scan(deep = true, exclusions = {
         "com.qualityplus.assistant.lib",
         "com.qualityplus.assistant.base.addons.placeholders",
-        "com.qualityplus.assistant.inventory"
+        "com.qualityplus.assistant.inventory",
+        "com.qualityplus.assistant.base.nms"
 })
 public final class TheAssistantPlugin extends OkaeriSilentPlugin {
     private static @Inject TheAssistantAPI api;

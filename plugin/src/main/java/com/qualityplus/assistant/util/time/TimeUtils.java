@@ -41,7 +41,7 @@ public final class TimeUtils {
                 getTimePlaceholder(time.getDays(), "days", days, symbolWhenIsEmpty),
                 getTimePlaceholder(time.getHours(), "hours", hours, symbolWhenIsEmpty),
                 getTimePlaceholder(time.getMinutes(), "minutes", minutes, symbolWhenIsEmpty),
-                getTimePlaceholder(time.getSeconds(), "seconds", secondsParsed, symbolWhenIsEmpty)
+                getTimePlaceholder(time.getSeconds(), "seconds", seconds, symbolWhenIsEmpty)
         );
 
         return StringUtils.processMulti(message, placeholders);
@@ -83,7 +83,7 @@ public final class TimeUtils {
 
     private Placeholder getTimePlaceholder(final long time, final String placeholder, final String placeholderValue,
                                            final String symbolWhenIsEmpty) {
-        final String timeStr = String.valueOf(time);
+        final String timeStr = time < 10 ? "0" + String.valueOf(time) : String.valueOf(time);
 
         final String placeholderKey = placeholder + "_placeholder";
 
