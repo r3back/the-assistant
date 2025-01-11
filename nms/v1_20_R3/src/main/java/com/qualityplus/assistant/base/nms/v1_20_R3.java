@@ -159,11 +159,12 @@ public final class v1_20_R3 extends AbstractNMS {
         final ServerLevel worldServer = ((CraftWorld) playerWorld).getHandle();
         final UUID uuid = UUID.randomUUID();
         final ServerPlayer fakePlayer = new ServerPlayer(minecraftServer, worldServer, new GameProfile(uuid, name), ClientInformation.createDefault());
-        fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(this.plugin, "UUID"));
-        fakePlayer.forceSetPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+
         final Connection connection = new Connection(PacketFlow.CLIENTBOUND);
         final CommonListenerCookie cookie = CommonListenerCookie.createInitial(fakePlayer.getGameProfile());
         fakePlayer.connection = new ServerGamePacketListenerImpl(minecraftServer, connection, fakePlayer, cookie);
+        fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(this.plugin, "UUID"));
+        fakePlayer.forceSetPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         worldServer.addDuringPortalTeleport(fakePlayer);
         Bukkit.getOnlinePlayers().forEach(player1 -> player1.hidePlayer(fakePlayer.getBukkitEntity()));
         return fakePlayer;
