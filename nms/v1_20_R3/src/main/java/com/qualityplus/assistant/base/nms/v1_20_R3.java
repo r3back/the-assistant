@@ -17,7 +17,6 @@ import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
@@ -47,6 +46,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -160,13 +160,18 @@ public final class v1_20_R3 extends AbstractNMS {
         final UUID uuid = UUID.randomUUID();
         final ServerPlayer fakePlayer = new ServerPlayer(minecraftServer, worldServer, new GameProfile(uuid, name), ClientInformation.createDefault());
 
-        final Connection connection = new Connection(PacketFlow.CLIENTBOUND);
-        final CommonListenerCookie cookie = CommonListenerCookie.createInitial(fakePlayer.getGameProfile());
-        fakePlayer.connection = new ServerGamePacketListenerImpl(minecraftServer, connection, fakePlayer, cookie);
-        fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(this.plugin, "UUID"));
-        fakePlayer.forceSetPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
-        worldServer.addDuringPortalTeleport(fakePlayer);
-        Bukkit.getOnlinePlayers().forEach(player1 -> player1.hidePlayer(fakePlayer.getBukkitEntity()));
+        try {
+            final Connection connection = new EmptyConnection_1_20_R3(PacketFlow.SERVERBOUND);
+            final CommonListenerCookie cookie = CommonListenerCookie.createInitial(fakePlayer.getGameProfile());
+            fakePlayer.connection = new EmptyPacketListener_1_20_R3(minecraftServer, connection, fakePlayer, cookie);
+            fakePlayer.getBukkitEntity().setMetadata("NPC", new FixedMetadataValue(this.plugin, "UUID"));
+            fakePlayer.forceSetPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+            worldServer.addDuringPortalTeleport(fakePlayer);
+            Bukkit.getOnlinePlayers().forEach(player1 -> player1.hidePlayer(fakePlayer.getBukkitEntity()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return fakePlayer;
     }
 
