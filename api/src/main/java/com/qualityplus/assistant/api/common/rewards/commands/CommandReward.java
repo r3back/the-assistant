@@ -24,7 +24,7 @@ public final class CommandReward extends OkaeriConfig implements Reward {
     public void execute(final Player player) {
         final String cmd = this.command.replace("%player%", player.getName());
 
-        if (this.commandExecutor.equals(CommandExecutor.PLAYER)) {
+        if (this.commandExecutor.equals(CommandExecutor.CONSOLE)) {
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), cmd);
         } else {
             player.performCommand(cmd);
