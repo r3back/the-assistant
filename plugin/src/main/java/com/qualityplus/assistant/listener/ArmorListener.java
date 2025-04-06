@@ -5,6 +5,7 @@ import com.qualityplus.assistant.base.event.ArmorEquipEvent;
 import com.qualityplus.assistant.base.event.ArmorEquipEvent.EquipMethod;
 import com.qualityplus.assistant.listener.armorhandler.ArmorClickHandler;
 import com.qualityplus.assistant.listener.armorhandler.ArmorShiftClickHandler;
+import com.qualityplus.assistant.listener.armorhandler.NormalArmorClickHandler;
 import com.qualityplus.assistant.util.armor.ArmorType;
 import eu.okaeri.platform.core.annotation.Component;
 import org.bukkit.Bukkit;
@@ -42,7 +43,7 @@ import java.util.List;
 public final class ArmorListener implements Listener {
     private static final List<String> BLOCKED_MATERIALS = Collections.singletonList("TRAPDOOR");
     private static final ArmorClickHandler SHIFT_CLICK_HANDLER = new ArmorShiftClickHandler();
-    private static final ArmorClickHandler NORMAL_CLICK_HANDLER = new ArmorShiftClickHandler();
+    private static final ArmorClickHandler NORMAL_CLICK_HANDLER = new NormalArmorClickHandler();
 
     /**
      *
@@ -75,6 +76,7 @@ public final class ArmorListener implements Listener {
         if (inventoryIsNotCraftingOrPlayer(invType)) {
             return;
         }
+
         if (!(e.getWhoClicked() instanceof Player)) {
             return;
         }

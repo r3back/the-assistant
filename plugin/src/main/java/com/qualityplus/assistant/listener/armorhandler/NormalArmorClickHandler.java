@@ -45,6 +45,7 @@ public final class NormalArmorClickHandler implements ArmorClickHandler {
             if (event.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) {
                 method = ArmorEquipEvent.EquipMethod.HOTBAR_SWAP;
             }
+
             final ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent((Player) event.getWhoClicked(), method,
                     newArmorType, oldArmorPiece, newArmorPiece);
             Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
