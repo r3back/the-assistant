@@ -145,6 +145,7 @@ tasks {
             include(project(":nms:v1_21_R1"))
             include(project(":nms:v1_21_R2"))
             include(project(":nms:v1_21_R3"))
+            include(project(":nms:v1_21_R4"))
         }
 
         relocatePackages.forEach { packageName -> relocate(packageName, "com.qualityplus.assistant.lib.${packageName}")}

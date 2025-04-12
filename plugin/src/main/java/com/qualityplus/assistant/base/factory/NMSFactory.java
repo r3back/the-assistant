@@ -21,6 +21,8 @@ import com.qualityplus.assistant.base.nms.v1_21_R2;
 import com.qualityplus.assistant.base.nms.v1_21_R2_Tab;
 import com.qualityplus.assistant.base.nms.v1_21_R3;
 import com.qualityplus.assistant.base.nms.v1_21_R3_Tab;
+import com.qualityplus.assistant.base.nms.v1_21_R4;
+import com.qualityplus.assistant.base.nms.v1_21_R4_Tab;
 import com.qualityplus.assistant.base.nms.v1_8_R1;
 import com.qualityplus.assistant.base.nms.v1_8_R3;
 import com.qualityplus.assistant.base.nms.v1_12_R1;
@@ -64,6 +66,7 @@ public final class NMSFactory {
             .put("1.21.2", MinecraftVersion.V1_21_R1)
             .put("1.21.3", MinecraftVersion.V1_21_R2)
             .put("1.21.4", MinecraftVersion.V1_21_R3)
+            .put("1.21.5", MinecraftVersion.V1_21_R4)
             .build();
 
     private static final String RECOGNIZED_MC_VERSION_MESSAGE = "Successfully recognized MC Version %s mapped with version %s";
@@ -250,7 +253,11 @@ public final class NMSFactory {
         /**
          * V1_21_R3
          */
-        V1_21_R3(() -> v1_21_R3.class, () -> v1_21_R3_Tab.class);
+        V1_21_R3(() -> v1_21_R3.class, () -> v1_21_R3_Tab.class),
+        /**
+         * V1_21_R3
+         */
+        V1_21_R4(() -> v1_21_R4.class, () -> v1_21_R4_Tab.class);
 
         private final Supplier<Class<? extends NMS>> nms;
         private final Supplier<Class<? extends TabAdapter>> tab;
