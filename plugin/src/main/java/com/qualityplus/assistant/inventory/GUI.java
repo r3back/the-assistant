@@ -181,7 +181,7 @@ public abstract class GUI implements InventoryHolder, ClickableInventory<Item, B
     /**
      * Represents Inventory click targets
      */
-    protected enum ClickTarget {
+    public static enum ClickTarget {
         /**
          * Called when none of targets is clicked
          */
