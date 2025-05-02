@@ -20,6 +20,7 @@ public final class LabelProvider {
     private final String label;
     private final Plugin plugin;
     private final String useHelpMessage;
+    private final String noArgsUsageMessage;
     private final String noPermissionMessage;
     private final String onlyForPlayersMessage;
     private final String unknownCommandMessage;

@@ -120,26 +120,8 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
         if (args.length == 0) {
             final Optional<AssistantCommand> emptyArgsCmd = labelProvider.map(LabelProvider::getEmptyArgsCommand);
             if (emptyArgsCmd.isPresent()) {
-                if (emptyArgsCmd.get().isEnabled()) {
-                    return false;
-                }
-
-                if (emptyArgsCmd.get().isOnlyForPlayers() && !(sender instanceof Player)) {
-                    sendMessage(sender, labelProvider, LabelProvider::getOnlyForPlayersMessage);
-                    return false;
-                }
-
-                if (!(sender.hasPermission(emptyArgsCmd.get().getPermission()) || emptyArgsCmd.get().getPermission()
-                        .equalsIgnoreCase(EMPTY_PERMISSION) || emptyArgsCmd.get().getPermission()
-                        .equalsIgnoreCase(PERMISSION_NODE))) {
-
-                    sendMessage(sender, labelProvider, LabelProvider::getNoPermissionMessage);
-                    return false;
-                }
-
-                emptyArgsCmd.get().execute(sender, args);
+                executeCommand(labelProvider, sender, args, emptyArgsCmd.get(), true);
                 return true;
-
             } else {
                 if (sender instanceof Player) {
                     sendMessage(sender, labelProvider, LabelProvider::getUseHelpMessage);
@@ -149,30 +131,53 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
         }
 
         for (AssistantCommand command : getCommandsByLabel(cmd.getName())) {
-            if (!(command.getAliases().contains(args[0]) && command.isEnabled())) {
+            if (!executeCommand(labelProvider, sender, args, command, false)) {
                 continue;
             }
-
-            if (command.isOnlyForPlayers() && !(sender instanceof Player)) {
-                sendMessage(sender, labelProvider, LabelProvider::getOnlyForPlayersMessage);
-                return false;
-            }
-
-            if (!(sender.hasPermission(command.getPermission()) || command.getPermission()
-                    .equalsIgnoreCase(EMPTY_PERMISSION) || command.getPermission()
-                    .equalsIgnoreCase(PERMISSION_NODE))) {
-
-                sendMessage(sender, labelProvider, LabelProvider::getNoPermissionMessage);
-                return false;
-            }
-
-            command.execute(sender, args);
             return true;
         }
 
         sendMessage(sender, labelProvider, LabelProvider::getUnknownCommandMessage);
 
         return false;
+    }
+
+    private boolean executeCommand(final Optional<LabelProvider> labelProvider,
+                                   final @NotNull CommandSender sender,
+                                   final String[] args,
+                                   final AssistantCommand command,
+                                   final boolean isNoArgsCommand) {
+        if (!command.isEnabled()) {
+            return false;
+        }
+
+        if (!isNoArgsCommand) {
+            if (!command.getAliases().contains(args[0])) {
+                return false;
+            }
+        } else {
+            if (args.length != 0) {
+                sender.sendMessage(StringUtils.color(labelProvider.map(LabelProvider::getNoArgsUsageMessage).orElse("&cNot found no args usage message.")));
+                return false;
+            }
+        }
+
+
+        if (command.isOnlyForPlayers() && !(sender instanceof Player)) {
+            sendMessage(sender, labelProvider, LabelProvider::getOnlyForPlayersMessage);
+            return true;
+        }
+
+        if (!(sender.hasPermission(command.getPermission()) || command.getPermission()
+                .equalsIgnoreCase(EMPTY_PERMISSION) || command.getPermission()
+                .equalsIgnoreCase(PERMISSION_NODE))) {
+
+            sendMessage(sender, labelProvider, LabelProvider::getNoPermissionMessage);
+            return true;
+        }
+
+        command.execute(sender, args);
+        return true;
     }
 
     @SuppressWarnings("all")
