@@ -31,6 +31,13 @@ public abstract class GUI implements InventoryHolder, ClickableInventory<Item, B
     protected int maxPerPage;
 
     /**
+     * No parameters constructor
+     *
+     */
+    public GUI() {
+    }
+
+    /**
      * Constructor with gui tile and size
      *
      * @param size  inventory size
