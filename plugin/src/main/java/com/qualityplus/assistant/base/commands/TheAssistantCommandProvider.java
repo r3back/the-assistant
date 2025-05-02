@@ -118,9 +118,33 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
         final Optional<LabelProvider> labelProvider = getLabelProvider(cmd.getName());
 
         if (args.length == 0) {
-            if (sender instanceof Player) {
-                sendMessage(sender, labelProvider, LabelProvider::getUseHelpMessage);
+            final Optional<AssistantCommand> emptyArgsCmd = labelProvider.map(LabelProvider::getEmptyArgsCommand);
+            if (emptyArgsCmd.isPresent()) {
+                if (emptyArgsCmd.get().isEnabled()) {
+                    return false;
+                }
+
+                if (emptyArgsCmd.get().isOnlyForPlayers() && !(sender instanceof Player)) {
+                    sendMessage(sender, labelProvider, LabelProvider::getOnlyForPlayersMessage);
+                    return false;
+                }
+
+                if (!(sender.hasPermission(emptyArgsCmd.get().getPermission()) || emptyArgsCmd.get().getPermission()
+                        .equalsIgnoreCase(EMPTY_PERMISSION) || emptyArgsCmd.get().getPermission()
+                        .equalsIgnoreCase(PERMISSION_NODE))) {
+
+                    sendMessage(sender, labelProvider, LabelProvider::getNoPermissionMessage);
+                    return false;
+                }
+
+                emptyArgsCmd.get().execute(sender, args);
                 return true;
+
+            } else {
+                if (sender instanceof Player) {
+                    sendMessage(sender, labelProvider, LabelProvider::getUseHelpMessage);
+                    return true;
+                }
             }
         }
 

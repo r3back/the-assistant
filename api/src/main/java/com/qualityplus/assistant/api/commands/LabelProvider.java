@@ -1,5 +1,6 @@
 package com.qualityplus.assistant.api.commands;
 
+import com.qualityplus.assistant.api.commands.command.AssistantCommand;
 import com.qualityplus.assistant.api.commands.handler.CommandLabelRegistry;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,7 @@ public final class LabelProvider {
     private final String noPermissionMessage;
     private final String onlyForPlayersMessage;
     private final String unknownCommandMessage;
+    private final AssistantCommand emptyArgsCommand;
 
     /**
      * Register label provider
