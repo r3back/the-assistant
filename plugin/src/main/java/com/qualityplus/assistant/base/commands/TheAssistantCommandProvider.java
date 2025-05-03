@@ -185,6 +185,7 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
                              final Function<LabelProvider, String> function) {
         sender.sendMessage(StringUtils.color(provider
                 .map(LabelProvider::getUseHelpMessage)
+                .map(msg -> msg.replace("%label%", provider.map(LabelProvider::getLabel).orElse("")))
                 .orElse(EMPTY_PERMISSION)));
     }
 
