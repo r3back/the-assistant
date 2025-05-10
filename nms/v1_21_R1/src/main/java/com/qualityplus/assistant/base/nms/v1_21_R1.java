@@ -73,11 +73,6 @@ public final class v1_21_R1 extends AbstractNMS {
     }
 
     @Override
-    public int getBlockDataId(final Object object) {
-        return ((BlockState)object).;
-    }
-
-    @Override
     public void addPlayer(final Player player, final String name) {
         final ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
 
