@@ -20,6 +20,12 @@ import java.util.List;
 public interface NMS {
     /**
      *
+     * @param object {@link Object}
+     */
+    public int getBlockDataId(final Object object);
+
+    /**
+     *
      * @param player {@link Player} player to send packet
      * @param name   new player name
      */

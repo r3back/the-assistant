@@ -105,6 +105,17 @@ public final class ItemBuilder {
 
     /**
      *
+     * @param customModelData customModelData
+     * @return {@link ItemBuilder}
+     */
+    public ItemBuilder customModelData(final int customModelData) {
+        this.item.setCustomModelData(customModelData);
+        return this;
+    }
+
+
+    /**
+     *
      * @param displayName displayName
      * @return {@link ItemBuilder}
      */

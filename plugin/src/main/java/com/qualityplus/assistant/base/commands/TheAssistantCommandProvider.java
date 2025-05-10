@@ -121,13 +121,10 @@ public final class TheAssistantCommandProvider implements CommandProvider<Assist
             final Optional<AssistantCommand> emptyArgsCmd = labelProvider.map(LabelProvider::getEmptyArgsCommand);
             if (emptyArgsCmd.isPresent()) {
                 executeCommand(labelProvider, sender, args, emptyArgsCmd.get(), true);
-                return true;
             } else {
-                if (sender instanceof Player) {
-                    sendMessage(sender, labelProvider, LabelProvider::getUseHelpMessage);
-                    return true;
-                }
+                sendMessage(sender, labelProvider, LabelProvider::getUseHelpMessage);
             }
+            return true;
         }
 
         for (AssistantCommand command : getCommandsByLabel(cmd.getName())) {

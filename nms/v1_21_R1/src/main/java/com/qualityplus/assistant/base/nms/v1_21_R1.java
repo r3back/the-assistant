@@ -24,6 +24,7 @@ import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.boss.EnderDragonPart;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
@@ -72,6 +73,11 @@ public final class v1_21_R1 extends AbstractNMS {
     }
 
     @Override
+    public int getBlockDataId(final Object object) {
+        return ((BlockState)object).;
+    }
+
+    @Override
     public void addPlayer(final Player player, final String name) {
         final ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
 
@@ -80,6 +86,7 @@ public final class v1_21_R1 extends AbstractNMS {
         final GameProfile gameProfile = new GameProfile(uuid, name);
 
         final ServerPlayer entityPlayer = getEntityPlayer(gameProfile);
+
 
         final ClientboundPlayerInfoUpdatePacket.Entry entry = new ClientboundPlayerInfoUpdatePacket.Entry(
                 entityPlayer.getUUID(),
