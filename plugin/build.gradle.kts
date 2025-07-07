@@ -72,7 +72,7 @@ dependencies {
     okaeriDependencies.forEach{ implementation (it) }
     driverDependencies.forEach{ implementation (it) }
 
-    implementation("de.tr7zw:item-nbt-api:2.15.0")
+    implementation("de.tr7zw:item-nbt-api:2.15.1")
 
     implementation("org.slf4j:slf4j-nop:2.0.5")
 }
