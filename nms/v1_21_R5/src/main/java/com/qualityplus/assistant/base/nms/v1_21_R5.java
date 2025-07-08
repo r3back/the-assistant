@@ -1,6 +1,5 @@
 package com.qualityplus.assistant.base.nms;
 
-import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.qualityplus.assistant.api.gui.FakeInventory;
 import com.qualityplus.assistant.api.gui.fake.FakeInventoryImpl;
@@ -9,13 +8,10 @@ import eu.okaeri.injector.annotation.Inject;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.minecraft.Optionull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.Connection;
-import net.minecraft.network.chat.RemoteChatSession;
 import net.minecraft.network.protocol.PacketFlow;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
@@ -23,7 +19,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.CommonListenerCookie;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.entity.boss.EnderDragonPart;
-import net.minecraft.world.level.GameType;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
@@ -38,10 +33,10 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
-import org.bukkit.craftbukkit.v1_21_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_21_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftEnderDragon;
-import org.bukkit.craftbukkit.v1_21_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_21_R5.CraftServer;
+import org.bukkit.craftbukkit.v1_21_R5.CraftWorld;
+import org.bukkit.craftbukkit.v1_21_R5.entity.CraftEnderDragon;
+import org.bukkit.craftbukkit.v1_21_R5.entity.CraftPlayer;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.ChunkGenerator;
@@ -53,6 +48,7 @@ import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -61,62 +57,16 @@ import java.util.Random;
 import java.util.UUID;
 
 /**
- * NMS Implementation for Spigot v1_20_R3
+ * NMS Implementation for Spigot v1_21_R5
  */
-public final class v1_21_R1 extends AbstractNMS {
+public final class v1_21_R5 extends AbstractNMS {
     private @Getter @Inject Plugin plugin;
+    private static Method metaSetProfileMethod;
+    private static Field metaProfileField;
 
     @Override
     public boolean isNewNBTAPIResolver() {
         return true;
-    }
-
-    @Override
-    public void addPlayer(final Player player, final String name) {
-        final ServerPlayer nmsPlayer = ((CraftPlayer) player).getHandle();
-
-        final UUID uuid = UUID.randomUUID();
-
-        final GameProfile gameProfile = new GameProfile(uuid, name);
-
-        final ServerPlayer entityPlayer = getEntityPlayer(gameProfile);
-
-
-        final ClientboundPlayerInfoUpdatePacket.Entry entry = new ClientboundPlayerInfoUpdatePacket.Entry(
-                entityPlayer.getUUID(),
-                entityPlayer.getGameProfile(),
-                true,
-                entityPlayer.connection.latency(),
-                GameType.SURVIVAL,
-                entityPlayer.getTabListDisplayName(),
-                Optionull.map(entityPlayer.getChatSession(), RemoteChatSession::asData)
-        );
-
-        final ClientboundPlayerInfoUpdatePacket packet = ClientboundPlayerInfoUpdatePacket
-                .createPlayerInitializing(Collections.singletonList(entityPlayer));
-        try {
-            final Field field = ClientboundPlayerInfoUpdatePacket.class.getDeclaredField("entries");
-            field.setAccessible(true);
-            field.set(packet, Lists.newArrayList(entry));
-
-            //final List<ClientboundPlayerInfoUpdatePacket.Entry> entries = (List<ClientboundPlayerInfoUpdatePacket.Entry>) field.get(packet);
-
-            //NMSImpl.test(packet, Lists.newArrayList(entry));
-        } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-        nmsPlayer.connection.sendPacket(packet);
-    }
-
-    private ServerPlayer getEntityPlayer(final GameProfile profile) {
-        final MinecraftServer server = MinecraftServer.getServer();
-
-        final ServerLevel worldServer = ((CraftWorld) Bukkit.getWorlds().get(0)).getHandle();
-
-        final ClientInformation clientInfo = ClientInformation.createDefault();
-
-        return new EntityHumanNPC_1_21_R1(server, worldServer, profile, clientInfo);
     }
 
     @Override
@@ -295,7 +245,7 @@ public final class v1_21_R1 extends AbstractNMS {
 
     @Override
     public void setMaxHealth(final Player player, final int maxHealth) {
-        Optional.ofNullable(player.getAttribute(Attribute.GENERIC_MAX_HEALTH))
+        Optional.ofNullable(player.getAttribute(Attribute.MAX_HEALTH))
                 .ifPresent(attribute -> attribute.setBaseValue(maxHealth));
     }
 

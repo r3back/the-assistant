@@ -6,9 +6,9 @@ repositories{
 
 dependencies {
     //Slime World
-    compileOnly("com.flowpowered:flow-nbt:2.0.2")
-    compileOnly("com.grinderwolf:slimeworldmanager-plugin:2.7.0-SNAPSHOT")
-    compileOnly("com.grinderwolf:slimeworldmanager-api:2.7.0-SNAPSHOT")
+    //compileOnly("com.flowpowered:flow-nbt:2.0.2")
+    //compileOnly("com.grinderwolf:slimeworldmanager-plugin:2.7.0-SNAPSHOT")
+    //compileOnly("com.grinderwolf:slimeworldmanager-api:2.7.0-SNAPSHOT")
 
     compileOnly("eu.okaeri:okaeri-platform-bukkit:0.4.0-preview54")
 

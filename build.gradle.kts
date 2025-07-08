@@ -10,7 +10,7 @@ plugins {
 group = "com.github.r3back"
 version = "4.0.0"
 
-ext.set("mojangUnmappedVersions", setOf("v1_21_R4", "v1_21_R3", "v1_21_R2", "v1_21_R1", "v1_20_R4", "v1_20_R3","v1_20_R2", "v1_20_R1", "v1_19_R1", "v1_19_R2", "v1_18_R1", "v1_18_R2", "v1_17_R1"))
+ext.set("mojangUnmappedVersions", setOf("v1_21_R5", "v1_21_R4", "v1_21_R3", "v1_21_R2", "v1_21_R1", "v1_20_R4", "v1_20_R3","v1_20_R2", "v1_20_R1", "v1_19_R1", "v1_19_R2", "v1_18_R1", "v1_18_R2", "v1_17_R1"))
 
 subprojects {
     group = rootProject.group
@@ -52,12 +52,12 @@ subprojects {
         maven("https://jitpack.io") {
             name = "Jitpack"
         }
-        maven("https://repo.rapture.pw/repository/maven-snapshots/") {
-            name = "SlimeWorld"
-        }
-        maven("https://repo.rapture.pw/repository/maven-releases/") {
-            name = "Rapture"
-        }
+        //maven("https://repo.rapture.pw/repository/maven-snapshots/") {
+       //     name = "SlimeWorld"
+        //}
+        //maven("https://repo.rapture.pw/repository/maven-releases/") {
+       //     name = "Rapture"
+       // }
         maven("https://nexus.lucko.me/repository/all/") {
             name = "Lucko"
         }
