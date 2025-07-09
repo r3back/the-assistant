@@ -17,6 +17,7 @@ import java.util.Objects;
  * TODO separate instance of hologram with an util hologram class
  */
 public final class TheHologram {
+    @Getter
     private List<ArmorStand> armorStands;
     private Location location;
     @Getter
