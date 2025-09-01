@@ -71,6 +71,7 @@ public final class NMSFactory {
             .put("1.21.5", MinecraftVersion.V1_21_R4)
             .put("1.21.6", MinecraftVersion.V1_21_R5)
             .put("1.21.7", MinecraftVersion.V1_21_R5)
+            .put("1.21.8", MinecraftVersion.V1_21_R5)
             .build();
 
     private static final String RECOGNIZED_MC_VERSION_MESSAGE = "Successfully recognized MC Version %s mapped with version %s";

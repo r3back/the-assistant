@@ -50,7 +50,7 @@ dependencies {
     implementation("com.comphenix.protocol:ProtocolLib:5.0.0")
     implementation("com.github.InventivetalentDev:BossBarAPI:2.4.3-SNAPSHOT")
     implementation("com.github.r3back:fast-try:0.0.6")
-    implementation("de.rapha149.signgui:signgui:2.5.3")
+    implementation("de.rapha149.signgui:signgui:2.5.4")
 
     implementation(project(":api"))
     implementation(project(":nms"))
@@ -72,7 +72,7 @@ dependencies {
     okaeriDependencies.forEach{ implementation (it) }
     driverDependencies.forEach{ implementation (it) }
 
-    implementation("de.tr7zw:item-nbt-api:2.15.1")
+    implementation("de.tr7zw:item-nbt-api:2.15.2")
 
     implementation("org.slf4j:slf4j-nop:2.0.5")
 }
